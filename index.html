@@ -28,7 +28,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overf
 .header-center{position:absolute;left:50%;transform:translateX(-50%)}
 .header-logo{font-size:18px;font-weight:600;letter-spacing:12px;color:var(--text);text-decoration:none;text-transform:uppercase}
 .floating-nav{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);display:flex;align-items:center;background:rgba(15,20,40,0.85);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:50px;padding:10px 8px;z-index:100}
-.floating-nav .nav-shield{width:32px;height:32px;margin:0 12px;fill:var(--cyan);opacity:.6}
+.floating-nav .nav-shield{width:32px;height:32px;margin:0 12px;object-fit:contain}
 .floating-nav a{color:var(--text2);text-decoration:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:500;padding:8px 16px;border-radius:30px;transition:all .3s}
 .floating-nav a:hover,.floating-nav a.active{color:var(--text);background:rgba(0,212,255,0.1)}
 .floating-nav a.cta{background:rgba(0,212,255,0.15);border:1px solid rgba(0,212,255,0.3);color:var(--cyan)}
@@ -41,7 +41,7 @@ section{position:relative;z-index:1}
 .hero-title{font-size:clamp(48px,8vw,120px);font-weight:300;letter-spacing:20px;text-transform:uppercase;opacity:0;transform:translateY(30px);animation:fadeUp 1.2s ease forwards .5s}
 .hero-tagline{font-size:13px;letter-spacing:8px;text-transform:uppercase;color:var(--text2);margin-top:24px;opacity:0;animation:fadeUp 1.2s ease forwards 1.2s}
 .hero-shield{width:48px;height:48px;margin-bottom:32px;opacity:0;animation:fadeUp 1s ease forwards .2s}
-.hero-shield svg{fill:var(--cyan);opacity:.6}
+.hero-shield img{width:100%;height:100%;object-fit:contain}
 .hero-badge{margin-top:40px;padding:8px 20px;border:1px solid rgba(0,212,255,0.2);border-radius:50px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);opacity:0;animation:fadeUp 1s ease forwards 1.8s;font-family:'JetBrains Mono',monospace}
 @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
 .stats{padding:120px 48px;position:relative;overflow:hidden}
@@ -104,7 +104,7 @@ section{position:relative;z-index:1}
 .footer-top{display:flex;justify-content:center;align-items:center;flex-direction:column;margin-bottom:64px}
 .footer-logo{font-size:24px;letter-spacing:12px;font-weight:300;text-transform:uppercase}
 .footer-shield{width:40px;height:40px;margin-bottom:16px}
-.footer-shield svg{fill:var(--cyan);opacity:.4}
+.footer-shield img{width:100%;height:100%;object-fit:contain}
 .footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;max-width:1200px;margin:0 auto;padding-bottom:48px;border-bottom:1px solid var(--border)}
 .footer-col h4{font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;font-weight:600}
 .footer-col a{display:block;color:var(--muted);text-decoration:none;font-size:13px;margin-bottom:12px;transition:color .3s}
@@ -129,13 +129,13 @@ section{position:relative;z-index:1}
 <div class="header-right"><a href="#contact">Contact Us</a></div>
 </header>
 <nav class="floating-nav">
-<svg class="nav-shield" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2.18l7 3.12v4.7c0 4.83-3.4 9.36-7 10.5-3.6-1.14-7-5.67-7-10.5V6.3l7-3.12z"/></svg>
+<img class="nav-shield" src="vektorium-logo.png" alt="Vektorium Logo">
 <a href="#product">Product</a><a href="#vision">Vision</a><a href="#about">About</a><a href="#technology">Technology</a><a href="#contact" class="cta">Contact</a>
 </nav>
 <div class="scroll-indicator" id="scrollIndicator">SCROLL 000%</div>
 <a href="#" class="back-to-top" id="backToTop">BACK TO TOP</a>
 <section class="hero" id="hero">
-<div class="hero-shield"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2.18l7 3.12v4.7c0 4.83-3.4 9.36-7 10.5-3.6-1.14-7-5.67-7-10.5V6.3l7-3.12z"/><path d="M12 7l-4 2v3c0 2.5 1.7 4.8 4 5.5 2.3-.7 4-3 4-5.5V9l-4-2z" opacity="0.4"/></svg></div>
+<div class="hero-shield"><img src="vektorium-logo.png" alt="Vektorium Logo"></div>
 <h1 class="hero-title">Vektorium</h1>
 <p class="hero-tagline">Sovereign Cybersecurity Infrastructure</p>
 <div class="hero-badge">Under Construction — Full Site Coming Soon</div>
@@ -188,7 +188,7 @@ section{position:relative;z-index:1}
 <div class="contact-email reveal"><a href="mailto:massimo.prando@vektorium.io">massimo.prando@vektorium.io</a></div>
 </section>
 <footer class="footer">
-<div class="footer-top"><div class="footer-shield"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2.18l7 3.12v4.7c0 4.83-3.4 9.36-7 10.5-3.6-1.14-7-5.67-7-10.5V6.3l7-3.12z"/></svg></div><div class="footer-logo">Vektorium</div></div>
+<div class="footer-top"><div class="footer-shield"><img src="vektorium-logo.png" alt="Vektorium Logo"></div><div class="footer-logo">Vektorium</div></div>
 <div class="footer-grid">
 <div class="footer-col"><h4>Product</h4><a href="#product">Cypher Sentinel</a><a href="#technology">Technology</a><a href="#stats">Platform Stats</a></div>
 <div class="footer-col"><h4>Company</h4><a href="#about">About</a><a href="#vision">Vision</a></div>
