@@ -1,0 +1,11 @@
+# Robots.txt for vektorium.io
+# Allow all search engines to crawl the entire site
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://vektorium.io/sitemap.xml
+
+# Crawl-delay (optional, be polite to crawlers)
+# Crawl-delay: 10
