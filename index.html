@@ -216,13 +216,13 @@ section{position:relative;z-index:1}
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="canvas-wrapper"><canvas id="fluidCanvas"></canvas></div>
 <header class="header">
-<div class="header-left"><a href="#contact">Request a Demo</a></div>
+<div class="header-left"><a href="mailto:massimo.prando@vektorium.io">Request a Demo</a></div>
 <div class="header-center"><a href="#" class="header-logo">Vektorium</a></div>
-<div class="header-right"><a href="#contact">Contact Us</a></div>
+<div class="header-right"><a href="mailto:massimo.prando@vektorium.io">Contact Us</a></div>
 </header>
 <nav class="floating-nav">
 <img class="nav-shield" src="vektorium-logo.png" alt="Vektorium Logo">
-<a href="#product">Product</a><a href="#vision">Vision</a><a href="#about">About</a><a href="#technology">Technology</a><a href="#contact" class="cta">Contact</a>
+<a href="#product">Product</a><a href="#vision">Vision</a><a href="#about">About</a><a href="#technology">Technology</a><a href="mailto:massimo.prando@vektorium.io" class="cta">Contact</a>
 </nav>
 <div class="scroll-indicator" id="scrollIndicator">SCROLL 000%</div>
 <a href="#" class="back-to-top" id="backToTop">BACK TO TOP</a>
@@ -287,7 +287,7 @@ section{position:relative;z-index:1}
 <div class="footer-col"><h4>Capabilities</h4><a href="#">Post-Quantum Crypto</a><a href="#">Homomorphic Encryption</a><a href="#">Adversarial AI Defense</a></div>
 <div class="footer-col"><h4>Contact</h4><a href="mailto:massimo.prando@vektorium.io">Email Us</a></div>
 </div>
-<div class="footer-bottom"><p>&copy; 2025-2026 Vektorium Inc. All rights reserved.</p><div><a href="#">Privacy Policy</a><a href="#">Terms</a></div></div>
+<div class="footer-bottom"><p>&copy; 2025-2026 Vektorium Inc. All rights reserved.</p><div><a href="/privacy-policy.html">Privacy Policy</a><a href="/terms.html">Terms</a></div></div>
 </footer>
 <script>
 var dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing');var mx=0,my=0,dx=0,dy=0,rx=0,ry=0;document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;});function ac(){dx+=(mx-dx)*0.2;dy+=(my-dy)*0.2;rx+=(mx-rx)*0.08;ry+=(my-ry)*0.08;dot.style.left=dx+'px';dot.style.top=dy+'px';ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ac);}ac();document.querySelectorAll('a,button,.product-card,.diff-item').forEach(function(el){el.addEventListener('mouseenter',function(){dot.classList.add('hovering');ring.classList.add('hovering');});el.addEventListener('mouseleave',function(){dot.classList.remove('hovering');ring.classList.remove('hovering');});});
