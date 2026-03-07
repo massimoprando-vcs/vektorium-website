@@ -48,4 +48,16 @@
                     <changefreq>daily</changefreq>
                     <priority>0.7</priority>
         </url>
+  <url>
+    <loc>https://vektorium.io/privacy-policy.html</loc>
+    <lastmod>2026-03-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://vektorium.io/terms.html</loc>
+    <lastmod>2026-03-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
 </urlset>
