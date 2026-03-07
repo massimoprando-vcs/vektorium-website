@@ -193,18 +193,18 @@ section{position:relative;z-index:1}
 .footer-logo{font-size:24px;letter-spacing:12px;font-weight:300;text-transform:uppercase}
 .footer-shield{width:40px;height:40px;margin-bottom:16px}
 .footer-shield img{width:100%;height:100%;object-fit:contain}
-.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;max-width:1200px;margin:0 auto;padding-bottom:48px;border-bottom:1px solid var(--border)}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;max-width:1200px;margin:0 auto;padding-bottom:24px}
 .footer-col h4{font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;font-weight:600}
 .footer-col a{display:block;color:var(--muted);text-decoration:none;font-size:13px;margin-bottom:12px;transition:color .3s}
 .footer-col a:hover{color:var(--cyan)}
-.footer-bottom{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:32px auto 0}
+.footer-bottom{text-align:center;max-width:1200px;margin:0 auto;padding:20px 0 24px;border-top:1px solid var(--border)}
 .footer-bottom p{font-size:11px;color:var(--muted);letter-spacing:1px}
 .footer-bottom a{color:var(--muted);text-decoration:none;font-size:11px;letter-spacing:1px;margin-left:24px;transition:color .3s}
 .footer-bottom a:hover{color:var(--text2)}
 .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
 @media(max-width:1024px){.product-grid{grid-template-columns:repeat(2,1fr)}.stats-grid{grid-template-columns:repeat(2,1fr);gap:48px}.about-grid{grid-template-columns:1fr;gap:40px}.footer-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:768px){body{cursor:auto}.cursor-dot,.cursor-ring{display:none}.header{padding:16px 24px}.product-grid{grid-template-columns:1fr}.diff-grid{grid-template-columns:1fr}.floating-nav{display:none}section{padding-left:24px!important;padding-right:24px!important}.footer-grid{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:16px;text-align:center}}
+@media(max-width:768px){body{cursor:auto}.cursor-dot,.cursor-ring{display:none}.header{padding:16px 24px}.product-grid{grid-template-columns:1fr}.diff-grid{grid-template-columns:1fr}.floating-nav{display:none}section{padding-left:24px!important;padding-right:24px!important}.footer-grid{grid-template-columns:1fr}.footer-bottom{text-align:center}}
 @media(max-width:600px){.header{justify-content:center;padding:14px 16px}.header-left,.header-right{display:none}.header-center{position:static;transform:none}.header-logo{font-size:15px;letter-spacing:8px}.hero h1,.hero-title{font-size:clamp(2rem,8vw,3.5rem)!important}.hero-subtitle,.hero p{font-size:14px!important}.stats-grid{gap:32px}.stat-number{font-size:2rem}.section-label{font-size:10px}.product-card{padding:24px}.about-text{font-size:15px;line-height:1.7}.diff-card{padding:20px}.scroll-indicator,.back-to-top{font-size:10px}}
 
 .product-card-visual{position:absolute;top:0;left:0;right:0;height:60%;display:flex;align-items:center;justify-content:center;opacity:0.55;transition:opacity .5s}
@@ -288,7 +288,7 @@ section{position:relative;z-index:1}
 <div class="footer-col"><h4>Solutions</h4><a href="/sovereign-cybersecurity-platform.html">Sovereign Platform</a><a href="/cybersecurity-convergence-platform.html">Convergence Platform</a><a href="/government-cybersecurity-platform.html">Government Security</a><a href="/ai-powered-siem-platform.html">AI-Powered SIEM</a><a href="/critical-infrastructure-cybersecurity.html">Infrastructure Security</a><a href="/zero-trust-cybersecurity-platform.html">Zero Trust</a></div>
 <div class="footer-col"><h4>Resources</h4><a href="/blog.html">Blog</a><a href="/privacy-policy.html">Privacy Policy</a><a href="/terms.html">Terms of Service</a><a href="mailto:massimo.prando@vektorium.io">Contact Us</a></div>
 </div>
-<div class="footer-bottom"><p>&copy; 2025-2026 Vektorium Inc. All rights reserved.</p><div><a href="/privacy-policy.html">Privacy Policy</a><a href="/terms.html">Terms</a></div></div>
+<div class="footer-bottom"><p>© 2025-2026 Vektorium Inc. All rights reserved.</p></div>
 </footer>
 <script>
 var dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing');var mx=0,my=0,dx=0,dy=0,rx=0,ry=0;document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;});function ac(){dx+=(mx-dx)*0.2;dy+=(my-dy)*0.2;rx+=(mx-rx)*0.08;ry+=(my-ry)*0.08;dot.style.left=dx+'px';dot.style.top=dy+'px';ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ac);}ac();document.querySelectorAll('a,button,.product-card,.diff-item').forEach(function(el){el.addEventListener('mouseenter',function(){dot.classList.add('hovering');ring.classList.add('hovering');});el.addEventListener('mouseleave',function(){dot.classList.remove('hovering');ring.classList.remove('hovering');});});
