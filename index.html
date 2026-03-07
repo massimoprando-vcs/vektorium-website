@@ -327,6 +327,7 @@ section{position:relative;z-index:1}
   padding: 0 1rem;
 }
 </style>
+<link rel="preload" href="vektorium-logo.png" as="image" fetchpriority="high">
 </head>
 <body>
 <div class="cursor-dot" id="cursorDot"></div>
@@ -338,13 +339,14 @@ section{position:relative;z-index:1}
 <div class="header-right"><a href="mailto:massimo.prando@vektorium.io">Contact Us</a></div>
 </header>
 <nav class="floating-nav">
-<img class="nav-shield" src="vektorium-logo.png" alt="Vektorium Logo">
+<img class="nav-shield" src="vektorium-logo.png" alt="Vektorium Logo" width="40" height="40" fetchpriority="high">
 <a href="#product">Product</a><a href="#vision">Vision</a><a href="#about">About</a><a href="#technology">Technology</a><a href="/blog.html">Blog</a><a href="mailto:massimo.prando@vektorium.io" class="cta">Contact</a>
 </nav>
 <div class="scroll-indicator" id="scrollIndicator">SCROLL 000%</div>
 <a href="#" class="back-to-top" id="backToTop">BACK TO TOP</a>
+<main id="main-content">
 <section class="hero" id="hero">
-<div class="hero-shield"><img src="vektorium-logo.png" alt="Vektorium Logo"></div>
+<div class="hero-shield"><img src="vektorium-logo.png" alt="Vektorium Logo" width="120" height="120" loading="lazy"></div>
 <h1 class="hero-title">Vektorium</h1>
 <p class="hero-tagline">Sovereign Cybersecurity Infrastructure</p>
 <div class="hero-badge">Quantum-Resistant • AI-Powered • Sovereign</div>
@@ -398,8 +400,9 @@ section{position:relative;z-index:1}
 <a href="mailto:massimo.prando@vektorium.io" class="contact-cta reveal">Request a Demo</a>
 <div class="contact-email reveal"><a href="mailto:massimo.prando@vektorium.io">massimo.prando@vektorium.io</a></div>
 </section>
+</main>
 <footer class="footer" style="position: relative; z-index: 1;">
-<div class="footer-top"><div class="footer-shield"><img src="vektorium-logo.png" alt="Vektorium Logo"></div><div class="footer-logo">Vektorium</div></div>
+<div class="footer-top"><div class="footer-shield"><img src="vektorium-logo.png" alt="Vektorium Logo" width="120" height="120" loading="lazy"></div><div class="footer-logo">Vektorium</div></div>
 <div class="footer-grid">
 <div class="footer-col"><h4>Product</h4><a href="#product">Cypher Sentinel</a><a href="#technology">Technology</a><a href="#stats">Platform Stats</a></div>
 <div class="footer-col"><h4>Company</h4><a href="#about">About</a><a href="#vision">Vision</a></div>
@@ -409,6 +412,8 @@ section{position:relative;z-index:1}
 <div class="footer-bottom"><p>© 2025-2026 Vektorium Inc. All rights reserved.</p></div>
 </footer>
 <script>
+// Defer non-critical animations to reduce Total Blocking Time
+window.addEventListener("load", function() {
 var dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing');var mx=0,my=0,dx=0,dy=0,rx=0,ry=0;document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;});function ac(){dx+=(mx-dx)*0.2;dy+=(my-dy)*0.2;rx+=(mx-rx)*0.08;ry+=(my-ry)*0.08;dot.style.left=dx+'px';dot.style.top=dy+'px';ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ac);}ac();document.querySelectorAll('a,button,.product-card,.diff-item').forEach(function(el){el.addEventListener('mouseenter',function(){dot.classList.add('hovering');ring.classList.add('hovering');});el.addEventListener('mouseleave',function(){dot.classList.remove('hovering');ring.classList.remove('hovering');});});
 document.querySelectorAll('.product-card').forEach(function(c){c.addEventListener('mousemove',function(e){var r=c.getBoundingClientRect();c.style.setProperty('--mouse-x',((e.clientX-r.left)/r.width*100)+'%');c.style.setProperty('--mouse-y',((e.clientY-r.top)/r.height*100)+'%');});});
 var si=document.getElementById('scrollIndicator');window.addEventListener('scroll',function(){var p=Math.round(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100);si.textContent='SCROLL '+String(p).padStart(3,'0')+'%';var hdrOp=Math.max(0,1-(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)/4);document.querySelectorAll('.header-left,.header-center,.header-right').forEach(function(el){el.style.opacity=hdrOp;});document.querySelector('.header').style.pointerEvents=hdrOp===0?'none':'auto';});
@@ -417,6 +422,7 @@ var co=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isInter
 var vo=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.querySelectorAll('.dim').forEach(function(d,i){setTimeout(function(){d.classList.add('revealed');},i*200);});vo.unobserve(e.target);}});},{threshold:0.3});var vt=document.querySelector('.vision-text');if(vt)vo.observe(vt);
 var items=['Post-Quantum Cryptography','Homomorphic Encryption','Zero-Knowledge Proofs','Adversarial AI Defense','Sovereign XDR','109-Engine Convergence','NIST FIPS 203/204/205','ML-KEM Key Exchange','CKKS Scheme FHE','Deepfake Detection','Semantic Audit Verified','186+ CI Gates','Quantum-Resistant','CNSA 2.0 Compliant','Sovereign by Design'];var tr=document.getElementById('tickerTrack');var h='';for(var i=0;i<items.length;i++){h+='<span class="ticker-item">VEKTORIUM is <span class="hl">'+items[i]+'</span></span>';}tr.innerHTML=h+h;
 (function(){var cv=document.getElementById('fluidCanvas');var gl=cv.getContext('webgl')||cv.getContext('experimental-webgl');if(!gl)return;function rs(){cv.width=window.innerWidth*(window.devicePixelRatio||1);cv.height=window.innerHeight*(window.devicePixelRatio||1);}rs();window.addEventListener('resize',rs);var vs='attribute vec2 a_position;void main(){gl_Position=vec4(a_position,0,1);}';var fs='precision highp float;uniform vec2 u_resolution;uniform float u_time;uniform vec2 u_mouse;uniform float u_mouseActive;float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);float a=hash(i),b=hash(i+vec2(1,0)),c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1));return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}float fbm(vec2 p){float v=0.0,a=0.5;for(int i=0;i<5;i++){v+=a*noise(p);p*=2.0;a*=0.5;}return v;}void main(){vec2 uv=gl_FragCoord.xy/u_resolution;vec2 mouse=u_mouse/u_resolution;float t=u_time*0.15;vec2 q=vec2(fbm(uv*3.0+t*0.3),fbm(uv*3.0+vec2(1.7,9.2)+t*0.2));vec2 r=vec2(fbm(uv*3.0+q+vec2(1.7,9.2)+t*0.15),fbm(uv*3.0+q+vec2(8.3,2.8)+t*0.126));float f=fbm(uv*3.0+r);vec3 col=mix(vec3(0.039,0.055,0.102),vec3(0.06,0.08,0.16),f);col=mix(col,vec3(0.0,0.15,0.3),pow(f,2.0)*0.5);col=mix(col,vec3(0.0,0.5,0.8),pow(f,4.0)*0.15);if(u_mouseActive>0.5){float d=length(uv-mouse);float glow=exp(-d*d*12.0)*0.4;float glow2=exp(-d*d*4.0)*0.15;vec3 glowCol=mix(vec3(0.0,0.5,1.0),vec3(0.0,0.8,0.6),fbm(uv*5.0+t));col+=glowCol*glow+vec3(0.1,0.2,0.4)*glow2;}col+=vec3(0.05,0.08,0.15)*smoothstep(0.7,0.0,uv.y)*0.5;float vig=1.0-dot(uv-0.5,uv-0.5)*1.2;col*=vig;gl_FragColor=vec4(col,1.0);}';function cm(type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}var prog=gl.createProgram();gl.attachShader(prog,cm(gl.VERTEX_SHADER,vs));gl.attachShader(prog,cm(gl.FRAGMENT_SHADER,fs));gl.linkProgram(prog);gl.useProgram(prog);var buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);var pos=gl.getAttribLocation(prog,'a_position');gl.enableVertexAttribArray(pos);gl.vertexAttribPointer(pos,2,gl.FLOAT,false,0,0);var uR=gl.getUniformLocation(prog,'u_resolution'),uT=gl.getUniformLocation(prog,'u_time'),uM=gl.getUniformLocation(prog,'u_mouse'),uA=gl.getUniformLocation(prog,'u_mouseActive');var mX=0,mY=0,mA=0;document.addEventListener('mousemove',function(e){mX=e.clientX*(window.devicePixelRatio||1);mY=(window.innerHeight-e.clientY)*(window.devicePixelRatio||1);mA=1;});function rn(time){gl.viewport(0,0,cv.width,cv.height);gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,time*0.001);gl.uniform2f(uM,mX,mY);gl.uniform1f(uA,mA);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);requestAnimationFrame(rn);}requestAnimationFrame(rn);})();
+});
 </script>
 </body>
 </html>
