@@ -39,6 +39,10 @@
   {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": [".atomic-answer", "h1", ".article-hero p"]
+    },
     "mainEntity": [
       {"@type": "Question", "name": "What is a sovereign cybersecurity platform?", "acceptedAnswer": {"@type": "Answer", "text": "A sovereign cybersecurity platform is a security solution that provides full data sovereignty, meaning all data processing, storage, and analysis occurs within your own infrastructure. Unlike cloud-dependent solutions that route data through third-party servers, sovereign platforms like Cypher Sentinel can be deployed on-premise or in your own private cloud, ensuring no data exposure to external parties."}},
       {"@type": "Question", "name": "Why do governments need sovereign cybersecurity?", "acceptedAnswer": {"@type": "Answer", "text": "Governments handle classified and sensitive national security data that cannot be processed by foreign cloud providers. Sovereign cybersecurity ensures data residency compliance, eliminates foreign intelligence risks, meets regulatory requirements, and maintains full operational control over critical infrastructure protection."}},
@@ -73,7 +77,8 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
   <style>
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     :root{--bg:#0a0e1a;--bg2:#0d1225;--cyan:#00d4ff;--teal:#00ffcc;--blue:#4a7dff;--purple:#7b5cff;--text:#e8eaf0;--text2:#8892a8;--muted:#4a5568;--border:rgba(255,255,255,0.06);--glow:rgba(0,212,255,0.15)}
@@ -141,7 +146,7 @@
 </script>
 </head>
   <body>
-    <nav class="site-nav">
+    <nav class="site-nav" aria-label="Primary navigation">
       <a href="/" class="logo"><img src="vektorium-logo.png" alt="Vektorium Logo">Vektorium</a>
       <div class="nav-links">
         <a href="/">Home</a>
