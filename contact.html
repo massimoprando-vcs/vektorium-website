@@ -166,7 +166,7 @@
     }
 
     .hero {
-      padding: 4rem 2rem 6rem;
+      padding: 4rem 2rem 2rem;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -193,28 +193,30 @@
 
     .hero h1 {
       font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 700;
+      font-weight: 300;
       margin-bottom: 1rem;
       background: linear-gradient(135deg, var(--cyan), var(--teal));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      letter-spacing: -1px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
     }
 
     .hero p {
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       color: var(--text2);
-      margin-bottom: 3rem;
+      margin-bottom: 1.5rem;
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
+      letter-spacing: 0.5px;
     }
 
     .contact-section {
       max-width: 700px;
       margin: 0 auto;
-      padding: 3rem 2rem;
+      padding: 1rem 2rem 3rem;
       position: relative;
       z-index: 1;
     }
@@ -234,10 +236,12 @@
     }
 
     .contact-card h2 {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       margin-bottom: 1.5rem;
       color: var(--text);
-      font-weight: 600;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
 
     .email-display {
@@ -294,10 +298,12 @@
     }
 
     .contact-methods h3 {
-      font-size: 1.2rem;
+      font-size: 0.85rem;
       margin-bottom: 2rem;
-      color: var(--text);
-      font-weight: 600;
+      color: var(--text2);
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
     }
 
     .methods-grid {
@@ -311,15 +317,33 @@
     }
 
     .method-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: rgba(0, 212, 255, 0.08);
+      border: 1px solid rgba(0, 212, 255, 0.15);
+    }
+
+    .method-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--cyan);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .method-item h4 {
-      font-size: 1rem;
+      font-size: 0.95rem;
       margin-bottom: 0.5rem;
       color: var(--text);
-      font-weight: 600;
+      font-weight: 500;
+      letter-spacing: 1px;
     }
 
     .method-item p {
@@ -383,7 +407,9 @@
 
     .footer-logo {
       font-size: 1.5rem;
-      font-weight: 700;
+      font-weight: 300;
+      letter-spacing: 8px;
+      text-transform: uppercase;
       background: linear-gradient(135deg, var(--cyan), var(--teal));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -502,13 +528,17 @@
           <h3>Other Ways to Connect</h3>
           <div class="methods-grid">
             <div class="method-item">
-              <div class="method-icon">📧</div>
+              <div class="method-icon">
+                <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+              </div>
               <h4>Email</h4>
               <p>Send us a message directly</p>
               <a href="mailto:massimo.prando@vektorium.io">Contact us</a>
             </div>
             <div class="method-item">
-              <div class="method-icon">💼</div>
+              <div class="method-icon">
+                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              </div>
               <h4>LinkedIn</h4>
               <p>Connect with our team</p>
               <a href="https://www.linkedin.com/company/vektorium" target="_blank" rel="noopener">Visit LinkedIn</a>
