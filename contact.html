@@ -376,84 +376,7 @@
       transform: translateY(0);
     }
 
-    .footer {
-      background: var(--bg2);
-      border-top: 1px solid var(--border);
-      padding: 4rem 2rem 2rem;
-      margin-top: 6rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .footer-top {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      max-width: 1200px;
-      margin: 0 auto 3rem;
-      padding-bottom: 3rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .footer-shield {
-      flex-shrink: 0;
-    }
-
-    .footer-shield img,
-    .footer-shield picture {
-      display: block;
-      width: 60px;
-      height: 60px;
-      object-fit: contain;
-    }
-
-    .footer-logo {
-      font-size: 1.5rem;
-      font-weight: 300;
-      letter-spacing: 8px;
-      text-transform: uppercase;
-      color: #ffffff;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 3rem;
-      max-width: 1200px;
-      margin: 0 auto 3rem;
-    }
-
-    .footer-col h3 {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .footer-col a {
-      display: block;
-      color: var(--text2);
-      text-decoration: none;
-      font-size: 0.9rem;
-      margin-bottom: 0.8rem;
-      transition: color 0.3s ease;
-    }
-
-    .footer-col a:hover {
-      color: var(--cyan);
-    }
-
-    .footer-bottom {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding-top: 2rem;
-      border-top: 1px solid var(--border);
-      text-align: center;
-      color: var(--text2);
-      font-size: 0.85rem;
-    }
+    .footer{border-top:1px solid var(--border);padding:80px 48px 40px;position:relative;z-index:1}.footer-top{display:flex;justify-content:center;align-items:center;flex-direction:column;margin-bottom:64px}.footer-logo{font-size:24px;letter-spacing:12px;font-weight:300;text-transform:uppercase;color:var(--text)}.footer-shield{width:40px;height:40px;margin-bottom:16px}.footer-shield img{width:100%;height:100%;object-fit:contain}.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;max-width:1200px;margin:0 auto;padding-bottom:48px;border-bottom:1px solid var(--border)}.footer-col h3{font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;font-weight:600;color:var(--text)}.footer-col a{display:block;color:var(--muted);text-decoration:none;font-size:13px;margin-bottom:12px;transition:color .3s}.footer-col a:hover{color:var(--cyan)}.footer-bottom{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:32px auto 0}.footer-bottom p{font-size:11px;color:var(--muted);letter-spacing:1px}.footer-bottom a{color:var(--muted);text-decoration:none;font-size:11px;letter-spacing:1px;margin-left:24px;transition:color .3s}.footer-bottom a:hover{color:var(--text2)}
 
     @media (max-width: 768px) {
       .hero {
@@ -480,15 +403,14 @@
         grid-template-columns: 1fr;
       }
 
-      .footer-top {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
+      .footer-grid {
+        grid-template-columns: 1fr;
       }
 
-      .footer-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
+      .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
       }
     }
   body{cursor:none}.cursor-dot{position:fixed;top:0;left:0;width:8px;height:8px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;mix-blend-mode:difference}.cursor-ring{position:fixed;top:0;left:0;width:40px;height:40px;border:1px solid rgba(0,212,255,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s}.cursor-dot.hovering{width:16px;height:16px;background:var(--teal)}.cursor-ring.hovering{width:60px;height:60px;border-color:rgba(0,255,204,0.6)}.canvas-wrapper{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}.canvas-wrapper canvas{position:absolute;top:0;left:0;width:100%;height:100%}@media(max-width:768px){body{cursor:auto}.cursor-dot,.cursor-ring{display:none}}.breadcrumb{position:relative;z-index:1}.page-content{position:relative;z-index:1}.footer{position:relative;z-index:1}</style>
@@ -551,51 +473,16 @@
     </section>
   </main>
 
-  <footer class="footer" style="position: relative; z-index: 1;">
-    <div class="footer-top">
-      <div class="footer-shield">
-        <picture>
-          <source srcset="vektorium-logo.webp" type="image/webp">
-          <img src="vektorium-logo.png" alt="Vektorium Logo" width="120" height="120" loading="lazy">
-        </picture>
-      </div>
-      <div class="footer-logo">Vektorium</div>
-    </div>
-    <div class="footer-grid">
-      <div class="footer-col">
-        <h3>Product</h3>
-        <a href="/cypher-sentinel.html">Cypher Sentinel</a>
-        <a href="/#technology">Technology</a>
-        <a href="/#stats">Platform Stats</a>
-      </div>
-      <div class="footer-col">
-        <h3>Company</h3>
-        <a href="/#about">About</a>
-        <a href="/#vision">Vision</a>
-        <a href="https://www.linkedin.com/company/vektorium" target="_blank" rel="noopener">LinkedIn</a>
-      </div>
-      <div class="footer-col">
-        <h3>Solutions</h3>
-        <a href="/sovereign-cybersecurity-platform.html">Sovereign Platform</a>
-        <a href="/cybersecurity-convergence-platform.html">Convergence Platform</a>
-        <a href="/government-cybersecurity-platform.html">Government Security</a>
-        <a href="/ai-powered-siem-platform.html">AI-Powered SIEM</a>
-        <a href="/critical-infrastructure-cybersecurity.html">Infrastructure Security</a>
-        <a href="/zero-trust-cybersecurity-platform.html">Zero Trust</a>
-        <a href="/post-quantum-cybersecurity.html">Post-Quantum Security</a>
-      </div>
-      <div class="footer-col">
-        <h3>Resources</h3>
-        <a href="/blog.html">Blog</a>
-        <a href="/privacy-policy.html">Privacy Policy</a>
-        <a href="/terms.html">Terms of Service</a>
-        <a href="/contact.html">Contact Us</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2025-2026 Vektorium Inc. All rights reserved.</p>
-    </div>
-  </footer>
+<footer class="footer">
+<div class="footer-top"><div class="footer-shield"><picture><source srcset="vektorium-logo.webp" type="image/webp"><img src="vektorium-logo.png" alt="Vektorium Logo"></picture></div><div class="footer-logo">Vektorium</div></div>
+<div class="footer-grid">
+<div class="footer-col"><h3>Product</h3><a href="/cypher-sentinel.html">Cypher Sentinel</a><a href="/#technology">Technology</a><a href="/#stats">Platform Stats</a></div>
+<div class="footer-col"><h3>Company</h3><a href="/#about">About</a><a href="/#vision">Vision</a><a href="https://www.linkedin.com/company/vektorium" target="_blank" rel="noopener">LinkedIn</a></div>
+<div class="footer-col"><h3>Solutions</h3><a href="/sovereign-cybersecurity-platform.html">Sovereign Platform</a><a href="/cybersecurity-convergence-platform.html">Convergence Platform</a><a href="/government-cybersecurity-platform.html">Government Security</a><a href="/ai-powered-siem-platform.html">AI-Powered SIEM</a><a href="/critical-infrastructure-cybersecurity.html">Infrastructure Security</a><a href="/zero-trust-cybersecurity-platform.html">Zero Trust</a><a href="/post-quantum-cybersecurity.html">Post-Quantum Security</a></div>
+<div class="footer-col"><h3>Resources</h3><a href="/blog.html">Blog</a><a href="/privacy-policy.html">Privacy Policy</a><a href="/terms.html">Terms of Service</a><a href="/contact.html">Contact Us</a></div>
+</div>
+<div class="footer-bottom"><p>&copy; 2025-2026 Vektorium Inc. All rights reserved.</p><div><a href="/privacy-policy.html">Privacy Policy</a><a href="/terms.html">Terms</a></div></div>
+</footer>
 
   <script>
     // Reveal animation observer
