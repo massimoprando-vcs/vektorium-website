@@ -100,6 +100,79 @@ html{scroll-behavior:smooth}body{font-family:'Inter',sans-serif;background:var(-
 @media(max-width:768px){.site-nav{padding:16px 24px}.site-nav .nav-links{display:none}.breadcrumb,.page-content{padding-left:24px;padding-right:24px}.footer-grid{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:16px;text-align:center}.internal-links-grid{grid-template-columns:1fr}}
 body{cursor:none}.cursor-dot{position:fixed;top:0;left:0;width:8px;height:8px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;mix-blend-mode:difference}.cursor-ring{position:fixed;top:0;left:0;width:40px;height:40px;border:1px solid rgba(0,212,255,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s}.cursor-dot.hovering{width:16px;height:16px;background:var(--teal)}.cursor-ring.hovering{width:60px;height:60px;border-color:rgba(0,255,204,0.6)}.canvas-wrapper{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}.canvas-wrapper canvas{position:absolute;top:0;left:0;width:100%;height:100%}@media(max-width:768px){body{cursor:auto}.cursor-dot,.cursor-ring{display:none}}.breadcrumb{position:relative;z-index:1}.page-content{position:relative;z-index:1}.footer{position:relative;z-index:1}</style>
 
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is post-quantum cybersecurity?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Post quantum cybersecurity refers to security systems that use quantum-resistant encryption algorithms to protect data against attacks from future quantum computers. Post quantum cryptography uses mathematical problems that are difficult for both classical and quantum computers to solve."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When will quantum computers break current encryption?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Large-scale quantum computers capable of breaking RSA and elliptic curve cryptography may become available within 10-20 years. However, the threat is immediate because of harvest now, decrypt later attacks where adversaries collect encrypted data today for decryption once quantum computers become available."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are FIPS 203, FIPS 204, and FIPS 205?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "FIPS 203, FIPS 204, and FIPS 205 are U.S. National Institute of Standards and Technology (NIST) standards for post quantum cryptography. FIPS 203 specifies ML-KEM (key encapsulation), FIPS 204 specifies ML-DSA (digital signatures), and FIPS 205 specifies SLH-DSA (hash-based signatures)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does Cypher Sentinel implement post-quantum cryptography?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cypher Sentinel integrates post quantum cryptography natively across all 72 security engines implementing FIPS 203, FIPS 204, and FIPS 205 standards for quantum-resistant key encapsulation, digital signatures, and hash-based signatures."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is a harvest now decrypt later attack?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A harvest now decrypt later attack is a strategy where adversaries intercept and store encrypted data today with the intent of decrypting it in the future using quantum computers. This makes post-quantum cybersecurity urgent even before quantum computers exist."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is post-quantum cryptography compatible with existing systems?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Cypher Sentinel implements hybrid cryptographic approaches that combine classical and post-quantum algorithms during the transition period, ensuring backward compatibility while providing quantum resistance."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What industries need post-quantum cybersecurity most?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Government agencies, defense organizations, financial institutions, healthcare systems, and critical infrastructure operators handling long-lived sensitive data face the greatest urgency for post-quantum cybersecurity."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does homomorphic encryption relate to post-quantum security?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Homomorphic encryption allows computation on encrypted data without decryption, providing an additional layer of quantum-resistant security. Cypher Sentinel combines post-quantum cryptography with homomorphic encryption for secure data processing."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
 <div class="cursor-dot" id="cursorDot"></div>
