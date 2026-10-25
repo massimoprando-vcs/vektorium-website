@@ -1,0 +1,57 @@
+/* Homepage editorial links. Keep the approved desktop styles and effects intact. */
+.vision-summary {
+  max-width: 800px;
+  margin-top: 28px;
+  color: var(--text2);
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.vision-insights { margin-top: 36px; }
+.vision-insights-label {
+  margin-bottom: 12px;
+  color: var(--cyan);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.vision-insights-links {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 20px;
+  list-style: none;
+}
+.vision-insights-links li { min-width: 0; }
+.vision-insights-links a {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  height: 100%;
+  min-height: 44px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
+  text-decoration: none;
+  transition: color .3s, border-color .3s;
+}
+.vision-insights-arrow { flex: none; color: var(--cyan); }
+.vision-insights-links a:hover,
+.vision-insights-links a:focus-visible { color: var(--cyan); border-color: var(--cyan); }
+.vision-insights-links a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
+
+@media (max-width: 768px) {
+  .vision-summary { margin-top: 24px; font-size: 16px; line-height: 1.75; }
+  .vision-insights { margin-top: 28px; }
+  .vision-insights-links { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 20px; }
+  .vision-insights-links li:last-child { grid-column: 1 / -1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vision-insights-links a { transition: none; }
+}
