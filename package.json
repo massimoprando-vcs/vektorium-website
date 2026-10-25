@@ -1,0 +1,12 @@
+{
+  "name": "vektorium-public-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "24.x" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "python3 scripts/validate_site.py",
+    "check:js": "node --check assets/site.js && node --check assets/demo.js"
+  }
+}

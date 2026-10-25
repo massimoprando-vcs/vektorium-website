@@ -1,0 +1,92 @@
+/* Click-to-load wrapper. No third-party application is requested on page load. */
+(() => {
+  "use strict";
+  const targets = Object.freeze({
+    desktop: "https://cypher-sentinel-demo.vercel.app/",
+    mobile: "https://mobile-gold-five.vercel.app/demo",
+    standby: "https://cypher-sentinel-demo.vercel.app/demo?mode=standby&autostart=true&fullscreen=true",
+  });
+  const frame = document.getElementById("demo-frame");
+  const loadButton = document.getElementById("load-demo");
+  const stopButton = document.getElementById("stop-demo");
+  const placeholder = document.getElementById("demo-placeholder");
+  const viewport = document.getElementById("simulation-view");
+  const status = document.getElementById("demo-status");
+  const externalLink = document.getElementById("open-demo");
+  const destination = document.getElementById("demo-destination");
+  if (!frame || !loadButton || !stopButton || !placeholder || !viewport || !status) return;
+  // The control is hidden in the document until its behavior is available.
+  loadButton.hidden = false;
+  let active = false;
+  let awaitingLoad = false;
+  let timeoutId;
+
+  function selectedTarget() {
+    if (document.body.dataset.demoVariant === "standby") return targets.standby;
+    const smallScreen = window.matchMedia("(max-width: 767px)").matches;
+    const mobileDevice = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    return smallScreen || mobileDevice ? targets.mobile : targets.desktop;
+  }
+  function updateDestination() {
+    const target = selectedTarget();
+    if (externalLink) externalLink.href = target;
+    if (destination) destination.textContent = target === targets.mobile ? "mobile-gold-five.vercel.app" : "cypher-sentinel-demo.vercel.app";
+    return target;
+  }
+  function setStatus(state, message) {
+    status.dataset.state = state;
+    status.textContent = message;
+  }
+  function stopDemo(restoreFocus) {
+    window.clearTimeout(timeoutId);
+    active = false;
+    awaitingLoad = false;
+    frame.removeAttribute("src");
+    frame.hidden = true;
+    placeholder.hidden = false;
+    stopButton.hidden = true;
+    viewport.removeAttribute("aria-busy");
+    setStatus("idle", "The external demonstration is unloaded. You can start it again when you choose.");
+    updateDestination();
+    if (restoreFocus) loadButton.focus();
+  }
+  loadButton.addEventListener("click", () => {
+    if (active) return;
+    const target = updateDestination();
+    active = true;
+    awaitingLoad = true;
+    placeholder.hidden = true;
+    frame.hidden = false;
+    stopButton.hidden = false;
+    viewport.setAttribute("aria-busy", "true");
+    setStatus("loading", "Loading the external simulation. You can stop and unload it at any time.");
+    frame.src = target;
+    stopButton.focus();
+    timeoutId = window.setTimeout(() => {
+      if (!active || !awaitingLoad) return;
+      viewport.removeAttribute("aria-busy");
+      setStatus("waiting", "The external application is taking longer to load. If it stays blank, stop it and use the help or external link below.");
+    }, 15000);
+  });
+  frame.addEventListener("load", () => {
+    if (!active || !awaitingLoad) return;
+    window.clearTimeout(timeoutId);
+    awaitingLoad = false;
+    viewport.removeAttribute("aria-busy");
+    // A cross-origin frame load event cannot establish application health.
+    setStatus("loaded", "The external frame has loaded. If the application is blank or unavailable, use the help below.");
+  });
+  frame.addEventListener("error", () => {
+    if (!active) return;
+    window.clearTimeout(timeoutId);
+    awaitingLoad = false;
+    viewport.removeAttribute("aria-busy");
+    setStatus("error", "The external frame could not be loaded. Stop it and use the help below or contact Vektorium.");
+  });
+  stopButton.addEventListener("click", () => stopDemo(true));
+  externalLink?.addEventListener("click", updateDestination);
+  window.addEventListener("pagehide", () => {
+    if (active) stopDemo(false);
+  });
+  updateDestination();
+})();

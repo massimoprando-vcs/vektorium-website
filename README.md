@@ -1,62 +1,58 @@
-# Vektorium — Sovereign Cybersecurity Infrastructure
+# Vektorium public website
 
-**[vektorium.io](https://vektorium.io)**
+This repository contains the static corporate website for [Vektorium](https://vektorium.io), the company behind **Cypher Sentinel**. It is not the Cypher Sentinel application repository, deployment package or an assessment of the platform's current implementation.
 
-Vektorium Inc. builds **Cypher Sentinel** — a sovereign cybersecurity convergence platform with 88 integrated security modules for governments and enterprises protecting critical infrastructure.
+## Purpose and content boundary
 
-## About Cypher Sentinel
+The website is a commercial and informational entry point: visitors can learn about Vektorium and Cypher Sentinel, explore relevant topics and demonstrations, and contact the company. Vektorium is the company; Cypher Sentinel is the platform. Navigation and technical improvements should support that role.
 
-Cypher Sentinel is a production-ready sovereign cybersecurity platform that unifies threat intelligence, network security, endpoint protection, identity and access management, compliance and GRC, AI-powered SIEM, zero-trust architecture, and more into a single converged platform.
+**This preview preserves original visible product claims and existing JSON-LD pending joint review with the owner.** Current platform code and release evidence have not been reviewed as part of this website work. Do not infer readiness, missing capabilities, service availability or certification status from this repository, and do not change those claims without discussion and evidence. Any editorial proposal is separate from the authorized technical changes.
 
-### Key Features
+The source transformer preserves existing structured data by default. Its optional `--normalize-schema` mode changes content and must not be used for this technical-only preview without explicit content-review approval. Do not copy confidential platform code or operational data into this public website repository.
 
-- **88 Security Modules** — Complete cybersecurity coverage in one sovereign platform
-- - **Full Data Sovereignty** — Deploy on-premise or in your own private cloud
-  - - **Government Grade** — Designed for critical infrastructure and government networks
-    - - **Production Ready** — 95% production-ready with 2,350+ tests passed
-      - - **Zero Trust Architecture** — End-to-end zero-trust implementation
-        - - **AI-Powered SIEM/SOAR** — Intelligent threat detection with predictive analytics
-          - - **IT-OT Convergence** — Unified security across information and operational technology
-           
-            - ### Core Capabilities
-           
-            - | Domain | Description |
-            - |--------|-------------|
-            - | Threat Intelligence | AI-powered real-time threat detection and analysis |
-            - | Network Security | Zero-trust architecture with advanced packet inspection |
-            - | Endpoint Protection | Next-gen EDR/XDR with behavioral analysis |
-            - | Identity & Access | IAM/PAM with multi-factor authentication |
-            - | Compliance & GRC | Automated governance, risk, and compliance |
-            - | AI-Powered SIEM | Intelligent SIEM with predictive analytics and SOAR |
-            - | Data Encryption | Military-grade encryption for data at rest and in transit |
-            - | Vulnerability Management | Continuous assessment and prioritized remediation |
-            - | Incident Response | Automated detection, investigation, and response |
-            - | Cloud Security | Sovereign cloud security posture management |
-            - | IoT Security | Protection for OT and IoT in critical infrastructure |
-           
-            - ## Website
-           
-            - This repository contains the source code for [vektorium.io](https://vektorium.io) — the official Vektorium corporate website.
-           
-            - ### Pages
-           
-            - - [Home](https://vektorium.io/) — Main landing page
-              - - [Sovereign Cybersecurity Platform](https://vektorium.io/sovereign-cybersecurity-platform.html) — Sovereign platform deep-dive
-                - - [Cybersecurity Convergence Platform](https://vektorium.io/cybersecurity-convergence-platform.html) — Platform convergence approach
-                  - - [Critical Infrastructure Cybersecurity](https://vektorium.io/critical-infrastructure-cybersecurity.html) — Infrastructure protection
-                   
-                    - ## Technology Stack
-                   
-                    - - Static HTML/CSS/JavaScript
-                      - - WebGL fluid animation background
-                        - - Deployed via Vercel
-                          - - Domain: vektorium.io (Squarespace Domains)
-                           
-                            - ## Contact
-                           
-                            - - **Website:** [vektorium.io](https://vektorium.io)
-                              - - **Email:** massimo.prando@vektorium.io
-                               
-                                - ---
+## Website structure
 
-                                *Vektorium Inc. — From Japan to Silicon Valley, building the cybersecurity infrastructure that nations and enterprises need.*
+- Static HTML, CSS and JavaScript, hosted on Vercel.
+- [Home](https://vektorium.io/) and [Cypher Sentinel](https://vektorium.io/cypher-sentinel) are the principal entry points.
+- Topic routes retain existing URLs so bookmarks and inbound links continue to work.
+- [Contact](https://vektorium.io/contact) uses direct email and LinkedIn; no website upload or inquiry form is required.
+- Demonstrations are separate applications. The website controls only their parent-page embedding and permission boundaries, not their internals.
+- The security page and reporting file concern this public website; verify reporting-mailbox monitoring before publication.
+
+## Review and release discipline
+
+This technical upgrade is prepared on a preview branch. Do not promote it to production without explicit owner approval. Review the rendered pages, navigation, metadata, keyboard/mobile accessibility, analytics consent, actual response headers and demonstration isolation.
+
+Discuss product claims and any proposed semantic changes jointly using current platform evidence. Privacy, terms and security-reporting wording must be checked against actual deployed behavior and business practices before publication. No legal-compliance or product-security certification is established by these technical changes.
+
+The technical implementation keeps optional analytics disabled unless the visitor explicitly opts in, subject to browser privacy signals and the production-host restriction. Verify this in a real browser; a simulated test is not a deployed-network observation.
+
+## Build and publication controls
+
+The dependency-free builder publishes only allowlisted output in `dist`, not repository files. Only the exact value `VERCEL_ENV=production` preserves production indexing directives. Default, unknown, development and preview environments all create non-indexable preview output. Robots directives and noindex are not access control and must not be relied on to protect confidential content.
+
+`scripts/build.mjs` maintains an explicit public-page manifest (28 pages including `security.html`). The build rejects an unexpected root HTML page or a missing expected page before touching existing generated output. Adding a public page requires a reviewed manifest update and corresponding sitemap changes; root-level files are not published automatically. Allowlisting is not content approval.
+
+```sh
+python3 -B -m unittest discover -s scripts -p 'test_harden_site.py' -v
+python3 -B scripts/validate_site.py --self-test
+npm run check:js
+node scripts/test_site.mjs
+node scripts/test_build.mjs
+npm run build
+```
+
+The last command creates a local noindex preview unless the environment is explicitly production. There are no application package dependencies to install. Build-fixture tests write only to their own guarded temporary directory.
+
+Technical checks cover links/assets/fragments, document landmarks, navigation, externalized scripts/styles, consent safeguards, image dimensions, JSON-LD syntax, sitemap coverage, headers and output isolation. Malformed JSON/schema types remain failures. Repeated organizations, zero-price offers, SearchAction and unmatched FAQ text are separate review warnings. **A technical pass is not content approval.**
+
+See [the website security review and release gate](docs/SECURITY_REVIEW.md) for scope, limitations, browser checks, account-level exclusions and rollback requirements. Search Console lacks sufficient field data for a Core Web Vitals conclusion; no performance pass or guaranteed search/AI ranking is claimed.
+
+No production promotion, DNS/domain transfer, account-permission change or branch-protection change is part of these checks. GitHub CI is read-only and has no deployment step.
+
+## Contact
+
+- Website: [vektorium.io](https://vektorium.io)
+- Business inquiries: massimo.prando@vektorium.io
+
+Vektorium Inc. — Cypher Sentinel is the platform; Vektorium is the company.
