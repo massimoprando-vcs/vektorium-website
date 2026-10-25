@@ -74,7 +74,7 @@ export const mobileHeader = `
       <a href="/post-quantum-cybersecurity">Post-Quantum</a>
       <a href="/blog">Blog &amp; insights</a>
       <a href="/#about">About Vektorium</a>
-      <a class="vx-mobile-demo" href="/demo">View demo</a>
+      <a class="vx-mobile-demo" href="https://mobile-demo.vektorium.io/demo">View demo</a>
       <a class="vx-mobile-contact" href="/contact">Contact us</a>
     </nav>
   </details>
@@ -261,6 +261,22 @@ export function expectedConfig(inventory) {
   return {
     $schema: 'https://openapi.vercel.sh/vercel.json',
     framework: null, buildCommand: 'npm run build', installCommand: '', outputDirectory: 'dist', cleanUrls: true,
+    redirects: [
+      ...['/demo', '/demo.html'].flatMap(source => [
+        {
+          source,
+          has: [{ type: 'header', key: 'user-agent', value: '.*(Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini).*' }],
+          destination: 'https://mobile-demo.vektorium.io/demo',
+          permanent: false,
+        },
+        { source, destination: 'https://demo.vektorium.io/', permanent: false },
+      ]),
+      ...['/generated', '/generated.html'].map(source => ({
+        source,
+        destination: 'https://demo.vektorium.io/demo?mode=standby&autostart=true',
+        permanent: true,
+      })),
+    ],
     headers: [
       { source: '/(.*)', headers: [
         header('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload'),

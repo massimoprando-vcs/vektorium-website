@@ -139,18 +139,19 @@ function outputCheck(root, environment) {
 }
 
 try {
-  test('mobile navigation is additive, complete and excluded from the separate demo wrappers', () => {
+  test('mobile navigation is additive, complete and excluded from demo redirects', () => {
     assert.equal(mobilePages.size, 36);
     assert.equal(mobilePages.has('demo.html'), false);
     assert.equal(mobilePages.has('generated.html'), false);
     assert.ok(!/<(?:script|style)\b|\s(?:style|on[a-z]+)=/i.test(mobileHeader), 'Mobile markup may not authorize inline code or styling');
     const links = htmlTokens(mobileHeader).filter(t => t.name === 'a' && !t.closing).map(t => attr(t, 'href'));
     for (const href of links) {
+      if (href === 'https://mobile-demo.vektorium.io/demo') continue;
       assert.ok(href.startsWith('/') && !href.startsWith('//'), 'Navigation must remain on this site');
       const path = new URL(href, 'https://vektorium.io').pathname;
       assert.ok(publicPages.has(path === '/' ? 'index.html' : path.slice(1) + '.html'), `Missing navigation target: ${href}`);
     }
-    for (const target of ['/demo', '/contact', '/blog', '/cypher-sentinel']) assert.ok(links.includes(target), target);
+    for (const target of ['https://mobile-demo.vektorium.io/demo', '/contact', '/blog', '/cypher-sentinel']) assert.ok(links.includes(target), target);
     const source = '<html><head><title>Original</title></head><body><main>Original product claim</main></body></html>';
     const output = prepareHtml('index.html', source);
     assert.ok(output.includes('<body>' + mobileHeader + '<main>Original product claim</main>'));
