@@ -102,7 +102,10 @@ The standby view keeps `/demo?mode=standby&autostart=true&fullscreen=true` on
 `demo.vektorium.io`. The same two exact branded origins are allowed by CSP
 `frame-src` and the fullscreen Permissions-Policy; do not add wildcard hosts.
 
-The external DNS provider is reported as Google Cloud DNS. Required CNAMEs:
+The registrar is Squarespace Domains LLC, confirmed through its public RDAP
+record. Start at `https://account.squarespace.com/domains` and select
+`vektorium.io` → DNS. Vercel labels the underlying nameserver infrastructure as
+Google Cloud DNS; this is not the account dashboard name. Required CNAMEs:
 
 | Name in the `vektorium.io` zone | Type | Target |
 | --- | --- | --- |
