@@ -86,7 +86,7 @@
     timeoutId = window.setTimeout(() => {
       if (!active || !awaitingLoad) return;
       viewport.removeAttribute("aria-busy");
-      setStatus("waiting", "The external application is taking longer to load. If it stays blank, stop it and use the help or external link below.");
+      setStatus("waiting", "The external application is taking longer to load. If it stays blank, stop it and choose Open in new tab, or use the help below.");
     }, 15000);
   });
   frame.addEventListener("load", () => {
@@ -111,7 +111,7 @@
       if (document.fullscreenElement === shell) await document.exitFullscreen();
       else await shell.requestFullscreen();
     } catch {
-      setStatus("waiting", "Full screen is unavailable in this browser. You can keep using the embedded demo or open it in a new tab below.");
+      setStatus("waiting", "Full screen is unavailable in this browser. Keep using the embedded demo or choose Open in new tab in the toolbar.");
     }
   });
   document.addEventListener("fullscreenchange", () => {

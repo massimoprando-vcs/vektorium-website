@@ -173,7 +173,7 @@
   .content-wrapper { padding-top: 100px; padding-bottom: 64px; overflow-wrap: anywhere; }
   .contact-section { padding-top: 16px; padding-bottom: 48px; }
   .contact-card { padding: 24px 20px; }
-  .email-link { font-size: clamp(15px, 4.2vw, 20px); word-break: normal; overflow-wrap: anywhere; }
+  .email-link { font-size: clamp(14px, 4vw, 20px); word-break: normal; overflow-wrap: anywhere; }
   .copy-btn { min-height: 44px; }
   .method-item a { display: inline-flex; align-items: center; min-height: 44px; }
 
