@@ -46,6 +46,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://vektorium.io/cybersecurity-convergence-platform</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://vektorium.io/government-cybersecurity-platform</loc>
     <lastmod>2026-03-22</lastmod>
     <changefreq>monthly</changefreq>
@@ -153,4 +158,17 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+<!-- BEGIN LINKEDIN INSIGHTS SITEMAP -->
+  <url><loc>https://vektorium.io/insight-control-is-a-dial</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://vektorium.io/insight-agent-era-containment</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://vektorium.io/insight-will-you-own-your-company</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://vektorium.io/insight-verify-what-you-own</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://vektorium.io/insight-own-your-defense</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://vektorium.io/insight-flaws-in-the-foundations</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://vektorium.io/insight-dependency-is-exposure</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://vektorium.io/insight-stealth-and-cybersecurity</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://vektorium.io/insight-cybersecurity-convergence</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://vektorium.io/insight-why-cypher-sentinel</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://vektorium.io/insight-vektorium-builds-cypher-sentinel</loc><lastmod>2026-10-25</lastmod></url>
+<!-- END LINKEDIN INSIGHTS SITEMAP -->
 </urlset>

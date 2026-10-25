@@ -1,0 +1,60 @@
+/* Scoped publication archive additions. Original site styling and scripts remain unchanged. */
+.insight-archive { margin: 4rem 0 5rem; }
+.insight-section-heading { margin-bottom: 2rem; }
+.page-content .insight-eyebrow { margin: 0 0 0.75rem; color: var(--cyan); font: 500 0.7rem/1.6 "JetBrains Mono", monospace; letter-spacing: 0.15em; text-transform: uppercase; }
+.page-content .insight-section-heading h2 { margin: 0 0 1rem; border: 0; padding: 0; font-size: clamp(1.7rem, 3vw, 2.3rem); letter-spacing: -0.025em; }
+.page-content .insight-section-heading > p:last-child { max-width: 44rem; font-size: 0.95rem; }
+.insight-archive-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+.insight-card { min-width: 0; display: flex; flex-direction: column; overflow: hidden; border: 1px solid rgba(0, 212, 255, 0.16); border-radius: 14px; background: rgba(13, 18, 37, 0.88); }
+.insight-card-featured { grid-column: 1 / -1; }
+.insight-card-media { display: block; background: #070c17; border-bottom: 1px solid rgba(0, 212, 255, 0.12); }
+.insight-card-media img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: contain; }
+.insight-card-featured .insight-card-media img { max-height: 350px; }
+.insight-card-content { display: flex; flex: 1; flex-direction: column; padding: 1.5rem; border-top: 2px solid rgba(0, 212, 255, 0.3); }
+.insight-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; color: #a5b2c7; font: 400 0.7rem/1.7 "JetBrains Mono", monospace; }
+.insight-kind { color: var(--teal); text-transform: uppercase; letter-spacing: 0.07em; }
+.page-content .insight-card h3 { margin: 1rem 0 0.8rem; font-size: 1.25rem; font-weight: 500; line-height: 1.4; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.insight-card h3 a { color: var(--text); text-decoration: none; }
+.insight-card h3 a:hover { color: var(--cyan); }
+.page-content .insight-card .insight-excerpt { font-size: 0.9rem; color: #aab5c7; line-height: 1.75; margin-bottom: 1.25rem; }
+.page-content .insight-repost-note { color: #aab5c7; font-size: 0.78rem; line-height: 1.7; }
+.insight-card-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; margin-top: auto; padding-top: 0.5rem; }
+.insight-read-link, .insight-source-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 0.8rem; text-decoration: underline; text-underline-offset: 4px; }
+.insight-read-link { color: var(--cyan); gap: 0.5rem; }
+.insight-source-link { color: #adb9cc; }
+.insight-source-link:hover { color: var(--teal); }
+.insight-page .insight-breadcrumb, .insight-page .insight-main { max-width: 1000px; }
+.insight-page .insight-main { padding-top: 1.5rem; }
+.insight-article-header { max-width: 48rem; margin: 0 auto 2.5rem; }
+.page-content .insight-article-header h1 { max-width: 23ch; margin: 1.25rem 0 1.5rem; font-size: clamp(2rem, 4.7vw, 3.5rem); line-height: 1.15; letter-spacing: -0.045em; font-weight: 400; text-wrap: balance; }
+.insight-article-header .insight-meta { margin-bottom: 1rem; }
+.page-content .insight-publication-note { margin: 1.25rem 0 0; color: #9faec4; font-size: 0.8rem; line-height: 1.7; }
+.insight-figure { margin: 2.5rem auto; max-width: 800px; overflow: hidden; border: 1px solid rgba(0, 212, 255, 0.16); border-radius: 12px; background: #070c17; }
+.insight-figure img { display: block; width: 100%; height: auto; }
+.insight-figure figcaption { padding: 0.65rem 1rem; color: #aab5c7; font-size: 0.75rem; line-height: 1.6; }
+.insight-body { max-width: 44rem; margin: 3rem auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: clamp(1rem, 1.5vw, 1.1rem); line-height: 1.85; color: #c0cad9; }
+.insight-article-footer { max-width: 44rem; margin: 3rem auto 0; padding-top: 1.5rem; border-top: 1px solid rgba(0, 212, 255, 0.18); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem 1.5rem; }
+.insight-article-footer a { display: inline-flex; align-items: center; min-height: 44px; font-size: 0.85rem; text-decoration: underline; text-underline-offset: 4px; }
+.insight-noscript { position: relative; z-index: 1; padding: 1rem 1.5rem; text-align: center; color: #aab5c7; font-size: 0.8rem; }
+.insight-noscript a { text-decoration: underline; }
+.insight-visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+@media (min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .insight-card { transition: border-color 180ms ease, box-shadow 180ms ease; }
+  .insight-card:hover, .insight-card:focus-within { border-color: rgba(0, 212, 255, 0.5); box-shadow: 0 12px 38px rgba(0, 212, 255, 0.07); }
+}
+@media (max-width: 640px) {
+  .insight-archive-grid { grid-template-columns: 1fr; }
+  .insight-card-featured { grid-column: auto; }
+  .insight-card-content { padding: 1.25rem; }
+  .insight-archive { margin-top: 3rem; }
+  .insight-article-header { margin-bottom: 2rem; }
+  .insight-body { margin-top: 2rem; }
+  .insight-figure { border-radius: 8px; }
+}
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  .insight-card, .insight-card a { transition: none; }
+}
+@media (forced-colors: active) {
+  .insight-card, .insight-figure { border-color: CanvasText; }
+  .insight-card h3 a, .insight-read-link, .insight-source-link { color: LinkText; }
+}

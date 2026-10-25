@@ -1,36 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cypher Sentinel | 3D Security Visualization | Vektorium</title>
-<meta name="description" content="Interactive 3D cybersecurity simulation. Watch Cypher Sentinel detect, analyze, and neutralize threats in real time.">
-<meta name="keywords" content="cybersecurity simulation, 3D visualization, sovereign cybersecurity, quantum-resistant, AI threat detection, Cypher Sentinel, Vektorium">
-<link rel="canonical" href="https://vektorium.io/generated">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<!-- Open Graph -->
-<meta property="og:title" content="Cypher Sentinel | Live 3D Cybersecurity Simulation">
-<meta property="og:description" content="Full-screen interactive 3D visualization of sovereign cybersecurity defense in action.">
-<meta property="og:url" content="https://vektorium.io/generated">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Vektorium">
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Cypher Sentinel | Live 3D Cybersecurity Simulation">
-<meta name="twitter:description" content="Full-screen interactive 3D visualization of sovereign cybersecurity defense.">
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
-  iframe { width: 100%; height: 100%; border: none; display: block; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0e1a">
+  <title>Cypher Sentinel 3D Simulation | Vektorium</title>
+  <meta name="description" content="Explore an illustrative Cypher Sentinel simulation, understand its scope, and discuss a guided evaluation with Vektorium.">
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://vektorium.io/generated">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta property="og:title" content="Cypher Sentinel 3D Simulation | Vektorium">
+  <meta property="og:description" content="An illustrative walkthrough—not a live customer environment or proof of production readiness.">
+  <meta property="og:url" content="https://vektorium.io/generated">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vektorium">
+  <meta property="og:image" content="https://vektorium.io/vektorium-logo.webp">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cypher Sentinel 3D Simulation | Vektorium">
+  <meta name="twitter:description" content="Explore an illustrative simulation and discuss a guided evaluation with Vektorium.">
+  <meta name="twitter:image" content="https://vektorium.io/vektorium-logo.webp">
+  <link rel="stylesheet" href="/assets/demo.css">
+  <script src="/assets/demo.js" defer></script>
 </head>
-<body>
-<iframe
-  src="https://cypher-sentinel-demo.vercel.app/demo?mode=standby&autostart=true&fullscreen=true"
-  title="Cypher Sentinel 3D Cybersecurity Simulation"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
-  allowfullscreen
-  loading="eager"
-></iframe>
+<body data-demo-variant="standby">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="demo-header">
+    <a class="demo-brand" href="/" aria-label="Vektorium home"><img src="/vektorium-logo.webp" width="32" height="32" alt="">Vektorium</a>
+    <nav class="demo-nav" aria-label="Demo navigation">
+      <a href="/demo">Demo overview</a>
+      <a class="nav-cta" href="/contact">Discuss an evaluation</a>
+    </nav>
+  </header>
+  <main id="main-content">
+    <section class="demo-intro" aria-labelledby="page-title">
+      <p class="eyebrow">Illustrative 3D simulation</p>
+      <h1 id="page-title">A different view of the workflow.</h1>
+      <p class="demo-lede">This alternate visualization opens the existing 3D demonstration. The external application starts only after you choose to load it.</p>
+      <div class="scope-note">
+        <p><strong>Know what you are viewing.</strong> This is an illustrative simulation, not a live customer environment or proof of production readiness. Do not enter confidential information, credentials, or real operational data.</p>
+      </div>
+    </section>
+    <section class="demo-shell" aria-labelledby="simulation-title">
+      <div class="demo-toolbar">
+        <div><p class="eyebrow">Optional external application</p><h2 id="simulation-title">3D visualization</h2></div>
+        <button class="button button-secondary" id="stop-demo" type="button" hidden>Stop and unload</button>
+      </div>
+      <div class="demo-viewport" id="simulation-view">
+        <div class="demo-placeholder" id="demo-placeholder">
+          <img src="/vektorium-logo.webp" width="64" height="64" alt="">
+          <h3>Start when you are ready.</h3>
+          <p>The external demonstration is not embedded until you choose to load it. It runs in a restricted frame and may use device resources while active.</p>
+          <button class="button button-primary" id="load-demo" type="button" hidden>Load 3D simulation</button>
+          <p class="fine-print">Loading connects to <span id="demo-destination">a separate Vercel-hosted demonstration</span>.</p>
+        </div>
+        <iframe id="demo-frame" title="Illustrative Cypher Sentinel 3D simulation" width="1600" height="1000" sandbox="allow-scripts allow-same-origin" allow="fullscreen" allowfullscreen referrerpolicy="no-referrer" hidden></iframe>
+      </div>
+      <p class="demo-status" id="demo-status" role="status" aria-live="polite" data-state="idle">The external demonstration has not been loaded.</p>
+      <div class="demo-fallback">
+        <p>If the frame is blank, unavailable, or asks for unexpected sign-in details, stop the demonstration and <a href="/contact">contact Vektorium</a>. Do not bypass a browser security warning.</p>
+        <a id="open-demo" href="https://cypher-sentinel-demo.vercel.app/demo?mode=standby&amp;autostart=true&amp;fullscreen=true" target="_blank" rel="noopener noreferrer">Open the external simulation in a new tab</a>
+        <p class="fine-print">Opening it separately leaves this page’s embedded-frame restrictions.</p>
+      </div>
+      <noscript>
+        <div class="demo-noscript"><p>JavaScript is disabled, so this page will not embed the demonstration. You can read the <a href="/cypher-sentinel">platform overview</a>, <a href="/contact">request a guided evaluation</a>, or explicitly use the external link above.</p></div>
+      </noscript>
+    </section>
+    <details class="demo-details">
+      <summary>About this demonstration and its boundaries</summary>
+      <div>
+        <p>The desktop and mobile simulations are separate applications hosted at <code>cypher-sentinel-demo.vercel.app</code> and <code>mobile-gold-five.vercel.app</code>. Their behavior and availability are separate from this static website.</p>
+        <p>The embedded frame is limited to script execution, its own origin, and fullscreen. This page does not grant it camera, microphone, location, motion-sensor, clipboard, popup, or top-level navigation permissions. These restrictions are a precaution, not a security certification of the demonstration.</p>
+        <p>For product decisions, agree a bounded evaluation and review the relevant evidence with Vektorium. A visualization alone cannot establish deployment suitability, operational performance, or compliance.</p>
+      </div>
+    </details>
+    <section class="demo-next-step" aria-labelledby="next-step-title">
+      <h2 id="next-step-title">Turn a walkthrough into a useful evaluation.</h2>
+      <p>Discuss your environment, the problem to be addressed, and the evidence needed to assess fit.</p>
+      <a class="button button-primary" href="/contact">Discuss an evaluation</a>
+    </section>
+  </main>
+  <footer class="demo-footer">
+    <p>Vektorium Inc. · Cypher Sentinel</p>
+    <nav aria-label="Footer navigation"><a href="/">Home</a><a href="/privacy-policy">Privacy</a><a href="/terms">Terms</a><a href="/contact">Contact</a></nav>
+  </footer>
 </body>
 </html>

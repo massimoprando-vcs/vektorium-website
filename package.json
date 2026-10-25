@@ -1,0 +1,14 @@
+{
+  "name": "vektorium-public-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "24.x" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs --check",
+    "test:build": "node scripts/test_build.mjs",
+    "test:privacy": "node scripts/test_privacy.mjs",
+    "test:integration": "node scripts/test_build.mjs --actual"
+  }
+}
