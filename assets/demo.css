@@ -48,6 +48,7 @@ iframe{display:block;width:100%;height:max(1000px,100svh);border:0;background:#0
 .demo-shell:fullscreen iframe{height:100%}
 .demo-shell:fullscreen .demo-status,.demo-shell:fullscreen .demo-fallback,.demo-shell:fullscreen .demo-noscript{display:none}
 .demo-status{margin:0;padding:1rem 1.5rem;border-top:1px solid var(--demo-border);color:var(--demo-muted);font-size:.9rem}
+.demo-status:empty{padding:0;border-top:0}
 .demo-status[data-state="loading"],.demo-status[data-state="loaded"]{color:var(--demo-cyan)}
 .demo-status[data-state="waiting"],.demo-status[data-state="error"]{color:#ffdc9c}
 .demo-fallback,.demo-noscript{padding:0 1.5rem 1.5rem;color:var(--demo-muted);font-size:.95rem}
