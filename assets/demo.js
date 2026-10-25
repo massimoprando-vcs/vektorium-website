@@ -2,9 +2,9 @@
 (() => {
   "use strict";
   const targets = Object.freeze({
-    desktop: "https://cypher-sentinel-demo.vercel.app/",
-    mobile: "https://mobile-gold-five.vercel.app/demo",
-    standby: "https://cypher-sentinel-demo.vercel.app/demo?mode=standby&autostart=true&fullscreen=true",
+    desktop: "https://demo.vektorium.io/",
+    mobile: "https://mobile-demo.vektorium.io/demo",
+    standby: "https://demo.vektorium.io/demo?mode=standby&autostart=true&fullscreen=true",
   });
   const frame = document.getElementById("demo-frame");
   const loadButton = document.getElementById("load-demo");
