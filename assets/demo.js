@@ -22,16 +22,59 @@
   let awaitingLoad = false;
   let timeoutId;
   let wasFullscreen = false;
+  let viewportExpanded = false;
+  let fullscreenPending = false;
+  let fullscreenRequest = 0;
+  let savedScroll;
+  let savedShellSemantics;
+  let inertSiblings = [];
   const supportsFullscreen = Boolean(shell && document.fullscreenEnabled && typeof shell.requestFullscreen === "function");
 
   function updateFullscreenControl() {
     if (!fullscreenButton) return;
-    const expanded = document.fullscreenElement === shell;
-    fullscreenButton.hidden = !active || !supportsFullscreen;
+    const expanded = document.fullscreenElement === shell || viewportExpanded;
+    fullscreenButton.hidden = !active;
     fullscreenButton.textContent = expanded ? "Exit full screen" : "Full screen";
     fullscreenButton.setAttribute("aria-pressed", String(expanded));
-    if (wasFullscreen && !expanded && active) fullscreenButton.focus();
+    if (wasFullscreen && !expanded && active) fullscreenButton.focus({ preventScroll: true });
     wasFullscreen = expanded;
+  }
+
+  function expandViewport() {
+    if (!active || viewportExpanded) return;
+    savedScroll = { x: window.scrollX, y: window.scrollY };
+    savedShellSemantics = { role: shell.getAttribute("role"), modal: shell.getAttribute("aria-modal") };
+    // Keep the existing iframe connected: moving or rebuilding it reloads the demo.
+    viewportExpanded = true;
+    shell.classList.add("is-expanded");
+    document.documentElement.classList.add("demo-viewport-expanded");
+    shell.setAttribute("role", "dialog");
+    shell.setAttribute("aria-modal", "true");
+    // Keep keyboard focus out of the page hidden behind the expanded view.
+    for (let current = shell; current.parentElement && current.parentElement !== document.documentElement; current = current.parentElement) {
+      for (const sibling of current.parentElement.children) {
+        if (sibling === current || ["SCRIPT", "STYLE", "LINK"].includes(sibling.tagName)) continue;
+        inertSiblings.push({ element: sibling, inert: sibling.inert });
+        sibling.inert = true;
+      }
+    }
+    updateFullscreenControl();
+    fullscreenButton?.focus({ preventScroll: true });
+  }
+
+  function collapseViewport() {
+    if (!viewportExpanded) return;
+    viewportExpanded = false;
+    shell.classList.remove("is-expanded");
+    document.documentElement.classList.remove("demo-viewport-expanded");
+    for (const { element, inert } of inertSiblings) element.inert = inert;
+    inertSiblings = [];
+    if (savedShellSemantics.role === null) shell.removeAttribute("role");
+    else shell.setAttribute("role", savedShellSemantics.role);
+    if (savedShellSemantics.modal === null) shell.removeAttribute("aria-modal");
+    else shell.setAttribute("aria-modal", savedShellSemantics.modal);
+    window.scrollTo(savedScroll.x, savedScroll.y);
+    updateFullscreenControl();
   }
 
   function selectedTarget() {
@@ -53,6 +96,9 @@
     window.clearTimeout(timeoutId);
     active = false;
     awaitingLoad = false;
+    fullscreenRequest += 1;
+    fullscreenPending = false;
+    collapseViewport();
     frame.removeAttribute("src");
     frame.hidden = true;
     placeholder.hidden = false;
@@ -104,12 +150,38 @@
   });
   stopButton.addEventListener("click", () => stopDemo(true));
   fullscreenButton?.addEventListener("click", async () => {
-    if (!active || !supportsFullscreen) return;
+    if (!active || fullscreenPending) return;
+    if (viewportExpanded) {
+      collapseViewport();
+      return;
+    }
+    if (document.fullscreenElement === shell) {
+      try { await document.exitFullscreen(); }
+      catch { setStatus("waiting", "Full screen is unavailable. Use Open in new tab."); }
+      return;
+    }
+    if (!supportsFullscreen) {
+      expandViewport();
+      return;
+    }
+    const request = ++fullscreenRequest;
+    fullscreenPending = true;
     try {
-      if (document.fullscreenElement === shell) await document.exitFullscreen();
-      else await shell.requestFullscreen();
+      await shell.requestFullscreen();
+      // Stop may have happened while the browser was deciding the request.
+      if ((!active || request !== fullscreenRequest) && document.fullscreenElement === shell) {
+        await document.exitFullscreen();
+      }
     } catch {
-      setStatus("waiting", "Full screen is unavailable. Use Open in new tab.");
+      if (active && request === fullscreenRequest) expandViewport();
+    } finally {
+      if (request === fullscreenRequest) fullscreenPending = false;
+    }
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && viewportExpanded) {
+      event.preventDefault();
+      collapseViewport();
     }
   });
   document.addEventListener("fullscreenchange", () => {
