@@ -31,10 +31,12 @@ The technical implementation keeps optional analytics disabled unless the visito
 
 The dependency-free builder publishes only allowlisted output in `dist`, not repository files. Only the exact value `VERCEL_ENV=production` preserves production indexing directives. Default, unknown, development and preview environments all create non-indexable preview output. Robots directives and noindex are not access control and must not be relied on to protect confidential content.
 
-`scripts/build.mjs` maintains an explicit public-page manifest (28 pages including `security.html`). The build rejects an unexpected root HTML page or a missing expected page before touching existing generated output. Adding a public page requires a reviewed manifest update and corresponding sitemap changes; root-level files are not published automatically. Allowlisting is not content approval.
+`scripts/build.mjs` maintains an explicit public-page manifest (39 pages, including `security.html` and 11 republished LinkedIn articles). The build rejects an unexpected root HTML page or a missing expected page before touching existing generated output. Adding a public page requires a reviewed manifest update and corresponding sitemap changes; root-level files are not published automatically. Source material under `content/` is not public output. Allowlisting is not content approval.
 
 ```sh
 python3 -B -m unittest discover -s scripts -p 'test_harden_site.py' -v
+node scripts/render_linkedin_posts.mjs --test
+node scripts/render_linkedin_posts.mjs --check
 python3 -B scripts/validate_site.py --self-test
 npm run check:js
 node scripts/test_site.mjs

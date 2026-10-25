@@ -58,8 +58,11 @@ class HardenSiteTests(unittest.TestCase):
         self.assertNotIn("<style", result.html)
         self.assertNotIn("style=", result.html)
         self.assertNotIn("onclick", result.html)
-        self.assertNotIn("<canvas", result.html)
-        self.assertIn('class="canvas-wrapper"', result.html)
+        self.assertEqual(len(nodes(result.html, "canvas")), 1)
+        self.assertIn('id="fluidCanvas" aria-hidden="true"', result.html)
+        self.assertIn('class="canvas-wrapper" aria-hidden="true"', result.html)
+        self.assertIn('class="cursor-dot" id="cursorDot" aria-hidden="true"', result.html)
+        self.assertIn('class="cursor-ring" id="cursorRing" aria-hidden="true"', result.html)
         self.assertEqual(len(nodes(result.html, "noscript")), 0)
         main = find(document, lambda node: node.tag == "main")
         self.assertEqual(main.get("id"), "main-content")
@@ -85,7 +88,7 @@ class HardenSiteTests(unittest.TestCase):
         self.assertEqual(styled.classes()[:2], ["copy", "prior"])
         self.assertTrue(styled.classes()[2].startswith("vx-style-"))
         stylesheets = [node.get("href") for node in nodes(result.html, "link") if node.get("rel") == "stylesheet"]
-        self.assertEqual(stylesheets, ["/assets/styles/example.css", "/assets/site.css"])
+        self.assertEqual(stylesheets, ["/assets/fonts.css", "/assets/styles/example.css", "/assets/site.css", "/assets/desktop-effects.css"])
 
     def test_metadata_and_schema(self):
         result = transform_page(FIXTURE, "example.html", normalize_schema=True)
@@ -95,7 +98,7 @@ class HardenSiteTests(unittest.TestCase):
         self.assertEqual([n.get("content") for n in metas if n.get("name") == "google-site-verification"], ["real-code"])
         self.assertFalse(any(n.get("name") in {"keywords", "msvalidate.01"} for n in metas))
         scripts = nodes(result.html, "script")
-        self.assertEqual(len(scripts), 2)
+        self.assertEqual(len(scripts), 3)
         ld = next(n for n in scripts if n.get("type") == "application/ld+json")
         graph = json.loads("".join(n.raw for n in ld.children))["@graph"]
         self.assertEqual([node["@type"] for node in graph], ["Organization", "WebSite", "WebPage", "BreadcrumbList"])
@@ -195,6 +198,40 @@ class HardenSiteTests(unittest.TestCase):
         source = FIXTURE.replace('<meta charset="UTF-8">', '<meta charset="UTF-8"><meta property="og:image" content="https://vektorium.io/og-image.webp"><meta name="twitter:image" content="https://vektorium.io/og-image.webp">')
         result = transform_page(source, "contact.html")
         self.assertNotIn("/og-image.webp", result.html)
+
+    def test_desktop_hooks_and_approved_assets_are_idempotent(self):
+        source = FIXTURE.replace('</head>', '<link rel="stylesheet" href="/assets/capability-visuals.css"></head>')
+        first = transform_page(source, "index.html")
+        second = transform_page(first.html, "index.html", first.css)
+        self.assertEqual(first.html, second.html)
+        scripts = [node.get("src") for node in nodes(first.html, "script") if node.get("src")]
+        self.assertEqual(scripts, ["/assets/site.js", "/assets/desktop-effects.js"])
+        stylesheets = [node.get("href") for node in nodes(first.html, "link") if node.get("rel") == "stylesheet"]
+        self.assertEqual(stylesheets, ["/assets/fonts.css", "/assets/styles/index.css", "/assets/capability-visuals.css", "/assets/site.css", "/assets/desktop-effects.css"])
+        self.assertTrue(all(node.has("defer") for node in nodes(first.html, "script") if node.get("src")))
+        self.assertTrue(first.report["desktop_effects"])
+        self.assertEqual(first.report["canvases_removed"], 0)
+        self.assertEqual(first.report["cursor_nodes_removed"], 0)
+
+    def test_svg_tag_case_and_unchanged_markup_are_preserved(self):
+        svg = '''<svg viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="paint" gradientUnits="userSpaceOnUse"><stop stop-color="#00d4ff"/><stop offset="1" stop-color="#00ffcc" /></linearGradient><radialGradient id="aura"><stop stop-opacity=".13"/></radialGradient></defs><path d="M1 1H10" stroke="url(#paint)"/></svg>'''
+        source = FIXTURE.replace('<svg viewBox="0 0 16 16"><path d="M 0 0" /></svg>', svg)
+        first = transform_page(source, "index.html")
+        self.assertIn(svg, first.html)
+        self.assertNotIn("lineargradient", first.html)
+        self.assertNotIn("radialgradient", first.html)
+        second = transform_page(first.html, "index.html", first.css)
+        self.assertEqual(first.html, second.html)
+
+    def test_html_attribute_escaping_is_canonical_but_svg_is_preserved(self):
+        source = FIXTURE.replace('<meta charset="UTF-8">', '<meta charset="UTF-8"><meta property="og:image:alt" content="Vektorium&#39;s image">')
+        svg = '<svg viewBox="0 0 16 16" aria-label="Vektorium&#39;s illustration"><path d="M 0 0"/></svg>'
+        source = source.replace('<svg viewBox="0 0 16 16"><path d="M 0 0" /></svg>', svg)
+        first = transform_page(source, "index.html")
+        self.assertIn('<meta property="og:image:alt" content="Vektorium&#x27;s image">', first.html)
+        self.assertIn(svg, first.html)
+        second = transform_page(first.html, "index.html", first.css)
+        self.assertEqual(first.html, second.html)
 
 
 if __name__ == "__main__":

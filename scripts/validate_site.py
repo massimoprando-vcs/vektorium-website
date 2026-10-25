@@ -11,6 +11,7 @@ product claims; original claims remain pending joint review against evidence.
 from __future__ import annotations
 
 import argparse
+import ast
 from collections import Counter
 from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
@@ -65,6 +66,19 @@ def walk_json(value):
             yield from walk_json(child)
 
 
+def parse_public_manifest(source: str) -> list[str]:
+    match = re.search(r"const publicPages = new Set\(\[([\s\S]*?)\]\);", source)
+    if not match:
+        raise ValueError("Missing explicit literal publicPages manifest")
+    try:
+        pages = ast.literal_eval("[" + match.group(1) + "]")
+    except (ValueError, SyntaxError) as exc:
+        raise ValueError("Public manifest must contain only literal filenames") from exc
+    if not isinstance(pages, list) or not pages or not all(isinstance(name, str) and re.fullmatch(r"[a-z0-9-]+\.html", name) for name in pages):
+        raise ValueError("Public manifest must contain root-level HTML filenames")
+    return pages
+
+
 @dataclass
 class Node:
     tag: str
@@ -111,7 +125,7 @@ class Page(HTMLParser):
         hidden = hidden or bool(set(attr.get("class", "").split()) & HIDDEN_CLASSES)
         if tag not in VOID_TAGS:
             self.stack.append((tag, hidden))
-        if tag == "title":
+        if tag == "title" and any(parent == "head" for parent, _ in self.stack):
             self.titles.append([])
         elif tag == "h1":
             self.h1.append([])
@@ -128,7 +142,7 @@ class Page(HTMLParser):
         names = [tag for tag, _ in self.stack]
         if self.script_node:
             self.script_text.append(data)
-        if "title" in names and self.titles:
+        if "head" in names and "title" in names and self.titles:
             self.titles[-1].append(data)
         if "h1" in names and self.h1:
             self.h1[-1].append(data)
@@ -432,6 +446,17 @@ class Audit:
         for feature in ("camera", "microphone", "geolocation", "payment", "accelerometer", "gyroscope", "magnetometer", "clipboard-read", "autoplay"):
             self.check(bool(re.search(r"(?:^|,\s*)" + feature + r"=\(\)(?:,|$)", permissions)), "vercel.json", f"Browser feature must remain denied: {feature}")
 
+    def validate_public_manifest(self):
+        try:
+            declared = parse_public_manifest((self.root / "scripts/build.mjs").read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            self.check(False, "scripts/build.mjs", f"Could not validate public-page manifest: {exc}")
+            return
+        self.check(len(declared) == len(set(declared)), "scripts/build.mjs", "Duplicate public-page manifest entries")
+        actual = {page.path.relative_to(self.root).as_posix() for page in self.pages.values()}
+        expected = set(declared)
+        self.check(actual == expected, "Public HTML inventory", f"Manifest mismatch; missing={sorted(expected - actual)}; unexpected={sorted(actual - expected)}")
+
     def run(self):
         files = [path for path in sorted(self.root.rglob("*.html"))
                  if not any(part in EXCLUDED_DIRS for part in path.relative_to(self.root).parts[:-1])]
@@ -452,6 +477,7 @@ class Audit:
         self.validate_assets()
         self.validate_sitemap()
         self.validate_config()
+        self.validate_public_manifest()
 
 
 def self_test():
@@ -466,8 +492,18 @@ def self_test():
     assert types({"@type": ["Organization", "Thing"]}) == {"Organization", "Thing"}
     assert types({"@type": ["Organization", {}]}) == {"Organization"}
     assert len(list(walk_json({"@graph": [{"@type": "Offer", "price": "0"}]}))) == 2
+    assert parse_public_manifest("const publicPages = new Set(['index.html', 'insight-example.html',]);") == ["index.html", "insight-example.html"]
+    for invalid_manifest in ("const pages = [];", "const publicPages = new Set([unknown]);", "const publicPages = new Set(['../private.html']);", "const publicPages = new Set([1]);"):
+        try:
+            parse_public_manifest(invalid_manifest)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("Malformed or nonliteral manifests must be rejected")
     duplicate = Page(Path("fixture.html"), '<div id="a" id="b"></div><div id="b"></div>')
     assert duplicate.duplicates and duplicate.ids["b"] == 2
+    titled_svg = Page(Path("fixture.html"), '<html><head><title>Page title</title></head><body><svg role="img"><title>Accessible illustration title</title></svg></body></html>')
+    assert len(titled_svg.titles) == 1 and "".join(titled_svg.titles[0]) == "Page title", "SVG accessibility titles are not document metadata titles"
     audit = Audit(Path("/site"))
     audit.pages["/"] = page
     audit.local_reference("/#main-content", ORIGIN + "/", "fixture.html")

@@ -52,8 +52,9 @@ with the owner before changing them.
 - Publish allowlisted public output from `dist`, not the repository root.
   Build scripts, audit notes, package metadata, Git metadata and CI settings
   are not public output. The static build has no application dependencies.
-  The explicit manifest contains 28 allowlisted public HTML pages, including the
-  new security page. Allowlisting is not content approval. An unexpected root
+  The explicit manifest contains 39 allowlisted public HTML pages, including the
+  security page and 11 authorized LinkedIn article republications. Source JSON
+  under `content/` is not public output. Allowlisting is not content approval. An unexpected root
   HTML file or a missing allowlisted page
   stops the build before any existing generated output is touched. Adding a
   page requires deliberate manifest and sitemap review; it is not discovered
@@ -85,7 +86,7 @@ with the owner before changing them.
   noindex is access control.** Confidential previews need deployment protection.
   Only the exact environment value `VERCEL_ENV=production` preserves production
   indexing directives; absent, unknown, development and preview values all
-  fail closed to the non-indexable preview output. The sitemap contains 27
+  fail closed to the non-indexable preview output. The sitemap contains 38
   intended indexable pages.
 - Add a read-only, dependency-free regression CI job with verified commit-pinned
   actions. It has no deployment credentials or production-promotion step.
@@ -99,6 +100,8 @@ The build and validator reject those old patterns.
 
 ```sh
 python3 -B -m unittest discover -s scripts -p 'test_harden_site.py' -v
+node scripts/render_linkedin_posts.mjs --test
+node scripts/render_linkedin_posts.mjs --check
 python3 -B scripts/validate_site.py --self-test
 npm run check:js
 node scripts/test_site.mjs
@@ -125,7 +128,9 @@ They do not fail the technical gate or authorize automatic removal. Console
 and JSON reports explicitly state that original product claims remain pending
 joint review; even zero technical failures is not an all-content-approved result.
 
-CI also tests the transformer, checks JavaScript syntax and frontend consent
+CI also tests the transformer and article-generator safeguards, verifies that
+the authorized article/archive outputs match their source without rewriting
+them, checks JavaScript syntax and frontend consent
 logic, exercises build boundaries in isolated temporary fixtures, builds production
 output, checks that development files are excluded, then builds and verifies
 the non-indexable preview. CI deploys neither output. Passing CI does not mean

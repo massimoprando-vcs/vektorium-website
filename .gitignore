@@ -6,3 +6,5 @@ __pycache__/
 .env
 .env.*
 build-report.json
+content/review-assets/
+assets/blog/*.jpg

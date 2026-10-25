@@ -7,6 +7,6 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "test": "python3 scripts/validate_site.py",
-    "check:js": "node --check assets/site.js && node --check assets/demo.js"
+    "check:js": "node --check assets/site.js && node --check assets/demo.js && node --check assets/desktop-effects.js && node --check scripts/render_linkedin_posts.mjs"
   }
 }

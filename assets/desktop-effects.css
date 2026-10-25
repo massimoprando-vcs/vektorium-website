@@ -1,0 +1,109 @@
+/* Original desktop visual language, progressively enabled by first-party JS.
+   The static/mobile/reduced-motion page remains complete without this layer. */
+@media (min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  html.vx-desktop-effects { scroll-behavior: smooth; }
+  .vx-desktop-effects.vx-pointer-ready body,
+  .vx-desktop-effects.vx-pointer-ready a,
+  .vx-desktop-effects.vx-pointer-ready button,
+  .vx-desktop-effects.vx-pointer-ready summary { cursor: none; }
+
+  .vx-desktop-effects.vx-pointer-ready #cursorDot,
+  .vx-desktop-effects.vx-pointer-ready #cursorRing { display: block; }
+  .vx-desktop-effects .cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    background: var(--cyan);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 12001;
+    mix-blend-mode: difference;
+    transition: width 0.2s, height 0.2s;
+    will-change: transform;
+  }
+  .vx-desktop-effects .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 12000;
+    transition: width 0.3s, height 0.3s;
+    will-change: transform;
+  }
+  .vx-desktop-effects .cursor-dot.hovering { width: 16px; height: 16px; background: var(--teal); }
+  .vx-desktop-effects .cursor-ring.hovering { width: 60px; height: 60px; border-color: rgba(0, 255, 204, 0.6); }
+  .vx-desktop-effects.vx-webgl-ready #fluidCanvas { display: block; }
+  .vx-desktop-effects .scroll-indicator { display: block; }
+  .vx-desktop-effects .product-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(0, 212, 255, 0.2);
+    box-shadow: 0 20px 60px rgba(0, 212, 255, 0.08);
+  }
+  .vx-desktop-effects .product-card-glow {
+    background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.08), transparent 60%);
+  }
+  .vx-desktop-effects .vision-text .dim { color: var(--muted); }
+  .vx-desktop-effects .vision-text .dim.revealed { color: var(--text); }
+  .vx-desktop-effects .vision-label { opacity: 0.6; }
+  .vx-desktop-effects .diff-number { opacity: 0.5; }
+  .vx-desktop-effects .header.vx-header-faded { pointer-events: none; }
+  .vx-desktop-effects .header.vx-header-faded:focus-within { pointer-events: auto; }
+
+  .vx-desktop-effects .ticker { padding: 120px 0; overflow: hidden; }
+  .vx-desktop-effects .ticker-track {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0;
+    width: max-content;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    animation: vx-ticker-scroll 30s linear infinite;
+  }
+  .vx-desktop-effects .ticker-item {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 0 40px;
+    border: 0;
+    border-radius: 0;
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1.6;
+    letter-spacing: 1.5px;
+  }
+  .vx-desktop-effects .ticker-item .hl { color: var(--text2); font-weight: 500; }
+  .vx-desktop-effects.vx-effects-paused .ticker-track,
+  .vx-desktop-effects .ticker-track.vx-ticker-paused { animation-play-state: paused; }
+  .vx-ticker-toggle {
+    display: block;
+    width: max-content;
+    max-width: calc(100% - 3rem);
+    min-height: 44px;
+    margin: 28px auto 0;
+    padding: 10px 20px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 999px;
+    color: var(--text2);
+    background: transparent;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .vx-ticker-toggle:hover { color: var(--cyan); border-color: var(--cyan); }
+}
+
+@keyframes vx-ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (max-width: 1024px), (pointer: coarse), (hover: none), (prefers-reduced-motion: reduce), (forced-colors: active) {
+  .vx-ticker-toggle, [data-vx-ticker-copy] { display: none; }
+}

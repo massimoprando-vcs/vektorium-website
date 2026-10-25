@@ -7,9 +7,10 @@ are deliberately excluded because their click-to-load implementation is owned
 separately.  No network requests, dependency installation, or deployment occur.
 
 The transformer is intentionally conservative about content: copy and existing
-JSON-LD claims are preserved by default.  This script makes existing content
-usable without legacy animation scripts.  Replacing the structured-data graph
-requires the separate, explicit --normalize-schema option, after claim review.
+JSON-LD claims are preserved by default.  Decorative desktop DOM is retained for
+the external, capability-gated desktop-effects implementation; static content
+remains usable without scripts.  Replacing the structured-data graph requires
+the separate, explicit --normalize-schema option, after claim review.
 """
 
 from __future__ import annotations
@@ -37,6 +38,9 @@ ATTR_RE = re.compile(
     r"([^\s=/>]+)(?:\s*=\s*(?:\"([^\"]*)\"|'([^']*)'|([^\s>]+)))?"
 )
 GOOGLE_FONT_HOSTS = {"fonts.googleapis.com", "fonts.gstatic.com"}
+SHARED_STYLES = {"/assets/fonts.css", "/assets/site.css", "/assets/desktop-effects.css",
+                 "/assets/capability-visuals.css"}
+APPROVED_SCRIPTS = {"/assets/site.js", "/assets/desktop-effects.js"}
 NAV_LINKS = (
     ("/", "Home"),
     ("/cypher-sentinel", "Cypher Sentinel"),
@@ -57,6 +61,10 @@ class Node:
     raw: str = ""
     kind: str = "element"
     self_closing: bool = False
+    source_opening: str | None = None
+    source_tag: str | None = None
+    source_attrs: tuple[tuple[str, str | None], ...] | None = None
+    foreign_content: bool = False
 
     def get(self, name: str, default: str = "") -> str:
         for key, value in self.attrs:
@@ -134,14 +142,25 @@ class DocumentParser(HTMLParser):
             result.append((name, html.unescape(value) if value is not None else None))
         return result
 
+    def remember_opening(self, node: Node) -> None:
+        node.source_opening = self.get_starttag_text()
+        match = re.match(r"<\s*([^\s/>]+)", node.source_opening or "")
+        node.source_tag = match.group(1) if match else node.tag
+        node.source_attrs = tuple(node.attrs)
+        node.foreign_content = node.tag in {"svg", "math"} or any(
+            parent.tag in {"svg", "math"} for parent in self.stack
+        )
+
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         node = element(tag, self.attributes(attrs))
+        self.remember_opening(node)
         self.add(node)
         if tag not in VOID:
             self.stack.append(node)
 
     def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         node = element(tag, self.attributes(attrs))
+        self.remember_opening(node)
         node.self_closing = tag not in VOID
         self.add(node)
 
@@ -208,15 +227,23 @@ def render(node: Node) -> str:
                          if not (child.kind == "text" and not child.raw.strip())) + "\n"
     attrs = "".join(" " + key if value is None else f' {key}="{html.escape(value, quote=True)}"'
                     for key, value in node.attrs)
+    # Preserve unchanged foreign-content tags exactly, including SVG element
+    # casing and self-closing whitespace.  Ordinary HTML retains canonical
+    # attribute escaping so generator output remains reproducible.
+    tag = node.source_tag if node.foreign_content and node.source_tag and node.source_tag.lower() == node.tag else node.tag
+    unchanged_opening = (node.foreign_content and node.source_opening is not None and
+                         tuple(node.attrs) == node.source_attrs and
+                         node.source_tag is not None and node.source_tag.lower() == node.tag)
+    opening = node.source_opening if unchanged_opening else f"<{tag}{attrs}>"
     if node.tag in VOID:
-        return f"<{node.tag}{attrs}>"
+        return opening
     if node.self_closing:
-        return f"<{node.tag}{attrs} />"
+        return node.source_opening if unchanged_opening else f"<{tag}{attrs} />"
     if node.tag in {"html", "head", "body"}:
         children = "\n".join(render(child) for child in node.children
                              if not (child.kind == "text" and not child.raw.strip()))
-        return f"<{node.tag}{attrs}>\n{children}\n</{node.tag}>"
-    return f"<{node.tag}{attrs}>" + "".join(render(child) for child in node.children) + f"</{node.tag}>"
+        return f"{opening}\n{children}\n</{tag}>"
+    return opening + "".join(render(child) for child in node.children) + f"</{tag}>"
 
 
 def is_google_font_link(node: Node) -> bool:
@@ -349,13 +376,15 @@ def transform_page(source: str, filename: str, existing_css: str | None = None,
     canonical = ORIGIN + route
     css_url = f"/assets/styles/{stem}.css"
     already_linked = any(item.tag == "link" and item.get("href") == css_url for item in walk(head))
+    capability_visuals = any(item.tag == "link" and item.get("href") == "/assets/capability-visuals.css"
+                             for item in walk(head))
     if already_linked and (existing_css is None or not existing_css.startswith(CSS_HEADER)):
         raise ValueError(f"{filename}: generated CSS is missing or has an unrecognized header")
     stats = {"styles_extracted": 0, "inline_styles_converted": 0,
              "scripts_removed": 0, "event_handlers_removed": 0,
              "font_links_removed": 0, "cursor_nodes_removed": 0,
              "canvases_removed": 0, "counters_made_static": 0,
-             "structured_data_preserved": 0}
+             "structured_data_preserved": 0, "decorative_nodes_preserved": 0}
     styles: list[str] = []
     inline_styles: dict[str, str] = {}
 
@@ -382,15 +411,15 @@ def transform_page(source: str, filename: str, existing_css: str | None = None,
             if is_google_font_link(node):
                 stats["font_links_removed"] += 1
                 continue
-            if node.tag == "canvas":
-                stats["canvases_removed"] += 1
-                continue
-            if node.get("id") in {"cursorDot", "cursorRing"} or set(node.classes()) & {"cursor-dot", "cursor-ring"}:
-                stats["cursor_nodes_removed"] += 1
-                continue
+            if node.get("id") in {"cursorDot", "cursorRing", "fluidCanvas", "scrollIndicator"} or set(node.classes()) & {"cursor-dot", "cursor-ring", "canvas-wrapper"}:
+                # Keep the original effects hooks.  Desktop effects are enabled
+                # only by the approved external runtime; the shared stylesheet
+                # supplies static, native-cursor mobile/no-JS fallbacks.
+                node.set("aria-hidden", "true")
+                stats["decorative_nodes_preserved"] += 1
             if set(node.classes()) & {"vx-skip-link", "vx-mobile-header"}:
                 continue
-            if node.tag == "link" and node.get("href") in {css_url, "/assets/site.css"}:
+            if node.tag == "link" and node.get("href") in SHARED_STYLES | {css_url}:
                 continue
             for attr, _ in node.attrs[:]:
                 if attr.casefold().startswith("on"):
@@ -507,13 +536,23 @@ def transform_page(source: str, filename: str, existing_css: str | None = None,
         head.children.append(element("script", [("type", "application/ld+json"), ("id", "vx-structured-data")],
                                      [text_node("\n" + json_text + "\n")]))
         schema_types = [item["@type"] for item in graph["@graph"]]
-    # The page's original stylesheet remains first; shared accessibility and
-    # static-first overrides must be the final stylesheet in document order.
+    # Self-hosted font declarations precede the original page stylesheet.  The
+    # shared accessible defaults precede desktop-only progressive enhancement.
     head.children.extend([
+        element("link", [("rel", "stylesheet"), ("href", "/assets/fonts.css")]),
         element("link", [("rel", "stylesheet"), ("href", css_url)]),
-        element("link", [("rel", "stylesheet"), ("href", "/assets/site.css")]),
-        element("script", [("src", "/assets/site.js"), ("defer", None)]),
     ])
+    if capability_visuals:
+        head.children.append(element("link", [("rel", "stylesheet"), ("href", "/assets/capability-visuals.css")]))
+    head.children.extend([
+        element("link", [("rel", "stylesheet"), ("href", "/assets/site.css")]),
+    ])
+    desktop_effects = any(item.get("id") in {"cursorDot", "cursorRing", "fluidCanvas"} for item in walk(body))
+    if desktop_effects:
+        head.children.append(element("link", [("rel", "stylesheet"), ("href", "/assets/desktop-effects.css")]))
+    head.children.append(element("script", [("src", "/assets/site.js"), ("defer", None)]))
+    if desktop_effects:
+        head.children.append(element("script", [("src", "/assets/desktop-effects.js"), ("defer", None)]))
 
     if already_linked:
         css = existing_css.rstrip() + "\n"  # type: ignore[union-attr]
@@ -534,17 +573,18 @@ def transform_page(source: str, filename: str, existing_css: str | None = None,
         "page": filename, "canonical": canonical, "stylesheet": css_url,
         "changed_html": output != source, "changed_css": css != existing_css,
         "schema_mode": "normalized" if normalize_schema else "preserved",
+        "desktop_effects": desktop_effects,
         "normalized_schema_types": schema_types, **stats,
     })
 
 
 def verify(document: Node, filename: str) -> None:
     for item in walk(document):
-        if item.tag in {"style", "canvas"}:
+        if item.tag == "style":
             raise ValueError(f"{filename}: remaining <{item.tag}>")
         if any(name.casefold() == "style" or name.casefold().startswith("on") for name, _ in item.attrs):
             raise ValueError(f"{filename}: inline style/event handler survived")
-        if item.tag == "script" and not (item.get("type").strip().lower() == "application/ld+json" or item.get("src") == "/assets/site.js"):
+        if item.tag == "script" and not (item.get("type").strip().lower() == "application/ld+json" or item.get("src") in APPROVED_SCRIPTS):
             raise ValueError(f"{filename}: unexpected script survived")
         if is_google_font_link(item):
             raise ValueError(f"{filename}: Google Font link survived")

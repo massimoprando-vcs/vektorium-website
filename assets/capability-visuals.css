@@ -1,0 +1,32 @@
+/* Conceptual, decorative schematics. Card headings and copy carry meaning. */
+.product-card .product-card-visual {
+  padding: 0 10px;
+  opacity: 1;
+  pointer-events: none;
+}
+.product-card:hover .product-card-visual { opacity: 1; }
+.product-card-visual > svg.capability-visual {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.product-card .product-card-icon {
+  color: #91ecf8;
+  border-color: rgba(0, 212, 255, 0.22);
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.10), rgba(0, 255, 204, 0.035));
+}
+.product-card-icon > svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+@media (max-width: 600px) {
+  .product-card .product-card-visual { padding-inline: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .capability-visual, .capability-visual * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

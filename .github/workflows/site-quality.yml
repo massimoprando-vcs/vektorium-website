@@ -32,6 +32,12 @@ jobs:
       - name: Test the source transformer
         run: python3 -B -m unittest discover -s scripts -p 'test_harden_site.py' -v
 
+      - name: Test the LinkedIn article generator without writing files
+        run: node scripts/render_linkedin_posts.mjs --test
+
+      - name: Verify generated articles and archive are current
+        run: node scripts/render_linkedin_posts.mjs --check
+
       - name: Check static content and security invariants
         run: python3 -B scripts/validate_site.py --self-test
 
@@ -61,8 +67,8 @@ jobs:
           root = Path('.')
           output = root / 'dist'
           assert len(list(output.glob('*.html'))) == len(list(root.glob('*.html')))
-          assert len(list(output.glob('*.html'))) == 28, 'Review the explicit public-page manifest before changing coverage'
-          for forbidden in ('.git', '.github', 'scripts', 'docs', 'node_modules', 'README.md', 'package.json', 'package-lock.json', 'vercel.json', 'build-report.json'):
+          assert len(list(output.glob('*.html'))) == 39, 'Review the explicit public-page manifest before changing coverage'
+          for forbidden in ('.git', '.github', 'scripts', 'docs', 'content', 'node_modules', 'README.md', 'package.json', 'package-lock.json', 'vercel.json', 'build-report.json'):
               assert not (output / forbidden).exists(), f'Development file leaked into dist: {forbidden}'
           assert (output / '.well-known/security.txt').is_file()
           print('Public output isolation passed.')

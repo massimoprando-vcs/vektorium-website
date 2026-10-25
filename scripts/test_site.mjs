@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Dependency-free behavioral tests for assets/site.js.
+ * Dependency-free behavioral tests for the shared and desktop-effects scripts.
  * Run: node scripts/test_site.mjs
  *
  * The website source is read, not modified. DOM, cookies, localStorage,
@@ -481,4 +481,727 @@ test('loading documents defer initialization and initialize only once', async ()
   await f.document.fire('DOMContentLoaded');
   await f.document.fire('DOMContentLoaded');
   assert.equal(f.nodes().filter(node => node.attributes['data-vx-privacy-settings'] !== undefined).length, 1);
+});
+
+/* Desktop decoration has a separate fixture: media queries, visibility,
+ * animation frames, Web Animations, intersections and WebGL are simulated.
+ * No browser, GPU, network request, real timer or filesystem write is used. */
+const desktopSource = readFileSync(new URL('../assets/desktop-effects.js', import.meta.url), 'utf8');
+const sharedStyles = readFileSync(new URL('../assets/site.css', import.meta.url), 'utf8');
+const desktopStyles = readFileSync(new URL('../assets/desktop-effects.css', import.meta.url), 'utf8');
+
+test('desktop cursor enable selectors outrank ID-based fallback hiding', () => {
+  // This source guard covers CSS cascade behavior that the DOM fixture does
+  // not calculate. Each active selector must retain the ID plus state classes.
+  for (const id of ['cursorDot', 'cursorRing']) {
+    const activeSelector = `.vx-desktop-effects.vx-pointer-ready #${id}`;
+    assert(desktopStyles.includes(activeSelector), `Missing ID-specific enable selector for ${id}`);
+    const activeRule = [...desktopStyles.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+      .find(rule => rule[1].split(',').some(selector => selector.trim() === activeSelector));
+    assert(activeRule, `Missing enable rule for ${id}`);
+    assert.match(activeRule[2], /display\s*:\s*block\s*;/);
+    const fallbackRule = [...sharedStyles.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+      .find(rule => rule[1].split(',').some(selector => selector.trim() === `#${id}`));
+    assert(fallbackRule, `Missing static fallback rule for ${id}`);
+    assert.match(fallbackRule[2], /display\s*:\s*none\s*;/);
+    assert.doesNotMatch(fallbackRule[2], /!important/);
+  }
+});
+
+test('shared no-JavaScript body styling explicitly restores the native cursor', () => {
+  const bodyRule = [...sharedStyles.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+    .find(rule => rule[1].trim() === 'body');
+  assert(bodyRule, 'Missing shared body fallback');
+  assert.match(bodyRule[2], /cursor\s*:\s*auto\s*;/);
+  assert.doesNotMatch(sharedStyles, /cursor\s*:\s*none/);
+  assert.match(desktopStyles, /\.vx-desktop-effects\.vx-pointer-ready body[\s\S]*?cursor:\s*none/);
+});
+
+function desktopFixture(overrides = {}) {
+  const configuration = {
+    width: 1440, height: 900, fine: true, hover: true, reduced: false,
+    forced: false, hidden: false, devicePixelRatio: 1, ...overrides
+  };
+  const animations = [];
+  const observers = [];
+  const contextCalls = [];
+  const unsafeWrites = [];
+  const frames = new Map();
+  const timers = new Map();
+  const media = new Map();
+  let sequence = 0;
+  let maximumPendingFrames = 0;
+  let frameTime = 0;
+  let document;
+
+  class Events {
+    constructor() { this.listeners = new Map(); }
+    addEventListener(type, handler, options = {}) {
+      const handlers = this.listeners.get(type) || [];
+      handlers.push({ handler, once: options.once === true });
+      this.listeners.set(type, handlers);
+    }
+    removeEventListener(type, handler) {
+      this.listeners.set(type, (this.listeners.get(type) || []).filter(entry => entry.handler !== handler));
+    }
+    emit(type, properties = {}) {
+      const event = { target: this, defaultPrevented: false, ...properties };
+      event.preventDefault ||= function () { this.defaultPrevented = true; };
+      for (const entry of [...(this.listeners.get(type) || [])]) {
+        entry.handler(event);
+        if (entry.once) this.removeEventListener(type, entry.handler);
+      }
+      return event;
+    }
+    listenerCount(type) { return (this.listeners.get(type) || []).length; }
+  }
+
+  class Animation extends Events {
+    constructor(element, keyframes, options) {
+      super();
+      this.element = element;
+      this.keyframes = keyframes;
+      this.options = options;
+      this.currentTime = 0;
+      this.playState = 'running';
+      this.cancelled = false;
+      this.keyframeUpdates = 0;
+      this.effect = { setKeyframes: value => { this.keyframes = value; this.keyframeUpdates += 1; } };
+      animations.push(this);
+    }
+    pause() { this.playState = 'paused'; }
+    play() { this.playState = 'running'; }
+    cancel() { this.cancelled = true; this.playState = 'idle'; }
+    finish() { this.playState = 'finished'; this.emit('finish'); }
+  }
+
+  const descendants = node => node.children.flatMap(child => [child, ...descendants(child)]);
+  const matches = (node, selector) => selector.split(',').some(part => {
+    const value = part.trim();
+    if (value.startsWith('.')) return node.classList.contains(value.slice(1));
+    if (value === '[id]') return Boolean(node.id);
+    if (value === '[data-count]') return node.dataset.count !== undefined;
+    if (value === '[data-vx-ticker-copy]') return node.attributes['data-vx-ticker-copy'] !== undefined;
+    return node.tagName === value;
+  });
+
+  class Element extends Events {
+    constructor(tagName, className = '', id = '') {
+      super();
+      this.tagName = tagName;
+      this.className = className;
+      this.id = id;
+      this.children = [];
+      this.attributes = {};
+      this.dataset = {};
+      this.textContent = '';
+      this.removed = false;
+      this.scrollHeight = 6000;
+      this.rect = { left: 100, top: 100, width: 200, height: 300 };
+      const tokens = () => new Set(this.className.split(/\s+/).filter(Boolean));
+      this.classList = {
+        add: (...values) => { this.className = [...new Set([...tokens(), ...values])].join(' '); },
+        remove: (...values) => { this.className = [...tokens()].filter(value => !values.includes(value)).join(' '); },
+        contains: value => tokens().has(value),
+        toggle: (value, force) => {
+          const enabled = force === undefined ? !tokens().has(value) : Boolean(force);
+          if (enabled) this.classList.add(value); else this.classList.remove(value);
+          return enabled;
+        }
+      };
+      const forbidden = operation => { unsafeWrites.push(operation); throw new Error(operation + ' is forbidden'); };
+      Object.defineProperty(this, 'style', {
+        get: () => new Proxy({ setProperty: () => forbidden('inline style') }, { set: () => forbidden('inline style') }),
+        set: () => forbidden('inline style')
+      });
+      if (configuration.animateUnavailable) this.animate = undefined;
+    }
+    append(...nodes) {
+      for (const node of nodes) {
+        assert.notEqual(node.tagName, 'script', 'The effects layer must never append a script');
+        node.parentElement = this;
+        this.children.push(node);
+      }
+    }
+    setAttribute(name, value) {
+      if (name === 'style' || /^on/i.test(name)) {
+        unsafeWrites.push(name);
+        throw new Error('Inline attribute is forbidden');
+      }
+      this.attributes[name] = value;
+      if (name === 'id') this.id = value;
+    }
+    removeAttribute(name) { delete this.attributes[name]; if (name === 'id') this.id = ''; }
+    querySelectorAll(selector) { return descendants(this).filter(node => matches(node, selector)); }
+    querySelector(selector) { return this.querySelectorAll(selector)[0] || null; }
+    closest(selector) { return matches(this, selector) ? this : this.parentElement?.closest(selector) || null; }
+    contains(target) { return this === target || descendants(this).includes(target); }
+    getBoundingClientRect() { return this.rect; }
+    cloneNode(deep) {
+      const copy = new Element(this.tagName, this.className, this.id);
+      copy.attributes = { ...this.attributes };
+      copy.dataset = { ...this.dataset };
+      copy.textContent = this.textContent;
+      if (deep) copy.append(...this.children.map(child => child.cloneNode(true)));
+      return copy;
+    }
+    remove() {
+      this.removed = true;
+      if (this.parentElement) this.parentElement.children = this.parentElement.children.filter(node => node !== this);
+    }
+    animate(keyframes, options) {
+      if (configuration.animateThrows) throw new Error('Animation API unavailable');
+      return new Animation(this, keyframes, options);
+    }
+    set innerHTML(_value) { unsafeWrites.push('innerHTML'); throw new Error('innerHTML is forbidden'); }
+    insertAdjacentHTML() { unsafeWrites.push('insertAdjacentHTML'); throw new Error('HTML injection is forbidden'); }
+  }
+
+  const root = new Element('html');
+  const body = new Element('body');
+  root.append(body);
+  const header = new Element('header', 'header');
+  const headerParts = ['header-left', 'header-center', 'header-right'].map(name => new Element('div', name));
+  header.append(...headerParts);
+  const headerLink = new Element('a');
+  headerParts[0].append(headerLink);
+  body.append(header);
+  const dot = new Element('div', 'cursor-dot', 'cursorDot');
+  const ring = new Element('div', 'cursor-ring', 'cursorRing');
+  const canvas = new Element('canvas', '', 'fluidCanvas');
+  const wrapper = new Element('div', 'canvas-wrapper');
+  wrapper.append(canvas);
+  const indicator = new Element('div', 'scroll-indicator', 'scrollIndicator');
+  indicator.textContent = 'SCROLL 000%';
+  if (!configuration.noDecorations) body.append(dot, ring, wrapper, indicator);
+  const hero = new Element('section', 'hero');
+  const heroElements = ['hero-shield', 'hero-title', 'hero-tagline', 'hero-badge'].map(name => new Element('div', name));
+  hero.append(...heroElements);
+  body.append(hero);
+  const reveal = new Element('section', 'reveal');
+  reveal.textContent = 'Essential content remains readable';
+  const counter = new Element('span', 'counter');
+  counter.dataset.target = '14200';
+  counter.textContent = '14,200';
+  const vision = new Element('div', 'vision-text');
+  vision.append(new Element('span', 'dim'), new Element('span', 'dim'));
+  const card = new Element('div', 'product-card');
+  const glow = new Element('div', 'product-card-glow');
+  card.append(glow);
+  body.append(reveal, counter, vision, card);
+  const ticker = new Element('section', 'ticker');
+  const track = new Element('ul', 'ticker-track', 'tickerTrack');
+  const tickerOriginals = ['One', 'Two'].map((text, index) => {
+    const item = new Element('li', 'ticker-item', 'ticker-' + index);
+    const highlight = new Element('span', 'hl', 'ticker-highlight-' + index);
+    item.textContent = 'VEKTORIUM is ';
+    highlight.textContent = text;
+    item.append(highlight);
+    return item;
+  });
+  track.append(...tickerOriginals);
+  ticker.append(track);
+  if (!configuration.noDecorations) body.append(ticker);
+
+  const gl = {
+    VERTEX_SHADER: 1, FRAGMENT_SHADER: 2, COMPILE_STATUS: 3, LINK_STATUS: 4,
+    ARRAY_BUFFER: 5, STATIC_DRAW: 6, FLOAT: 7, TRIANGLE_STRIP: 8,
+    shaders: [], programs: [], buffers: [], deletedShaders: [], deletedPrograms: [], deletedBuffers: [],
+    draws: [], uniforms: {}, viewports: [],
+    createShader(type) { const value = { type, id: ++sequence }; this.shaders.push(value); return value; },
+    shaderSource(shader, value) { shader.source = value; },
+    compileShader() {},
+    getShaderParameter() { return !configuration.shaderFailure; },
+    createProgram() { const value = { id: ++sequence }; this.programs.push(value); return value; },
+    attachShader() {}, linkProgram() {},
+    getProgramParameter() { return !configuration.linkFailure; },
+    useProgram() {},
+    createBuffer() { const value = { id: ++sequence }; this.buffers.push(value); return value; },
+    bindBuffer() {}, bufferData() {}, getAttribLocation() { return 0; },
+    enableVertexAttribArray() {}, vertexAttribPointer() {},
+    getUniformLocation(_program, name) { return name; },
+    viewport(...values) { this.viewports.push(values); },
+    uniform1f(name, value) { this.uniforms[name] = value; },
+    uniform2f(name, x, y) { this.uniforms[name] = [x, y]; },
+    drawArrays() {
+      if (configuration.drawFailure) throw new Error('Simulated renderer failure');
+      this.draws.push({ frameTime, elapsed: this.uniforms.u_time });
+    },
+    deleteShader(value) { this.deletedShaders.push(value); },
+    deleteProgram(value) { this.deletedPrograms.push(value); },
+    deleteBuffer(value) { this.deletedBuffers.push(value); }
+  };
+  canvas.getContext = (type, attributes) => {
+    contextCalls.push({ type, attributes });
+    if (configuration.webglThrows) throw new Error('WebGL blocked');
+    return configuration.webglUnavailable ? null : gl;
+  };
+
+  class Observer {
+    constructor(callback, settings) { this.callback = callback; this.settings = settings; this.targets = new Set(); this.disconnected = false; observers.push(this); }
+    observe(element) { this.targets.add(element); }
+    unobserve(element) { this.targets.delete(element); }
+    disconnect() { this.targets.clear(); this.disconnected = true; }
+    intersect(element, isIntersecting = true) { this.callback([{ target: element, isIntersecting }]); }
+  }
+  document = new Events();
+  Object.assign(document, {
+    documentElement: root, body,
+    readyState: configuration.readyState || 'complete', hidden: configuration.hidden,
+    activeElement: body,
+    createElement: tag => new Element(tag),
+    getElementById: id => [root, ...descendants(root)].find(node => node.id === id) || null,
+    querySelector: selector => root.querySelector(selector),
+    querySelectorAll: selector => root.querySelectorAll(selector)
+  });
+  const desktopQuery = '(min-width: 1025px) and (hover: hover) and (pointer: fine)';
+  const reducedQuery = '(prefers-reduced-motion: reduce)';
+  const forcedQuery = '(forced-colors: active)';
+  const mediaMatches = query => {
+    if (query === desktopQuery) return configuration.width >= 1025 && configuration.hover && configuration.fine;
+    if (query === reducedQuery) return configuration.reduced;
+    if (query === forcedQuery) return configuration.forced;
+    throw new Error('Unexpected media query: ' + query);
+  };
+  const window = new Events();
+  Object.assign(window, {
+    innerWidth: configuration.width, innerHeight: configuration.height,
+    devicePixelRatio: configuration.devicePixelRatio, scrollY: 0,
+    matchMedia: configuration.noMediaAPI ? undefined : query => {
+      if (!media.has(query)) {
+        const item = new Events();
+        item.matches = mediaMatches(query);
+        media.set(query, item);
+      }
+      return media.get(query);
+    },
+    requestAnimationFrame(callback) {
+      const id = ++sequence;
+      frames.set(id, callback);
+      maximumPendingFrames = Math.max(maximumPendingFrames, frames.size);
+      return id;
+    },
+    cancelAnimationFrame: id => frames.delete(id),
+    setTimeout(callback, delay) { const id = ++sequence; timers.set(id, { callback, delay }); return id; },
+    clearTimeout: id => timers.delete(id),
+    IntersectionObserver: configuration.noObserverAPI ? undefined : Observer,
+    fetch() { throw new Error('Network access is forbidden in these tests'); }
+  });
+  vm.runInNewContext(desktopSource, { window, document }, {
+    filename: 'assets/desktop-effects.js', timeout: 1000,
+    contextCodeGeneration: { strings: false, wasm: false }
+  });
+
+  return {
+    configuration, root, body, window, document, dot, ring, canvas, indicator, header, headerParts, headerLink,
+    heroElements, reveal, counter, vision, card, glow, ticker, track, tickerOriginals,
+    animations, observers, gl, contextCalls, unsafeWrites, frames, timers,
+    maximumPendingFrames: () => maximumPendingFrames,
+    active: () => root.classList.contains('vx-desktop-effects'),
+    tickerCopies: () => track.children.filter(node => node.attributes['data-vx-ticker-copy'] !== undefined),
+    tickerButton: () => ticker.querySelector('.vx-ticker-toggle'),
+    poseFor: element => animations.findLast(animation => animation.element === element && animation.options.duration === 1 && !animation.cancelled),
+    runFrame(time) {
+      frameTime = time;
+      const pending = [...frames.values()];
+      frames.clear();
+      for (const callback of pending) callback(time);
+    },
+    runTimers() {
+      const pending = [...timers.values()];
+      timers.clear();
+      for (const timer of pending) timer.callback();
+    },
+    intersect(element) {
+      const observer = observers.find(value => value.targets.has(element));
+      assert(observer, 'Expected an active observer for ' + element.className);
+      observer.intersect(element);
+    },
+    pointer(x = 200, y = 250, target = body, pointerType = 'mouse') {
+      document.emit('pointermove', { clientX: x, clientY: y, target, pointerType });
+    },
+    visibility(hidden) { document.hidden = hidden; document.emit('visibilitychange'); },
+    mode(changes) {
+      Object.assign(configuration, changes);
+      window.innerWidth = configuration.width;
+      window.innerHeight = configuration.height;
+      window.devicePixelRatio = configuration.devicePixelRatio;
+      for (const [query, item] of media) {
+        const matches = mediaMatches(query);
+        if (item.matches !== matches) { item.matches = matches; item.emit('change', { matches }); }
+      }
+      window.emit('resize');
+    }
+  };
+}
+
+test('desktop effects require a wide viewport, fine hover pointer and no motion/color preference', () => {
+  for (const settings of [{ width: 1024 }, { width: 390 }, { fine: false }, { hover: false }, { reduced: true }, { forced: true }]) {
+    const f = desktopFixture(settings);
+    assert.equal(f.active(), false, JSON.stringify(settings));
+    assert.equal(f.frames.size, 0);
+    assert.equal(f.timers.size, 0);
+    assert.equal(f.contextCalls.length, 0);
+    assert.equal(f.tickerCopies().length, 0);
+    assert.equal(f.animations.length, 0);
+    assert.equal(f.document.listenerCount('pointermove'), 0);
+    assert.equal(f.counter.textContent, '14,200');
+  }
+  assert.equal(desktopFixture({ width: 1025 }).active(), true);
+});
+
+test('desktop effects leave the page static when required media APIs are unavailable', () => {
+  const f = desktopFixture({ noMediaAPI: true });
+  assert.equal(f.active(), false);
+  assert.equal(f.frames.size, 0);
+  assert.equal(f.contextCalls.length, 0);
+  assert.equal(f.counter.textContent, '14,200');
+});
+
+test('desktop GPU starts lazily on interaction, using the original shader and low-power attributes', () => {
+  const f = desktopFixture();
+  assert.equal(f.contextCalls.length, 0);
+  assert.equal(f.timers.size, 1);
+  assert.equal([...f.timers.values()][0].delay, 15000);
+  f.runFrame(0);
+  assert.equal(f.frames.size, 0);
+  f.pointer();
+  assert.equal(f.contextCalls.length, 0, 'Compilation is deferred to the frame, not the input handler');
+  f.runFrame(16.67);
+  assert.equal(f.contextCalls.length, 1);
+  assert.equal(f.contextCalls[0].attributes.powerPreference, 'low-power');
+  assert.equal(f.contextCalls[0].attributes.antialias, false);
+  assert.equal(f.timers.size, 0);
+  assert.equal(f.gl.draws.length, 1);
+  assert(f.root.classList.contains('vx-webgl-ready'));
+  assert(f.gl.shaders.find(shader => shader.type === f.gl.FRAGMENT_SHADER).source.includes('for(int i=0;i<3;i++)'));
+  assert(f.gl.shaders.find(shader => shader.type === f.gl.FRAGMENT_SHADER).source.includes('exp(-d*d*12.0)*0.4'));
+});
+
+test('desktop idle fallback requests GPU work only through the single frame scheduler', () => {
+  const f = desktopFixture();
+  f.runFrame(0);
+  f.runTimers();
+  assert.equal(f.contextCalls.length, 0);
+  assert.equal(f.frames.size, 1);
+  f.runFrame(15000);
+  assert.equal(f.contextCalls.length, 1);
+  assert.equal(f.maximumPendingFrames(), 1);
+});
+
+test('cursor poses retain 0.2/0.08 smoothing through WAAPI without inline styles or HTML', () => {
+  const f = desktopFixture();
+  f.pointer(100, 100);
+  f.runFrame(0);
+  f.pointer(200, 200, f.card);
+  f.runFrame(1000 / 60);
+  const dotTransform = f.poseFor(f.dot).keyframes[0].transform;
+  const ringTransform = f.poseFor(f.ring).keyframes[0].transform;
+  assert.match(dotTransform, /translate3d\(120px,120px,0\)/);
+  assert.match(ringTransform, /translate3d\(108px,108px,0\)/);
+  assert(f.root.classList.contains('vx-pointer-ready'));
+  assert(f.dot.classList.contains('hovering'));
+  assert(f.ring.classList.contains('hovering'));
+  assert.match(f.poseFor(f.glow).keyframes[0].background, /circle at 50%/);
+  assert.deepEqual(f.unsafeWrites, []);
+});
+
+test('cursor failure never hides the native pointer or makes essential content depend on animation', () => {
+  for (const settings of [{ animateUnavailable: true }, { animateThrows: true }]) {
+    const f = desktopFixture(settings);
+    f.pointer();
+    f.runFrame(0);
+    assert.equal(f.root.classList.contains('vx-pointer-ready'), false);
+    assert.equal(f.reveal.textContent, 'Essential content remains readable');
+    assert.equal(f.counter.textContent, '14,200');
+    assert.deepEqual(f.unsafeWrites, []);
+  }
+});
+
+test('touch and keyboard interaction restore the native pointer immediately', () => {
+  const f = desktopFixture();
+  f.pointer();
+  f.runFrame(0);
+  assert(f.root.classList.contains('vx-pointer-ready'));
+  f.pointer(200, 250, f.body, 'touch');
+  assert.equal(f.root.classList.contains('vx-pointer-ready'), false);
+  f.pointer();
+  f.runFrame(40);
+  f.document.emit('keydown', { key: 'Tab' });
+  assert.equal(f.root.classList.contains('vx-pointer-ready'), false);
+});
+
+test('hidden tabs cancel frames and pause animations; visibility resumes without a stale cursor', () => {
+  const f = desktopFixture();
+  f.pointer();
+  f.runFrame(0);
+  const before = f.gl.draws.length;
+  f.visibility(true);
+  assert.equal(f.frames.size, 0);
+  assert.equal(f.timers.size, 0);
+  assert(f.root.classList.contains('vx-effects-paused'));
+  assert.equal(f.root.classList.contains('vx-pointer-ready'), false);
+  assert(f.animations.filter(animation => animation.options.duration > 1).every(animation => animation.playState === 'paused'));
+  f.runFrame(10000);
+  assert.equal(f.gl.draws.length, before);
+  f.visibility(false);
+  assert.equal(f.frames.size, 1);
+  assert.equal(f.root.classList.contains('vx-effects-paused'), false);
+  f.runFrame(10020);
+  assert.equal(f.root.classList.contains('vx-pointer-ready'), false);
+  f.runFrame(10060);
+  assert.equal(f.gl.uniforms.u_mouseActive, 0);
+  assert(f.animations.filter(animation => animation.options.duration > 1).every(animation => animation.playState === 'running'));
+});
+
+test('initially hidden tabs do not initialize effects until visible', () => {
+  const f = desktopFixture({ hidden: true });
+  assert.equal(f.active(), false);
+  assert.equal(f.contextCalls.length, 0);
+  assert.equal(f.animations.length, 0);
+  assert.equal(f.frames.size, 0);
+  f.visibility(false);
+  assert(f.active());
+  assert.equal(f.frames.size, 1);
+});
+
+test('desktop mode cleanup restores counters and releases frames, listeners, observers, animations and GPU resources', () => {
+  const f = desktopFixture();
+  f.pointer(200, 250, f.card);
+  f.intersect(f.counter);
+  f.runFrame(0);
+  assert.notEqual(f.counter.textContent, '14,200');
+  assert(f.gl.draws.length > 0);
+  const oldAnimations = [...f.animations];
+  f.mode({ width: 1024 });
+  assert.equal(f.active(), false);
+  assert.equal(f.root.classList.contains('vx-pointer-ready'), false);
+  assert.equal(f.root.classList.contains('vx-webgl-ready'), false);
+  assert.equal(f.counter.textContent, '14,200');
+  assert.equal(f.track.children.length, f.tickerOriginals.length);
+  assert.equal(f.tickerButton(), null);
+  assert.equal(f.frames.size, 0);
+  assert.equal(f.timers.size, 0);
+  assert.equal(f.document.listenerCount('pointermove'), 0);
+  assert.equal(f.document.listenerCount('keydown'), 0);
+  assert.equal(f.window.listenerCount('resize'), 0);
+  assert.equal(f.window.listenerCount('scroll'), 0);
+  assert(f.observers.every(observer => observer.disconnected));
+  assert(oldAnimations.every(animation => animation.cancelled));
+  assert.equal(f.gl.deletedShaders.length, 2);
+  assert.equal(f.gl.deletedPrograms.length, 1);
+  assert.equal(f.gl.deletedBuffers.length, 1);
+  assert.equal(f.canvas.width, 1);
+  assert.equal(f.canvas.height, 1);
+  assert.equal(f.indicator.textContent, 'SCROLL 000%');
+});
+
+test('changing reduced-motion or forced-colors preferences performs full cleanup immediately', () => {
+  for (const change of [{ reduced: true }, { forced: true }]) {
+    const f = desktopFixture();
+    f.intersect(f.counter);
+    assert.equal(f.counter.textContent, '0');
+    f.mode(change);
+    assert.equal(f.counter.textContent, '14,200');
+    assert.equal(f.frames.size, 0);
+    assert.equal(f.active(), false);
+    assert.equal(f.tickerCopies().length, 0);
+  }
+});
+
+test('returning to desktop does not duplicate ticker copies or event handlers', () => {
+  const f = desktopFixture();
+  for (let index = 0; index < 3; index += 1) {
+    f.mode({ fine: false });
+    assert.equal(f.track.children.length, 2);
+    f.mode({ fine: true });
+    assert.equal(f.track.children.length, 4);
+    assert.equal(f.document.listenerCount('pointermove'), 1);
+    assert.equal(f.window.listenerCount('resize'), 1);
+    assert.equal(f.frames.size, 1);
+  }
+  assert.equal(f.maximumPendingFrames(), 1);
+});
+
+test('ticker copies are hidden from assistive technology, inert, and free of duplicate IDs', () => {
+  const f = desktopFixture();
+  assert.equal(f.tickerCopies().length, f.tickerOriginals.length);
+  for (const copy of f.tickerCopies()) {
+    assert.equal(copy.attributes['aria-hidden'], 'true');
+    assert.equal(copy.inert, true);
+    assert.equal(copy.id, '');
+    assert.equal(copy.querySelectorAll('[id]').length, 0);
+  }
+  assert(f.tickerOriginals.every(item => item.id));
+  assert.deepEqual(f.unsafeWrites, []);
+});
+
+test('ticker pause/resume control changes the actual pause class and pressed state', () => {
+  const f = desktopFixture();
+  const button = f.tickerButton();
+  assert.equal(button.type, 'button');
+  assert.equal(button.attributes['aria-pressed'], 'false');
+  button.emit('click');
+  assert(f.track.classList.contains('vx-ticker-paused'));
+  assert.equal(button.attributes['aria-pressed'], 'true');
+  assert.equal(button.textContent, 'Resume highlights');
+  button.emit('click');
+  assert.equal(f.track.classList.contains('vx-ticker-paused'), false);
+  assert.equal(button.attributes['aria-pressed'], 'false');
+  assert.equal(button.textContent, 'Pause highlights');
+});
+
+test('rapid pointer, scroll and resize events share one outstanding animation frame', () => {
+  const f = desktopFixture();
+  for (let index = 0; index < 20; index += 1) {
+    f.pointer(200 + index, 250 + index, f.card);
+    f.window.emit('scroll');
+    f.window.emit('resize');
+  }
+  assert.equal(f.frames.size, 1);
+  f.runFrame(0);
+  assert.equal(f.frames.size, 1);
+  assert.equal(f.maximumPendingFrames(), 1);
+});
+
+test('GPU drawing is capped near 30fps and its HiDPI framebuffer is bounded to four megapixels', () => {
+  const f = desktopFixture({ width: 8000, height: 4000, devicePixelRatio: 4 });
+  f.pointer();
+  f.runFrame(0);
+  assert(f.canvas.width * f.canvas.height <= 4000000);
+  assert(f.canvas.width > 0 && f.canvas.height > 0);
+  const before = f.gl.draws.length;
+  f.runFrame(10);
+  f.runFrame(20);
+  f.runFrame(30);
+  assert.equal(f.gl.draws.length, before);
+  f.runFrame(34);
+  assert.equal(f.gl.draws.length, before + 1);
+  f.mode({ width: 1920, height: 1080, devicePixelRatio: 2 });
+  f.runFrame(70);
+  assert(f.canvas.width * f.canvas.height <= 4000000);
+  assert(f.canvas.width <= 1920 * 1.5);
+});
+
+test('WebGL denial or shader/link failure leaves safe fallback content and cleans partial resources', () => {
+  for (const settings of [{ webglUnavailable: true }, { webglThrows: true }, { shaderFailure: true }, { linkFailure: true }]) {
+    const f = desktopFixture(settings);
+    f.pointer();
+    f.runFrame(0);
+    assert.equal(f.root.classList.contains('vx-webgl-ready'), false);
+    assert.equal(f.gl.draws.length, 0);
+    assert.equal(f.counter.textContent, '14,200');
+    assert.equal(f.reveal.textContent, 'Essential content remains readable');
+    assert.equal(f.gl.deletedShaders.length, f.gl.shaders.length);
+    assert.equal(f.gl.deletedPrograms.length, f.gl.programs.length);
+    const attempts = f.contextCalls.length;
+    f.pointer(300, 300);
+    f.runFrame(40);
+    assert.equal(f.contextCalls.length, attempts, 'Failed contexts are not repeatedly retried on pointer movement');
+  }
+});
+
+test('WebGL context loss removes readiness and restoration can safely rebuild the renderer', () => {
+  const f = desktopFixture();
+  f.pointer();
+  f.runFrame(0);
+  const draws = f.gl.draws.length;
+  const event = f.canvas.emit('webglcontextlost');
+  assert(event.defaultPrevented);
+  assert.equal(f.root.classList.contains('vx-webgl-ready'), false);
+  f.runFrame(40);
+  assert.equal(f.gl.draws.length, draws);
+  f.canvas.emit('webglcontextrestored');
+  f.runFrame(80);
+  assert(f.root.classList.contains('vx-webgl-ready'));
+  assert.equal(f.contextCalls.length, 2);
+  assert.equal(f.gl.draws.length, draws + 1);
+});
+
+test('a runtime renderer failure restores content, counters and the native pointer', () => {
+  const f = desktopFixture({ drawFailure: true });
+  f.intersect(f.counter);
+  f.pointer();
+  f.runFrame(0);
+  assert.equal(f.active(), false);
+  assert.equal(f.root.classList.contains('vx-pointer-ready'), false);
+  assert.equal(f.counter.textContent, '14,200');
+  assert.equal(f.frames.size, 0);
+  assert.equal(f.timers.size, 0);
+  assert.equal(f.tickerCopies().length, 0);
+  assert.equal(f.gl.deletedBuffers.length, 1);
+});
+
+test('counter animation preserves the displayed claim and ignores mismatched target metadata', () => {
+  const f = desktopFixture();
+  f.counter.dataset.target = '99999';
+  f.intersect(f.counter);
+  assert.equal(f.counter.textContent, '14,200');
+  const valid = desktopFixture();
+  valid.intersect(valid.counter);
+  valid.runFrame(0);
+  valid.runFrame(1000);
+  assert.equal(valid.counter.textContent, '14,200');
+});
+
+test('intersection effects are progressive and paused entries wait until visibility resumes', () => {
+  const f = desktopFixture();
+  assert.equal(f.animations.filter(animation => animation.element === f.reveal).length, 0);
+  assert.equal(f.reveal.textContent, 'Essential content remains readable');
+  f.visibility(true);
+  f.intersect(f.reveal);
+  assert.equal(f.animations.filter(animation => animation.element === f.reveal).length, 0);
+  f.visibility(false);
+  const animation = f.animations.find(value => value.element === f.reveal);
+  assert(animation);
+  assert.equal(animation.options.duration, 800);
+  animation.finish();
+  assert(animation.cancelled);
+});
+
+test('header scroll fading does not keep a focused navigation link invisible', () => {
+  const f = desktopFixture();
+  f.window.scrollY = 1000;
+  f.runFrame(0);
+  assert(f.header.classList.contains('vx-header-faded'));
+  assert.equal(f.poseFor(f.headerParts[0]).keyframes[0].opacity, 0);
+  f.document.activeElement = f.headerLink;
+  f.header.emit('focusin');
+  f.runFrame(40);
+  assert.equal(f.header.classList.contains('vx-header-faded'), false);
+  assert.equal(f.poseFor(f.headerParts[0]).keyframes[0].opacity, 1);
+});
+
+test('missing decoration or IntersectionObserver APIs leave the main page usable', () => {
+  for (const settings of [{ noDecorations: true }, { noObserverAPI: true }]) {
+    const f = desktopFixture(settings);
+    f.runFrame(0);
+    assert.equal(f.counter.textContent, '14,200');
+    assert.equal(f.reveal.textContent, 'Essential content remains readable');
+    assert.deepEqual(f.unsafeWrites, []);
+    f.mode({ reduced: true });
+    assert.equal(f.frames.size, 0);
+  }
+});
+
+test('desktop initialization waits for DOM readiness; pagehide cleans up and pageshow rebuilds once', () => {
+  const f = desktopFixture({ readyState: 'loading' });
+  assert.equal(f.active(), false);
+  f.document.emit('DOMContentLoaded');
+  f.document.emit('DOMContentLoaded');
+  assert(f.active());
+  assert.equal(f.document.listenerCount('visibilitychange'), 1);
+  assert.equal(f.document.listenerCount('pointermove'), 1);
+  f.pointer();
+  f.runFrame(0);
+  f.window.emit('pagehide');
+  assert.equal(f.active(), false);
+  assert.equal(f.frames.size, 0);
+  assert.equal(f.track.children.length, 2);
+  f.window.emit('pageshow');
+  f.window.emit('pageshow');
+  assert(f.active());
+  assert.equal(f.track.children.length, 4);
+  assert.equal(f.document.listenerCount('pointermove'), 1);
+  assert.equal(f.maximumPendingFrames(), 1);
 });

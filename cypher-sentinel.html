@@ -176,14 +176,19 @@
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="author" content="Vektorium Inc.">
 <link rel="canonical" href="https://vektorium.io/cypher-sentinel">
+<link rel="stylesheet" href="/assets/fonts.css">
 <link rel="stylesheet" href="/assets/styles/cypher-sentinel.css">
 <link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/desktop-effects.css">
 <script src="/assets/site.js" defer></script>
+<script src="/assets/desktop-effects.js" defer></script>
 </head>
 <body>
 <a class="vx-skip-link" href="#main-content">Skip to content</a>
 <div class="vx-mobile-header"><a class="vx-mobile-brand" href="/" aria-label="Vektorium home"><img src="/vektorium-logo.webp" width="32" height="32" alt="" decoding="async">Vektorium</a><details class="vx-mobile-menu"><summary>Menu</summary><nav aria-label="Mobile navigation"><a href="/">Home</a><a href="/cypher-sentinel" aria-current="page">Cypher Sentinel</a><a href="/sovereign-cybersecurity-platform">Sovereign control</a><a href="/post-quantum-cybersecurity">Post-quantum</a><a href="/blog">Resources</a><a href="/security">Security &amp; disclosure</a><a href="/demo">Demo</a><a href="/contact">Contact</a></nav></details></div>
-<div class="canvas-wrapper"></div>
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+<div class="canvas-wrapper" aria-hidden="true"><canvas id="fluidCanvas" aria-hidden="true"></canvas></div>
 <nav class="site-nav" aria-label="Primary navigation">
 <a href="/" class="logo"><picture><source srcset="vektorium-logo.webp" type="image/webp"><img src="/vektorium-logo.webp" alt="Vektorium Logo" width="240" height="240" decoding="async"></picture>Vektorium</a>
 <div class="nav-links"><a href="/">Home</a><a href="/cypher-sentinel">Cypher Sentinel</a><a href="/sovereign-cybersecurity-platform">Platform</a><a href="/cybersecurity-convergence-platform">Convergence</a><a href="/critical-infrastructure-cybersecurity">Infrastructure</a><a href="/blog">Resources</a><a href="/contact" class="cta">Contact</a></div>

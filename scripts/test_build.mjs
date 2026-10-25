@@ -20,7 +20,7 @@ const source = readFileSync(builder, 'utf8');
 const manifest = source.match(/const publicPages = new Set\(\[([\s\S]*?)\]\);/);
 assert.ok(manifest, 'Builder must retain an explicit literal public-page manifest');
 const pages = [...manifest[1].matchAll(/'([^']+)'/g)].map(match => match[1]);
-assert.equal(pages.length, 28, 'Review the test inventory explicitly if the public manifest changes');
+assert.equal(pages.length, 39, 'Review the test inventory explicitly if the public manifest changes');
 assert.equal(new Set(pages).size, pages.length, 'Public manifest contains duplicates');
 assert.ok(pages.every(page => /^[a-z0-9-]+\.html$/.test(page)), 'Manifest paths must be root-level HTML files');
 
@@ -56,6 +56,7 @@ function fixture(name) {
     put(root, path, 'Synthetic private fixture; never publish.\n');
   }
   put(root, 'package.json', '{"private":true}\n');
+  put(root, 'content/source-posts.json', '{"fixture":"Source archive is build input, not a public asset"}\n');
   return root;
 }
 
@@ -109,7 +110,7 @@ try {
     }
     assert.equal(readFileSync(join(output, 'robots.txt'), 'utf8'), readFileSync(join(root, 'robots.txt'), 'utf8'));
     assert.ok(existsSync(join(output, '.well-known/security.txt')));
-    for (const path of ['README.md', 'secret.txt', 'docs', '.git', '.github', 'scripts', 'package.json', 'build-report.json']) {
+    for (const path of ['README.md', 'secret.txt', 'docs', 'content', '.git', '.github', 'scripts', 'package.json', 'build-report.json']) {
       assert.equal(existsSync(join(output, path)), false, `${path} must not be public output`);
     }
     const report = JSON.parse(readFileSync(join(root, 'build-report.json'), 'utf8'));
@@ -205,6 +206,21 @@ try {
     assert.deepEqual(readdirSync(join(root, 'dist/assets')), ['site.js']);
     const report = JSON.parse(readFileSync(join(root, 'build-report.json'), 'utf8'));
     assert.ok(!report.assets.some(asset => asset.file.includes('.editor-')));
+  });
+
+  test('self-hosted WOFF2 assets and public stylesheet notices are copied unchanged', () => {
+    const root = fixture('self-hosted-fonts');
+    // Synthetic bytes test the publication boundary, not font-file validity.
+    const font = Buffer.from([0x77, 0x4f, 0x46, 0x32, 0, 1, 2, 3]);
+    const stylesheet = '/*! Fixture-only public font notice. */\n@font-face { font-family: Fixture; src: url("/assets/fonts/fixture.woff2") format("woff2"); font-display: swap; }\n';
+    put(root, 'assets/fonts/fixture.woff2', font);
+    put(root, 'assets/fonts.css', stylesheet);
+    build(root, 'production');
+    assert.deepEqual(readFileSync(join(root, 'dist/assets/fonts/fixture.woff2')), font);
+    assert.equal(readFileSync(join(root, 'dist/assets/fonts.css'), 'utf8'), stylesheet);
+    const report = JSON.parse(readFileSync(join(root, 'build-report.json'), 'utf8'));
+    assert.ok(report.assets.some(asset => asset.file === 'assets/fonts/fixture.woff2'));
+    assert.ok(report.assets.some(asset => asset.file === 'assets/fonts.css'));
   });
 } finally {
   // Never recursively remove a broad or unresolved path. All checks must hold
