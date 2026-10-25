@@ -1,0 +1,52 @@
+name: Desktop-preserving website checks
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out source without persisted credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: Check JavaScript syntax without installing dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in assets/*.js scripts/*.mjs; do
+            node --check "$file"
+          done
+
+      - name: Verify exact CSP hashes, approved assets and source manifest
+        run: npm run check
+
+      - name: Test privacy behavior without network access
+        run: npm run test:privacy
+
+      - name: Test build safeguards and actual production plus preview output
+        run: npm run test:integration
+
+      - name: Build the non-indexable review artifact
+        env:
+          VERCEL_ENV: preview
+        run: npm run build

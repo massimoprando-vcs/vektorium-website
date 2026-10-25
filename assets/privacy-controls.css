@@ -1,0 +1,98 @@
+/* Deliberately scoped to the new privacy UI. No original page, navigation,
+   font, layout, cursor-animation or WebGL rules are changed here. */
+.vx-privacy-settings {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 44px;
+  max-width: 100%;
+  margin: 12px 0;
+  padding: 10px 20px;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 999px;
+  color: #8892a8;
+  background: transparent;
+  font: 500 11px/1.6 "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.vx-privacy-settings:hover { color: #00d4ff; border-color: #00d4ff; }
+.vx-privacy-settings:focus-visible,
+.vx-privacy-dialog :focus-visible { outline: 2px solid #00d4ff; outline-offset: 4px; }
+
+.vx-privacy-dialog {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+  display: none;
+  box-sizing: border-box;
+  width: min(34rem, calc(100% - 40px));
+  height: fit-content;
+  max-height: calc(100vh - 40px);
+  max-height: calc(100svh - 40px);
+  overflow: auto;
+  margin: auto;
+  padding: 24px;
+  border: 1px solid rgba(0, 212, 255, 0.45);
+  border-radius: 12px;
+  color: #e8eaf0;
+  background: #0d1225;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
+  font: 400 14px/1.65 "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: none;
+  color-scheme: dark;
+  cursor: auto;
+}
+.vx-privacy-dialog[open] { display: block; }
+.vx-privacy-dialog::backdrop { background: rgba(3, 7, 18, 0.78); cursor: auto; }
+.vx-privacy-dialog * { box-sizing: border-box; }
+.vx-privacy-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin: 0 0 12px; }
+.vx-privacy-dialog .vx-privacy-title {
+  flex: 1;
+  margin: 6px 0 0;
+  padding: 0;
+  color: #e8eaf0;
+  background: none;
+  font: 500 16px/1.5 "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: none;
+}
+.vx-privacy-dialog .vx-privacy-copy,
+.vx-privacy-dialog .vx-privacy-status { margin: 0 0 12px; padding: 0; color: #b7c3d7; font-size: 14px; line-height: 1.65; letter-spacing: normal; }
+.vx-privacy-dialog .vx-privacy-current { margin: 16px 0; color: #00d4ff; font: 500 16px/1.5 "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: normal; }
+.vx-privacy-dialog .vx-privacy-link { display: inline; margin: 0; padding: 0; color: #00d4ff; font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.vx-privacy-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0 0; }
+.vx-privacy-button,
+.vx-privacy-close {
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 212, 255, 0.55);
+  border-radius: 8px;
+  color: #e8eaf0;
+  background: transparent;
+  font: 500 14px/1.5 "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: normal;
+  text-transform: none;
+  cursor: pointer;
+}
+.vx-privacy-button { flex: 1 1 140px; min-height: 48px; }
+.vx-privacy-button[aria-pressed="true"] { border-color: #00d4ff; box-shadow: inset 0 0 0 1px #00d4ff; }
+.vx-privacy-close { flex: 0 0 auto; font-size: 12px; }
+.vx-privacy-button:hover:not(:disabled),
+.vx-privacy-close:hover { color: #0a0e1a; background: #00d4ff; border-color: #00d4ff; }
+.vx-privacy-button:disabled { opacity: 0.6; cursor: not-allowed; }
+.vx-privacy-dialog .vx-privacy-status { margin: 12px 0; font-size: 12px; }
+
+@media (max-width: 600px) {
+  .vx-privacy-dialog { width: calc(100% - 24px); max-height: calc(100vh - 24px); max-height: calc(100svh - 24px); padding: 16px; }
+}
+@media (forced-colors: active) {
+  .vx-privacy-settings, .vx-privacy-dialog, .vx-privacy-button, .vx-privacy-close { border-color: ButtonText; }
+  .vx-privacy-settings:focus-visible, .vx-privacy-dialog :focus-visible { outline-color: Highlight; }
+}
