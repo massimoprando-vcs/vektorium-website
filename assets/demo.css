@@ -42,12 +42,14 @@ h3{margin:0;font-size:1.5rem;font-weight:400;letter-spacing:1px}
 .button-secondary{background:transparent;border-color:rgba(0,212,255,.3);color:var(--demo-text)}
 .button-secondary:hover{background:rgba(0,212,255,.1);border-color:var(--demo-cyan);color:var(--demo-cyan)}
 iframe{display:block;width:100%;height:max(1000px,100svh);border:0;background:#070c16}
-.demo-shell:fullscreen{display:flex;flex-direction:column;width:100%;height:100dvh;margin:0;border:0;border-radius:0;overflow:hidden}
-.demo-shell:fullscreen .demo-toolbar{flex:none;padding:.75rem 1rem}
-.demo-shell:fullscreen .demo-toolbar .eyebrow{display:none}
-.demo-shell:fullscreen .demo-viewport{flex:1;min-height:0}
-.demo-shell:fullscreen iframe{height:100%}
-.demo-shell:fullscreen .demo-status,.demo-shell:fullscreen .demo-fallback,.demo-shell:fullscreen .demo-noscript{display:none}
+.demo-shell:fullscreen,.demo-shell.is-expanded{display:flex;flex-direction:column;width:100%;height:100dvh;margin:0;border:0;border-radius:0;overflow:hidden}
+.demo-shell.is-expanded{position:fixed;inset:0;z-index:10000}
+html.demo-viewport-expanded,html.demo-viewport-expanded body{overflow:hidden}
+.demo-shell:fullscreen .demo-toolbar,.demo-shell.is-expanded .demo-toolbar{flex:none;padding:.75rem 1rem}
+.demo-shell:fullscreen .demo-toolbar .eyebrow,.demo-shell.is-expanded .demo-toolbar .eyebrow{display:none}
+.demo-shell:fullscreen .demo-viewport,.demo-shell.is-expanded .demo-viewport{flex:1;min-height:0}
+.demo-shell:fullscreen iframe,.demo-shell.is-expanded iframe{height:100%}
+.demo-shell:fullscreen .demo-status,.demo-shell:fullscreen .demo-fallback,.demo-shell:fullscreen .demo-noscript,.demo-shell.is-expanded .demo-status,.demo-shell.is-expanded .demo-fallback,.demo-shell.is-expanded .demo-noscript{display:none}
 .demo-status{margin:0;padding:1rem 1.5rem;border-top:1px solid var(--demo-border);color:var(--demo-muted);font-size:.9rem}
 .demo-status:empty{padding:0;border-top:0}
 .demo-status[data-state="loading"],.demo-status[data-state="loaded"]{color:var(--demo-cyan)}
