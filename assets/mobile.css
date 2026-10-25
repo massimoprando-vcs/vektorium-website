@@ -1,0 +1,200 @@
+/* Additive phone layout. The approved desktop CSS and effects stay unchanged. */
+.vx-mobile-header { display: none; }
+
+@media (max-width: 768px) {
+  .header, .site-nav { display: none; }
+  .floating-nav, .scroll-indicator, .back-to-top { display: none; }
+
+  .vx-mobile-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 68px;
+    padding: 12px 20px;
+    padding-top: max(12px, env(safe-area-inset-top));
+    border-bottom: 1px solid rgba(0, 212, 255, 0.16);
+    background: rgba(10, 14, 26, 0.97);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+  .vx-mobile-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    min-height: 44px;
+    color: var(--text, #e8eaf0);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .vx-mobile-brand img { flex: none; width: 28px; height: 28px; object-fit: contain; }
+  .vx-mobile-menu { position: static; flex: none; }
+  .vx-mobile-menu > summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 76px;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 24px;
+    color: var(--cyan, #00d4ff);
+    background: rgba(0, 212, 255, 0.06);
+    font: 500 12px/1.4 "Inter", sans-serif;
+    letter-spacing: 0.06em;
+    list-style: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .vx-mobile-menu > summary::-webkit-details-marker { display: none; }
+  .vx-mobile-menu > summary::marker { content: ""; }
+  .vx-mobile-menu > summary::after { content: "+"; font: 400 18px/1 "JetBrains Mono", monospace; }
+  .vx-mobile-menu[open] > summary::after { content: "−"; }
+  .vx-mobile-panel {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    display: grid;
+    gap: 4px;
+    max-height: calc(100vh - 68px);
+    max-height: calc(100svh - 68px - env(safe-area-inset-top));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 12px 20px 20px;
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+    border-bottom: 1px solid rgba(0, 212, 255, 0.25);
+    background: #0d1225;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+  .vx-mobile-menu:not([open]) > .vx-mobile-panel { display: none; }
+  .vx-mobile-panel a {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    min-height: 48px;
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 6px;
+    color: var(--text, #e8eaf0);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .vx-mobile-panel a:hover, .vx-mobile-panel a:focus-visible { background: rgba(0, 212, 255, 0.08); color: var(--cyan, #00d4ff); }
+  .vx-mobile-panel a[href="/demo"] { color: var(--cyan, #00d4ff); }
+  .vx-mobile-panel a[href="/contact"] { border: 1px solid rgba(0, 212, 255, 0.3); margin-top: 4px; }
+  a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--cyan, #00d4ff); outline-offset: 4px; }
+  section[id], main[id], .page-content h2, .page-content h3 { scroll-margin-top: 92px; }
+
+  /* Homepage: keep the same type, palette, graphics and story at phone scale. */
+  #hero {
+    height: auto;
+    min-height: 100vh;
+    min-height: min(760px, 100svh);
+    padding-top: 112px;
+    padding-bottom: 72px;
+  }
+  .hero-shield { width: 112px; height: 112px; margin-bottom: 28px; }
+  .hero-title { max-width: 100%; letter-spacing: clamp(3px, 1.2vw, 8px); line-height: 1.2; }
+  .hero-tagline { max-width: 34ch; margin-top: 20px; letter-spacing: 0.18em; line-height: 1.9; text-wrap: balance; }
+  .hero-badge { max-width: 100%; margin-top: 24px; padding: 10px 16px; font-size: 10px; letter-spacing: 0.1em; line-height: 1.8; text-wrap: balance; }
+  .stats, .vision, .products, .about, .differentiators, .contact { padding-top: 72px; padding-bottom: 72px; }
+  .stats .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 16px; }
+  .stats .stat-number { font-size: clamp(30px, 8vw, 48px); }
+  .stats .stat-label { margin-top: 12px; font-size: 11px; letter-spacing: 1px; line-height: 1.6; }
+  .vision { min-height: auto; }
+  .vision-label { margin-bottom: 24px; }
+  .vision-text { font-size: clamp(23px, 4.8vw, 32px); line-height: 1.6; }
+  .vision-cta { margin-top: 28px; }
+  .products-header, .diff-header { margin-bottom: 36px; }
+  .products-header h2, .diff-header h2 { line-height: 1.3; letter-spacing: 1px; }
+  .atomic-answer { padding-right: 0; padding-left: 0; font-size: 15px; line-height: 1.75; }
+  .product-grid { gap: 24px; min-width: 0; }
+  .product-card { display: flex; flex-direction: column; min-width: 0; aspect-ratio: auto; padding: 0; }
+  .product-card-visual { position: relative; inset: auto; height: auto; aspect-ratio: 8 / 5; opacity: 0.7; }
+  .product-card-visual > svg.capability-visual { width: 100%; height: auto; max-height: none; }
+  .product-card-content { position: relative; inset: auto; padding: 0 24px 24px; }
+  .product-card-icon { width: 40px; height: 40px; margin-bottom: 16px; }
+  .product-card h3 { font-size: 20px; line-height: 1.35; letter-spacing: 0.5px; }
+  .product-card p { font-size: 15px; line-height: 1.7; }
+  .product-card-tag { font-size: 11px; line-height: 1.5; letter-spacing: 1px; }
+  .products-beyond { margin-top: 48px; padding: 0; }
+  .products-beyond .beyond-intro { line-height: 1.5; letter-spacing: 1.5px; }
+  .about-grid { gap: 28px; }
+  .about-title { font-size: clamp(30px, 6vw, 40px); letter-spacing: 1px; }
+  .ticker { padding-top: 48px; padding-bottom: 48px; }
+  .diff-item { padding: 24px; }
+  .diff-item h3 { line-height: 1.4; }
+  .diff-item p { font-size: 15px; line-height: 1.75; }
+  .contact h2 { letter-spacing: 1px; line-height: 1.3; }
+  .contact-email { overflow-wrap: anywhere; line-height: 1.7; }
+  .vision-cta, .products-beyond .beyond-cta, .contact-cta, .page-content .cta-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    min-height: 48px;
+    padding: 14px 22px;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    line-height: 1.5;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  /* Product, editorial, contact and legal pages share the same phone gutters. */
+  .breadcrumb { margin-top: 84px; padding-top: 12px; padding-bottom: 12px; line-height: 1.7; overflow-wrap: anywhere; }
+  .page-content { padding-top: 24px; padding-bottom: 64px; }
+  .page-content h1 { font-size: clamp(28px, 6vw, 40px); letter-spacing: 0.02em; line-height: 1.3; margin-bottom: 24px; overflow-wrap: anywhere; }
+  .page-content h2 { margin-top: 36px; line-height: 1.4; overflow-wrap: anywhere; }
+  .page-content h3 { line-height: 1.5; overflow-wrap: anywhere; }
+  .page-content ul { margin-left: 8px; }
+  .page-content .highlight-box, .page-content .internal-links { padding: 24px 20px; }
+  .faq-item { padding: 20px; }
+  .faq-item p { font-size: 15px; }
+  .internal-links-grid a { display: flex; align-items: center; min-height: 44px; line-height: 1.6; overflow-wrap: anywhere; }
+  .page-content .cta-section { margin-top: 40px; padding-top: 36px; padding-bottom: 36px; }
+  .insight-article-header { min-width: 0; }
+  .insight-body { margin-top: 2rem; }
+  .content-wrapper { padding-top: 100px; padding-bottom: 64px; overflow-wrap: anywhere; }
+  .contact-section { padding-top: 16px; padding-bottom: 48px; }
+  .contact-card { padding: 24px 20px; }
+  .email-link { font-size: clamp(14px, 4vw, 20px); word-break: normal; overflow-wrap: anywhere; }
+  .copy-btn { min-height: 44px; }
+  .method-item a { display: inline-flex; align-items: center; min-height: 44px; }
+
+  .footer { padding: 56px 24px 32px; }
+  .footer-top { margin-bottom: 36px; }
+  .footer-logo { font-size: 20px; letter-spacing: 7px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 24px; padding-bottom: 24px; }
+  .footer-col h3 { margin-bottom: 12px; }
+  .footer-col a { display: flex; align-items: center; min-height: 44px; margin-bottom: 0; padding: 6px 0; line-height: 1.5; overflow-wrap: anywhere; }
+  .footer-bottom { gap: 12px; margin-bottom: 0; }
+  .footer-bottom > div { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; }
+  .footer-bottom a { display: inline-flex; align-items: center; min-height: 44px; max-width: 100%; margin-left: 0; line-height: 1.6; }
+}
+
+@media (min-width: 600px) and (max-width: 768px) {
+  .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 360px) {
+  .vx-mobile-header { padding-right: 16px; padding-left: 16px; gap: 8px; }
+  .vx-mobile-brand { gap: 8px; font-size: 13px; letter-spacing: 0.18em; }
+  .vx-mobile-menu > summary { min-width: 68px; padding-right: 10px; padding-left: 10px; }
+  .product-card-content { padding-right: 20px; padding-left: 20px; }
+}

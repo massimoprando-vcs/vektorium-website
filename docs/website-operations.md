@@ -35,6 +35,14 @@ The six homepage schematics and LinkedIn archive use small, separate stylesheets
 Do not reintroduce the parked global stylesheet or replacement desktop-effects
 implementation when making subsequent changes.
 
+The shared mobile header is inserted only into the 36 marketing/content pages.
+Its layout and reading refinements live in `assets/mobile.css` and apply only
+at 768px or narrower. The original desktop header, cursor, WebGL effects and
+inline style/script bodies stay intact. The native menu remains usable without
+JavaScript; `assets/mobile.js` adds dismissal and focus handling. Keep desktop
+selectors out of that stylesheet's ungated rules and check both sides of the
+768px breakpoint whenever changing it.
+
 The enforced Content Security Policy permits the reviewed inline scripts,
 style blocks and static style attributes by their exact SHA-256 hashes. If one
 changes, the build fails until the configuration change is reviewed. Inspect
@@ -85,6 +93,12 @@ article pages, contact copy control, privacy controls, and demo load/stop on
 desktop and mobile. Inspect console errors for CSP failures. Merge only the
 reviewed commit after automated checks pass, then verify the production domain
 and actual response headers.
+
+For mobile changes, check 320px, 390px and 768px layouts, menu navigation and
+dismissal, readable homepage diagrams, article links, footer and privacy controls.
+Recheck desktop identity above the mobile breakpoint. The demo wrapper has its
+own layout: keep the self-hosted Inter/JetBrains Mono fonts, a generous frame,
+the direct standalone destination and Stop/unload available in full screen.
 
 Vercel deployment history and Git history retain prior releases for recovery.
 Domain, DNS, billing, account security and access settings are separate from
