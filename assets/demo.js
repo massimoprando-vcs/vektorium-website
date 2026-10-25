@@ -15,7 +15,6 @@
   const viewport = document.getElementById("simulation-view");
   const status = document.getElementById("demo-status");
   const externalLink = document.getElementById("open-demo");
-  const destination = document.getElementById("demo-destination");
   if (!shell || !frame || !loadButton || !stopButton || !placeholder || !viewport || !status) return;
   // The control is hidden in the document until its behavior is available.
   loadButton.hidden = false;
@@ -44,7 +43,6 @@
   function updateDestination() {
     const target = selectedTarget();
     if (externalLink) externalLink.href = target;
-    if (destination) destination.textContent = target === targets.mobile ? "mobile-gold-five.vercel.app" : "cypher-sentinel-demo.vercel.app";
     return target;
   }
   function setStatus(state, message) {
@@ -66,7 +64,7 @@
       }).catch(() => {});
     }
     viewport.removeAttribute("aria-busy");
-    setStatus("idle", "The external demonstration is unloaded. You can start it again when you choose.");
+    setStatus("idle", "");
     updateDestination();
     if (restoreFocus) loadButton.focus();
   }
@@ -80,13 +78,13 @@
     stopButton.hidden = false;
     updateFullscreenControl();
     viewport.setAttribute("aria-busy", "true");
-    setStatus("loading", "Loading the external simulation. You can stop and unload it at any time.");
+    setStatus("loading", "Loading demo…");
     frame.src = target;
     stopButton.focus();
     timeoutId = window.setTimeout(() => {
       if (!active || !awaitingLoad) return;
       viewport.removeAttribute("aria-busy");
-      setStatus("waiting", "The external application is taking longer to load. If it stays blank, stop it and choose Open in new tab, or use the help below.");
+      setStatus("waiting", "Still loading. Try Open in new tab if the demo does not appear.");
     }, 15000);
   });
   frame.addEventListener("load", () => {
@@ -95,14 +93,14 @@
     awaitingLoad = false;
     viewport.removeAttribute("aria-busy");
     // A cross-origin frame load event cannot establish application health.
-    setStatus("loaded", "The external frame has loaded. If the application is blank or unavailable, use the help below.");
+    setStatus("loaded", "");
   });
   frame.addEventListener("error", () => {
     if (!active) return;
     window.clearTimeout(timeoutId);
     awaitingLoad = false;
     viewport.removeAttribute("aria-busy");
-    setStatus("error", "The external frame could not be loaded. Stop it and use the help below or contact Vektorium.");
+    setStatus("error", "The demo could not load. Try Open in new tab.");
   });
   stopButton.addEventListener("click", () => stopDemo(true));
   fullscreenButton?.addEventListener("click", async () => {
@@ -111,7 +109,7 @@
       if (document.fullscreenElement === shell) await document.exitFullscreen();
       else await shell.requestFullscreen();
     } catch {
-      setStatus("waiting", "Full screen is unavailable in this browser. Keep using the embedded demo or choose Open in new tab in the toolbar.");
+      setStatus("waiting", "Full screen is unavailable. Use Open in new tab.");
     }
   });
   document.addEventListener("fullscreenchange", () => {

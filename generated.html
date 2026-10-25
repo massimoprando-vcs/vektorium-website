@@ -10,7 +10,7 @@
   <link rel="canonical" href="https://vektorium.io/generated">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <meta property="og:title" content="Cypher Sentinel 3D Simulation | Vektorium">
-  <meta property="og:description" content="An illustrative walkthrough—not a live customer environment or proof of production readiness.">
+  <meta property="og:description" content="Explore an illustrative Cypher Sentinel simulation and discuss a guided evaluation with Vektorium.">
   <meta property="og:url" content="https://vektorium.io/generated">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Vektorium">
@@ -36,13 +36,10 @@
       <p class="eyebrow">Illustrative 3D simulation</p>
       <h1 id="page-title">A different view of the workflow.</h1>
       <p class="demo-lede">This alternate visualization opens the existing 3D demonstration. The external application starts only after you choose to load it.</p>
-      <div class="scope-note">
-        <p><strong>Know what you are viewing.</strong> This is an illustrative simulation, not a live customer environment or proof of production readiness. Do not enter confidential information, credentials, or real operational data.</p>
-      </div>
     </section>
     <section class="demo-shell" aria-labelledby="simulation-title">
       <div class="demo-toolbar">
-        <div><p class="eyebrow">Optional external application</p><h2 id="simulation-title">3D visualization</h2></div>
+        <div><p class="eyebrow">Cypher Sentinel demo</p><h2 id="simulation-title">3D visualization</h2></div>
         <div class="demo-actions">
           <a class="button button-secondary" id="open-demo" href="https://cypher-sentinel-demo.vercel.app/demo?mode=standby&amp;autostart=true&amp;fullscreen=true" target="_blank" rel="noopener noreferrer">Open in new tab</a>
           <button class="button button-secondary" id="fullscreen-demo" type="button" aria-controls="simulation-view" aria-pressed="false" hidden>Full screen</button>
@@ -52,30 +49,16 @@
       <div class="demo-viewport" id="simulation-view">
         <div class="demo-placeholder" id="demo-placeholder">
           <img src="/vektorium-logo.webp" width="64" height="64" alt="">
-          <h3>Start when you are ready.</h3>
-          <p>The external demonstration is not embedded until you choose to load it. It runs in a restricted frame and may use device resources while active.</p>
+          <h3>Explore the interactive simulation.</h3>
           <button class="button button-primary" id="load-demo" type="button" hidden>Load 3D simulation</button>
-          <p class="fine-print">Loading connects to <span id="demo-destination">a separate Vercel-hosted demonstration</span>.</p>
         </div>
         <iframe id="demo-frame" title="Illustrative Cypher Sentinel 3D simulation" width="1600" height="1000" sandbox="allow-scripts allow-same-origin" allow="fullscreen" allowfullscreen referrerpolicy="no-referrer" hidden></iframe>
       </div>
-      <p class="demo-status" id="demo-status" role="status" aria-live="polite" data-state="idle">The external demonstration has not been loaded.</p>
-      <div class="demo-fallback">
-        <p>If the frame is blank, unavailable, or asks for unexpected sign-in details, stop the demonstration and <a href="/contact">contact Vektorium</a>. Do not bypass a browser security warning.</p>
-        <p class="fine-print">Opening it separately leaves this page’s embedded-frame restrictions.</p>
-      </div>
+      <p class="demo-status" id="demo-status" role="status" aria-live="polite" data-state="idle"></p>
       <noscript>
-        <div class="demo-noscript"><p>JavaScript is disabled, so this page will not embed the demonstration. You can read the <a href="/cypher-sentinel">platform overview</a>, <a href="/contact">request a guided evaluation</a>, or explicitly use the external link above.</p></div>
+        <div class="demo-noscript"><p><a href="https://cypher-sentinel-demo.vercel.app/demo?mode=standby&amp;autostart=true&amp;fullscreen=true" target="_blank" rel="noopener noreferrer">Open the demo in a new tab</a>, or <a href="/contact">contact us</a> for a guided walkthrough.</p></div>
       </noscript>
     </section>
-    <details class="demo-details">
-      <summary>About this demonstration and its boundaries</summary>
-      <div>
-        <p>The desktop and mobile simulations are separate applications hosted at <code>cypher-sentinel-demo.vercel.app</code> and <code>mobile-gold-five.vercel.app</code>. Their behavior and availability are separate from this static website.</p>
-        <p>The embedded frame is limited to script execution, its own origin, and fullscreen. This page does not grant it camera, microphone, location, motion-sensor, clipboard, popup, or top-level navigation permissions. These restrictions are a precaution, not a security certification of the demonstration.</p>
-        <p>For product decisions, agree a bounded evaluation and review the relevant evidence with Vektorium. A visualization alone cannot establish deployment suitability, operational performance, or compliance.</p>
-      </div>
-    </details>
     <section class="demo-next-step" aria-labelledby="next-step-title">
       <h2 id="next-step-title">Turn a walkthrough into a useful evaluation.</h2>
       <p>Discuss your environment, the problem to be addressed, and the evidence needed to assess fit.</p>
