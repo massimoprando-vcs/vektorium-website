@@ -43,7 +43,11 @@
     <section class="demo-shell" aria-labelledby="simulation-title">
       <div class="demo-toolbar">
         <div><p class="eyebrow">Optional external application</p><h2 id="simulation-title">3D visualization</h2></div>
-        <button class="button button-secondary" id="stop-demo" type="button" hidden>Stop and unload</button>
+        <div class="demo-actions">
+          <a class="button button-secondary" id="open-demo" href="https://cypher-sentinel-demo.vercel.app/demo?mode=standby&amp;autostart=true&amp;fullscreen=true" target="_blank" rel="noopener noreferrer">Open in new tab</a>
+          <button class="button button-secondary" id="fullscreen-demo" type="button" aria-controls="simulation-view" aria-pressed="false" hidden>Full screen</button>
+          <button class="button button-secondary" id="stop-demo" type="button" hidden>Stop and unload</button>
+        </div>
       </div>
       <div class="demo-viewport" id="simulation-view">
         <div class="demo-placeholder" id="demo-placeholder">
@@ -58,7 +62,6 @@
       <p class="demo-status" id="demo-status" role="status" aria-live="polite" data-state="idle">The external demonstration has not been loaded.</p>
       <div class="demo-fallback">
         <p>If the frame is blank, unavailable, or asks for unexpected sign-in details, stop the demonstration and <a href="/contact">contact Vektorium</a>. Do not bypass a browser security warning.</p>
-        <a id="open-demo" href="https://cypher-sentinel-demo.vercel.app/demo?mode=standby&amp;autostart=true&amp;fullscreen=true" target="_blank" rel="noopener noreferrer">Open the external simulation in a new tab</a>
         <p class="fine-print">Opening it separately leaves this page’s embedded-frame restrictions.</p>
       </div>
       <noscript>

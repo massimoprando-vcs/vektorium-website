@@ -7,7 +7,7 @@ import { copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSy
 import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { attr, build, cspHash, decodeAttribute, expectedConfig, fixedFiles, htmlTokens, inspectHtml, legacyGaBodies, legacyGaBody, legacyGaSource, prepareBuild, prepareHtml, publicPages, versionPageAssets } from './build.mjs';
+import { attr, build, cspHash, decodeAttribute, expectedConfig, fixedFiles, htmlTokens, inspectHtml, legacyGaBodies, legacyGaBody, legacyGaSource, mobileHeader, mobilePages, prepareBuild, prepareHtml, publicPages, versionPageAssets } from './build.mjs';
 
 const checkout = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const options = new Set(process.argv.slice(2));
@@ -58,6 +58,8 @@ function fixture(name) {
     ['assets/fonts/fixture.woff2', Buffer.from([0x77, 0x4f, 0x46, 0x32, 0, 1, 2])],
     ['assets/privacy-controls.css', '.fixture-privacy { color: inherit; }\n'],
     ['assets/privacy-controls.js', "'use strict'; // No network access in fixture.\n"],
+    ['assets/mobile.css', '.vx-mobile-header { display: none; }\n'],
+    ['assets/mobile.js', "'use strict'; // Mobile navigation fixture.\n"],
     ['robots.txt', 'User-agent: *\nAllow: /\nSitemap: https://vektorium.io/sitemap.xml\n'],
     ['sitemap.xml', '<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>'],
     ['.well-known/security.txt', 'Contact: mailto:fixture@example.invalid\nExpires: 2030-01-01T00:00:00Z\n'],
@@ -110,6 +112,10 @@ function outputCheck(root, environment) {
     }
     assert.equal(tokens.filter(t => t.name === 'script' && attr(t, 'src')?.startsWith('/assets/privacy-controls.js?')).length, 1, page);
     assert.equal(tokens.filter(t => t.name === 'link' && attr(t, 'href')?.startsWith('/assets/fonts.css?')).length, 1, page);
+    const mobileCount = mobilePages.has(page) ? 1 : 0;
+    assert.equal(tokens.filter(t => t.name === 'header' && attr(t, 'class') === 'vx-mobile-header').length, mobileCount, page);
+    assert.equal(tokens.filter(t => t.name === 'script' && attr(t, 'src')?.startsWith('/assets/mobile.js?')).length, mobileCount, page);
+    assert.equal(tokens.filter(t => t.name === 'link' && attr(t, 'href')?.startsWith('/assets/mobile.css?')).length, mobileCount, page);
     const inventory = inspectHtml(page, html);
     const policy = JSON.parse(readFileSync(join(root, 'vercel.json'), 'utf8')).headers[0].headers.find(h => h.key === 'Content-Security-Policy').value;
     for (const hashes of Object.values(inventory)) for (const hash of hashes) assert.ok(policy.includes(`'${hash}'`), `${page}: unapproved inline hash`);
@@ -133,6 +139,25 @@ function outputCheck(root, environment) {
 }
 
 try {
+  test('mobile navigation is additive, complete and excluded from the separate demo wrappers', () => {
+    assert.equal(mobilePages.size, 36);
+    assert.equal(mobilePages.has('demo.html'), false);
+    assert.equal(mobilePages.has('generated.html'), false);
+    assert.ok(!/<(?:script|style)\b|\s(?:style|on[a-z]+)=/i.test(mobileHeader), 'Mobile markup may not authorize inline code or styling');
+    const links = htmlTokens(mobileHeader).filter(t => t.name === 'a' && !t.closing).map(t => attr(t, 'href'));
+    for (const href of links) {
+      assert.ok(href.startsWith('/') && !href.startsWith('//'), 'Navigation must remain on this site');
+      const path = new URL(href, 'https://vektorium.io').pathname;
+      assert.ok(publicPages.has(path === '/' ? 'index.html' : path.slice(1) + '.html'), `Missing navigation target: ${href}`);
+    }
+    for (const target of ['/demo', '/contact', '/blog', '/cypher-sentinel']) assert.ok(links.includes(target), target);
+    const source = '<html><head><title>Original</title></head><body><main>Original product claim</main></body></html>';
+    const output = prepareHtml('index.html', source);
+    assert.ok(output.includes('<body>' + mobileHeader + '<main>Original product claim</main>'));
+    assert.ok(!prepareHtml('demo.html', source).includes('vx-mobile-header'));
+    assert.throws(() => prepareHtml('index.html', source.replace('<body>', '')), /missing opening body/);
+    assert.throws(() => prepareHtml('index.html', source.replace('<body>', '<body>' + mobileHeader)), /inserted only by the build/);
+  });
   test('production preserves original inline code, styles, schema and robots while isolating public output', () => {
     const root = fixture('production');
     const before = [...publicPages].map(page => digest(readFileSync(join(root, page))));
