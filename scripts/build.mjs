@@ -252,7 +252,7 @@ export function expectedConfig(inventory) {
     "font-src 'self'",
     "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com",
     `connect-src 'self' https://www.googletagmanager.com ${analytics}`,
-    'frame-src https://cypher-sentinel-demo.vercel.app https://mobile-gold-five.vercel.app',
+    'frame-src https://demo.vektorium.io https://mobile-demo.vektorium.io',
     "frame-ancestors 'self'", "object-src 'none'", "base-uri 'none'",
     "form-action 'self' mailto:", "worker-src 'none'", 'upgrade-insecure-requests',
   ].join('; ');
@@ -266,7 +266,7 @@ export function expectedConfig(inventory) {
         header('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload'),
         header('X-Content-Type-Options', 'nosniff'), header('X-Frame-Options', 'SAMEORIGIN'),
         header('X-XSS-Protection', '0'), header('Referrer-Policy', 'strict-origin-when-cross-origin'),
-        header('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), accelerometer=(), gyroscope=(), magnetometer=(), usb=(), interest-cohort=(), clipboard-write=(self), fullscreen=(self "https://cypher-sentinel-demo.vercel.app" "https://mobile-gold-five.vercel.app")'),
+        header('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), accelerometer=(), gyroscope=(), magnetometer=(), usb=(), interest-cohort=(), clipboard-write=(self), fullscreen=(self "https://demo.vektorium.io" "https://mobile-demo.vektorium.io")'),
         header('Content-Security-Policy', policy),
         header('Cache-Control', 'public, max-age=0, must-revalidate'),
       ] },

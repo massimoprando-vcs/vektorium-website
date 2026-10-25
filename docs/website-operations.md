@@ -85,6 +85,35 @@ origins, limited sandbox permissions and no referrer. A frame load event proves
 only that the frame loaded, not that the external application is healthy or
 secure. Recheck the embedded applications separately when they change.
 
+### Branded demo hosts — release prerequisite
+
+Keep the branded-host change in a draft pull request until **both custom hosts
+resolve publicly and serve valid TLS certificates for their exact hostnames**.
+The Vercel domain assignments alone do not complete this change. Verify the
+desktop and mobile applications through the branded hosts before merging; retain
+the working Vercel-hosted links in production while DNS or TLS is pending.
+
+| Public host | Existing Vercel application | Application path |
+| --- | --- | --- |
+| `demo.vektorium.io` | `cypher-sentinel-demo.vercel.app` | `/` |
+| `mobile-demo.vektorium.io` | `mobile-gold-five.vercel.app` | `/demo` |
+
+The standby view keeps `/demo?mode=standby&autostart=true&fullscreen=true` on
+`demo.vektorium.io`. The same two exact branded origins are allowed by CSP
+`frame-src` and the fullscreen Permissions-Policy; do not add wildcard hosts.
+
+The external DNS provider is reported as Google Cloud DNS. Required CNAMEs:
+
+| Name in the `vektorium.io` zone | Type | Target |
+| --- | --- | --- |
+| `demo` | CNAME | `769f0889689c9db7.vercel-dns-017.com.` |
+| `mobile-demo` | CNAME | `2e2280978d921a9d.vercel-dns-017.com.` |
+
+This host mapping does not change analytics host checks, cookie scope, demo
+sandbox permissions or the external applications themselves. Recheck any
+application origin restrictions and load/open/stop/fullscreen behavior through
+the protected website preview after DNS and TLS are ready.
+
 ## Release checks
 
 Review changes through the GitHub pull request and its protected Vercel preview.
