@@ -1,9 +1,4 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": null,
-  "installCommand": "",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
   "cleanUrls": true,
   "headers": [
     {
@@ -23,7 +18,7 @@
         },
         {
           "key": "X-XSS-Protection",
-          "value": "0"
+          "value": "1; mode=block"
         },
         {
           "key": "Referrer-Policy",
@@ -31,29 +26,25 @@
         },
         {
           "key": "Permissions-Policy",
-          "value": "camera=(), microphone=(), geolocation=(), payment=(), accelerometer=(), gyroscope=(), magnetometer=(), autoplay=(), encrypted-media=(), usb=(), serial=(), hid=(), display-capture=(), clipboard-read=(), clipboard-write=(self), fullscreen=(self \"https://cypher-sentinel-demo.vercel.app\" \"https://mobile-gold-five.vercel.app\")"
-        },
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://www.googletagmanager.com; script-src-attr 'none'; style-src 'self'; style-src-attr 'none'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com; font-src 'self'; connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://region1.analytics.google.com; frame-src https://cypher-sentinel-demo.vercel.app https://mobile-gold-five.vercel.app; frame-ancestors 'self'; object-src 'none'; base-uri 'none'; form-action 'self' mailto:; worker-src 'none'; media-src 'none'; upgrade-insecure-requests"
+          "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"
         }
       ]
     },
     {
-      "source": "/assets/:path*",
+      "source": "/demo.html",
       "headers": [
         {
-          "key": "Cache-Control",
-          "value": "public, max-age=3600, must-revalidate"
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
         }
       ]
     },
     {
-      "source": "/generated",
+      "source": "/generated.html",
       "headers": [
         {
-          "key": "X-Robots-Tag",
-          "value": "noindex, follow"
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
         }
       ]
     }
