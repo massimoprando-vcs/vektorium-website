@@ -1,4 +1,16 @@
-/* Homepage editorial links. Keep the approved desktop styles and effects intact. */
+/* Homepage vision and editorial links. Keep the approved desktop effects intact. */
+.vision-content > .vision-label { margin-bottom: 20px; }
+.vision-title {
+  max-width: 18ch;
+  margin-bottom: 32px;
+  color: var(--text);
+  font-size: clamp(36px, 5.5vw, 68px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
 .vision-summary {
   max-width: 800px;
   margin-top: 28px;
@@ -6,6 +18,34 @@
   font-size: 18px;
   line-height: 1.8;
 }
+
+.vision-pillars {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px 36px;
+  margin-top: 40px;
+  list-style: none;
+}
+.vision-pillars > li {
+  min-width: 0;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 212, 255, 0.3);
+}
+.vision-pillar-breadth { grid-column: 1 / -1; }
+.vision-pillars h3 {
+  margin-bottom: 10px;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.vision-pillars p {
+  color: var(--text2);
+  font-size: 16px;
+  line-height: 1.7;
+}
+.vision-pillar-breadth p { color: var(--text); font-size: 18px; }
+.vision-pillar-breadth strong { color: var(--cyan); font-weight: 700; }
 
 .vision-insights { margin-top: 36px; }
 .vision-insights-label {
@@ -46,7 +86,10 @@
 .vision-insights-links a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
 
 @media (max-width: 768px) {
+  .vision-title { margin-bottom: 24px; }
   .vision-summary { margin-top: 24px; font-size: 16px; line-height: 1.75; }
+  .vision-pillars { grid-template-columns: minmax(0, 1fr); gap: 24px; margin-top: 32px; }
+  .vision-pillars > li { padding-top: 16px; }
   .vision-insights { margin-top: 28px; }
   .vision-insights-links { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 20px; }
   .vision-insights-links li:last-child { grid-column: 1 / -1; }
