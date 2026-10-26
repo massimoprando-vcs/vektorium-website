@@ -29,6 +29,10 @@
 .page-content .insight-article-header h1 { max-width: 23ch; margin: 1.25rem 0 1.5rem; font-size: clamp(2rem, 4.7vw, 3.5rem); line-height: 1.15; letter-spacing: -0.045em; font-weight: 400; text-wrap: balance; }
 .insight-article-header .insight-meta { margin-bottom: 1rem; }
 .page-content .insight-publication-note { margin: 1.25rem 0 0; color: #9faec4; font-size: 0.8rem; line-height: 1.7; }
+.insight-platform-update { max-width: 48rem; margin: 0 auto 2rem; padding: clamp(1.25rem, 3vw, 2rem); border: 1px solid rgba(0, 212, 255, 0.25); border-left: 3px solid var(--teal); border-radius: 12px; background: rgba(13, 18, 37, 0.88); }
+.page-content .insight-platform-update h2 { margin: 0 0 1rem; padding: 0; border: 0; font-size: clamp(1.3rem, 3vw, 1.75rem); font-weight: 600; line-height: 1.3; letter-spacing: -0.02em; }
+.page-content .insight-platform-update .insight-update-copy { margin: 0 0 1rem; color: #c0cad9; font-size: 0.95rem; line-height: 1.75; }
+.insight-platform-update strong { color: var(--text); font-weight: 600; }
 .insight-figure { margin: 2.5rem auto; max-width: 800px; overflow: hidden; border: 1px solid rgba(0, 212, 255, 0.16); border-radius: 12px; background: #070c17; }
 .insight-figure img { display: block; width: 100%; height: auto; }
 .insight-figure figcaption { padding: 0.65rem 1rem; color: #aab5c7; font-size: 0.75rem; line-height: 1.6; }
@@ -55,6 +59,6 @@
   .insight-card, .insight-card a { transition: none; }
 }
 @media (forced-colors: active) {
-  .insight-card, .insight-figure { border-color: CanvasText; }
+  .insight-card, .insight-figure, .insight-platform-update { border-color: CanvasText; }
   .insight-card h3 a, .insight-read-link, .insight-source-link { color: LinkText; }
 }
