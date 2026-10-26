@@ -1,0 +1,36 @@
+/* Match the shared solution cards to the site's existing cyan and Inter typography. */
+section.internal-links {
+  position: relative;
+  z-index: 1;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, var(--bg), var(--bg2)) !important;
+  border-top-color: rgba(0, 212, 255, 0.15) !important;
+}
+
+section.internal-links h2 {
+  color: var(--cyan) !important;
+  font-family: inherit;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 1px;
+}
+
+section.internal-links h3 {
+  color: var(--cyan) !important;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+section.internal-links a {
+  background: rgba(0, 212, 255, 0.05) !important;
+  border-color: rgba(0, 212, 255, 0.15) !important;
+}
+
+section.internal-links p {
+  color: var(--text2) !important;
+  font-family: inherit;
+  line-height: 1.65;
+}
