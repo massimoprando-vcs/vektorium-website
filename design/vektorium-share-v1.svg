@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="630" viewBox="0 0 1200 630">
+  <title>Vektorium logo on a dark blue background</title>
+  <defs>
+    <radialGradient id="brand-background" cx="50%" cy="50%" r="65%">
+      <stop offset="0" stop-color="#132b43"/>
+      <stop offset="0.55" stop-color="#0c172a"/>
+      <stop offset="1" stop-color="#0a0e1a"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#brand-background)"/>
+  <!-- Frame the visible mark from the original asset, excluding transparent padding. -->
+  <svg x="400" y="119" width="400" height="392" viewBox="278 355 1112 1090">
+    <image width="1712" height="1776" xlink:href="../vektorium-logo.png"/>
+  </svg>
+</svg>
