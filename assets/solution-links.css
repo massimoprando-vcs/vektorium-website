@@ -1,5 +1,7 @@
 /* Match the shared solution cards to the site's existing cyan and Inter typography. */
 section.internal-links {
+  position: relative;
+  z-index: 1;
   font-family: 'Inter', sans-serif;
   background: linear-gradient(135deg, var(--bg), var(--bg2)) !important;
   border-top-color: rgba(0, 212, 255, 0.15) !important;
