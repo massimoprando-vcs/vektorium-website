@@ -34,38 +34,67 @@
   <meta name="twitter:image" content="https://vektorium.io/assets/vektorium-share-v1.png">
   <meta name="twitter:image:alt" content="Vektorium logo centered on a dark blue background">
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@id": "https://vektorium.io/network-security-monitoring#article",
-    "@type": "TechArticle",
-    "headline": "Network Security Monitoring (NSM): Real-Time Threat Detection Across Network Infrastructure",
-    "description": "A comprehensive guide to network security monitoring, NDR platforms, firewall integration, DDoS protection, and real-time detection of lateral movement and network-based attacks.",
-    "author": {"@type": "Person", "name": "Massimo Prando", "jobTitle": "CEO & Founder", "url": "https://vektorium.io", "worksFor": {"@type": "Organization", "name": "Vektorium Inc."}},
-    "publisher": {"@type": "Organization", "name": "Vektorium Inc.", "logo": {"@type": "ImageObject", "url": "https://vektorium.io/vektorium-logo.png"}},
-    "datePublished": "2026-03-22",
-    "dateModified": "2026-03-22",
-    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://vektorium.io/network-security-monitoring"},
-    "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".atomic-answer", "h1"]}
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@id": "https://vektorium.io/network-security-monitoring#faq",
-    "@type": "FAQPage",
-    "speakable": {
-      "@type": "SpeakableSpecification",
-      "cssSelector": [".atomic-answer", "h1"]
+{
+  "@context": "https://schema.org",
+  "@id": "https://vektorium.io/network-security-monitoring#article",
+  "@type": "TechArticle",
+  "headline": "Network Security Monitoring (NSM): Real-Time Threat Detection Across Network Infrastructure",
+  "description": "A comprehensive guide to network security monitoring, NDR platforms, firewall integration, DDoS protection, and real-time detection of lateral movement and network-based attacks.",
+  "author": {
+    "@type": "Person",
+    "name": "Massimo Prando",
+    "jobTitle": "CEO & Founder",
+    "url": "https://vektorium.io",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Vektorium",
+      "@id": "https://vektorium.io/#organization",
+      "url": "https://vektorium.io/"
     },
-    "mainEntity": [
-      {"@type": "Question", "name": "What is network security monitoring (NSM)?", "acceptedAnswer": {"@type": "Answer", "text": "Network Security Monitoring (NSM) is the continuous analysis of network traffic to identify threats, anomalies, and unauthorized activity. NSM captures and analyzes all network traffic in real-time, providing visibility into what is happening on the network and detecting attacks that occur at the network layer, including lateral movement, data exfiltration, and command-and-control communications."}},
-      {"@type": "Question", "name": "What is the difference between a firewall and NDR?", "acceptedAnswer": {"@type": "Answer", "text": "A firewall controls traffic based on predefined rules, blocking or allowing traffic. Network Detection and Response (NDR) analyzes all network traffic to detect anomalies and threats in real-time. While a firewall is a prevention tool, NDR is a detection and response tool. NDR detects threats that firewalls miss, including lateral movement, data exfiltration, and encrypted threats."}},
-      {"@type": "Question", "name": "How does NDR detect lateral movement?", "acceptedAnswer": {"@type": "Answer", "text": "Lateral movement is when an attacker moves from one compromised system to another within the network. NDR detects lateral movement by analyzing network traffic patterns, identifying unusual communication between systems, recognizing reconnaissance activities, and detecting exploitation attempts. This enables detection of attacks in progress before they can compromise critical assets."}},
-      {"@type": "Question", "name": "What is DDoS protection and how does it work?", "acceptedAnswer": {"@type": "Answer", "text": "DDoS (Distributed Denial of Service) protection prevents attackers from overwhelming network resources by flooding the network with traffic. DDoS mitigation solutions use traffic analysis to identify attack patterns, filter malicious traffic in real-time, and maintain availability of critical services. Advanced DDoS protection uses behavioral analysis to detect sophisticated attacks."}},
-      {"@type": "Question", "name": "Why is encrypted traffic analysis important for security?", "acceptedAnswer": {"@type": "Answer", "text": "Attackers commonly use encryption to hide command-and-control communications and data exfiltration. While encryption protects data in transit, encrypted traffic analysis examines metadata—connection patterns, packet sizes, timing, and communication frequency—to detect malicious encrypted traffic. This enables detection of threats even when the traffic content itself is encrypted."}}
+    "@id": "https://vektorium.io/#founder"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Vektorium",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://vektorium.io/vektorium-logo.png"
+    },
+    "@id": "https://vektorium.io/#organization",
+    "url": "https://vektorium.io/"
+  },
+  "datePublished": "2026-03-22",
+  "dateModified": "2026-03-22",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://vektorium.io/network-security-monitoring"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [
+      ".atomic-answer",
+      "h1"
     ]
   }
-  </script>
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@id": "https://vektorium.io/network-security-monitoring#faq",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is network security monitoring (NSM)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Network Security Monitoring (NSM) is the continuous analysis of network traffic to identify threats, anomalies, and unauthorized activity. NSM captures and analyzes all network traffic in real-time, providing visibility into what is happening on the network and detecting attacks that occur at the network layer, including lateral movement, data exfiltration, and command-and-control communications."
+      }
+    }
+  ]
+}
+</script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -77,19 +106,30 @@
   }
   </script>
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Cypher Sentinel NSM/NDR",
-    "applicationCategory": "SecurityApplication",
-    "operatingSystem": "Network Appliance, Cloud, On-Premise",
-    "description": "Enterprise-grade network security monitoring and detection platform with NDR, IDS/IPS capabilities, firewall integration, DDoS protection, and encrypted traffic analysis for real-time detection of network-based threats and lateral movement.",
-    "url": "https://vektorium.io/network-security-monitoring",
-    "offers": {"@type": "Offer", "availability": "https://schema.org/InStock", "priceCurrency": "USD", "price": "0", "description": "Contact for enterprise pricing"},
-    "publisher": {"@type": "Organization", "name": "Vektorium Inc.", "url": "https://vektorium.io"},
-    "featureList": ["Network Detection and Response", "Intrusion Detection/Prevention", "DDoS Protection", "Encrypted Traffic Analysis", "Lateral Movement Detection", "Threat Intelligence Integration"]
-  }
-  </script>
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Cypher Sentinel",
+  "applicationCategory": "SecurityApplication",
+  "description": "Enterprise-grade network security monitoring and detection platform with NDR, IDS/IPS capabilities, firewall integration, DDoS protection, and encrypted traffic analysis for real-time detection of network-based threats and lateral movement.",
+  "url": "https://vektorium.io/cypher-sentinel",
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://vektorium.io/#organization",
+    "name": "Vektorium",
+    "url": "https://vektorium.io/"
+  },
+  "featureList": [
+    "Network Detection and Response",
+    "Intrusion Detection/Prevention",
+    "DDoS Protection",
+    "Encrypted Traffic Analysis",
+    "Lateral Movement Detection",
+    "Threat Intelligence Integration"
+  ],
+  "@id": "https://vektorium.io/cypher-sentinel#product"
+}
+</script>
   <script type="application/ld+json">
   [
     {"@context":"https://schema.org","@type":"DefinedTerm","name":"Network Security Monitoring","description":"The continuous analysis and monitoring of network traffic to identify security threats, anomalies, and unauthorized activities in real-time across all network segments and communication channels.","url":"https://vektorium.io/network-security-monitoring"},

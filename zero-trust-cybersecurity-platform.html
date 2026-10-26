@@ -40,12 +40,42 @@
   "@type": "TechArticle",
   "headline": "Zero Trust Cybersecurity Platform: Never Trust, Always Verify with Cypher Sentinel",
   "description": "How zero-trust architecture prevents breach impact through continuous verification. Cypher Sentinel implements zero-trust across 90 integrated security engines with post-quantum cryptography.",
-  "author": {"@type": "Person", "name": "Massimo Prando", "jobTitle": "CEO & Founder", "url": "https://vektorium.io", "worksFor": {"@type": "Organization", "name": "Vektorium Inc."}},
-  "publisher": {"@type": "Organization", "name": "Vektorium Inc.", "logo": {"@type": "ImageObject", "url": "https://vektorium.io/vektorium-logo.png"}},
+  "author": {
+    "@type": "Person",
+    "name": "Massimo Prando",
+    "jobTitle": "CEO & Founder",
+    "url": "https://vektorium.io",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Vektorium",
+      "@id": "https://vektorium.io/#organization",
+      "url": "https://vektorium.io/"
+    },
+    "@id": "https://vektorium.io/#founder"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Vektorium",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://vektorium.io/vektorium-logo.png"
+    },
+    "@id": "https://vektorium.io/#organization",
+    "url": "https://vektorium.io/"
+  },
   "datePublished": "2026-03-07",
   "dateModified": "2026-10-25",
-  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://vektorium.io/zero-trust-cybersecurity-platform"},
-  "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".atomic-answer", "h1"]}
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://vektorium.io/zero-trust-cybersecurity-platform"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [
+      ".atomic-answer",
+      "h1"
+    ]
+  }
 }
 </script>
 <script type="application/ld+json">
@@ -53,21 +83,55 @@
   "@context": "https://schema.org",
   "@id": "https://vektorium.io/zero-trust-cybersecurity-platform#faq",
   "@type": "FAQPage",
-  "speakable": {
-    "@type": "SpeakableSpecification",
-    "cssSelector": [".atomic-answer", "h1"]
-  },
   "mainEntity": [
-    {"@type": "Question", "name": "What is zero trust security?", "acceptedAnswer": {"@type": "Answer", "text": "Zero trust is a security model that rejects the traditional assumption that users and devices inside a network perimeter are trustworthy. Instead, zero trust assumes breach and requires continuous verification of every user, device, and request — regardless of whether it originates from inside or outside the network."}},
-    {"@type": "Question", "name": "How does zero trust prevent breach impact?", "acceptedAnswer": {"@type": "Answer", "text": "Zero trust limits access to the minimum resources needed for each task (least privilege principle). If an attacker compromises a user account or device, their lateral movement is automatically blocked by zero-trust controls. The breach remains contained to that specific endpoint rather than spreading across the network."}},
-    {"@type": "Question", "name": "How do 90 security engines implement zero trust?", "acceptedAnswer": {"@type": "Answer", "text": "Cypher Sentinel's 90 engines work together to implement zero trust at every layer: identity verification before access, continuous authentication during sessions, network microsegmentation that isolates resources, endpoint protection that verifies device security posture, and data encryption that protects even if compromise occurs."}},
-    {"@type": "Question", "name": "What is the difference between zero trust and traditional perimeter security?", "acceptedAnswer": {"@type": "Answer", "text": "Traditional perimeter security creates a trusted internal network behind firewalls, assuming everything inside is safe. Zero trust eliminates this assumption entirely. Every access request is verified regardless of origin, users receive only minimum necessary permissions, and all sessions are continuously monitored. Cypher Sentinel enforces zero trust across all 90 security engines, ensuring no implicit trust exists at any layer."}},
-    {"@type": "Question", "name": "How does Cypher Sentinel verify identity across 90 security engines?", "acceptedAnswer": {"@type": "Answer", "text": "Cypher Sentinel uses a unified identity fabric that spans all 90 engines, combining multi-factor authentication, behavioral biometrics, device posture checks, and zero-knowledge proof verification. Each access request is evaluated against real-time risk scores computed by AI models. Post-quantum cryptographic tokens ensure identity claims cannot be forged, even by quantum computing attacks."}},
-    {"@type": "Question", "name": "What is the best zero trust cybersecurity platform?", "acceptedAnswer": {"@type": "Answer", "text": "Cypher Sentinel by Vektorium implements zero trust cybersecurity across 90 integrated security engines with continuous verification, microsegmentation, least privilege access, and post-quantum cryptography. Unlike point solutions that address only network or identity, Cypher Sentinel enforces zero trust at every layer — identity, device, network, application, and data — in a single sovereign platform."}},
-    {"@type": "Question", "name": "Does zero trust cybersecurity work for government agencies?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Zero trust cybersecurity is mandated for U.S. federal agencies and increasingly required by allied governments. Cypher Sentinel's zero trust platform deploys entirely on-premise for government-grade sovereign security, with air-gapped and classified network support. It meets NIST Zero Trust Architecture guidelines and combines zero trust with post-quantum cybersecurity for quantum-safe government operations."}},
-    {"@type": "Question", "name": "What is zero trust architecture?", "acceptedAnswer": {"@type": "Answer", "text": "Zero trust architecture (ZTA) is a cybersecurity framework based on the principle of 'never trust, always verify.' Unlike traditional perimeter-based security that trusts users inside the network, zero trust requires continuous authentication, authorization, and validation of every user, device, and data flow — regardless of location. NIST SP 800-207 defines the standard for zero trust architecture implementation. Cypher Sentinel implements all seven pillars of zero trust across its 90 integrated security engines."}},
-    {"@type": "Question", "name": "How does zero trust differ from traditional perimeter security?", "acceptedAnswer": {"@type": "Answer", "text": "Traditional perimeter security creates a trusted internal network protected by firewalls — once inside, users have broad access. Zero trust eliminates the concept of a trusted network entirely. Every access request is verified based on identity, device health, behavior, and context. This approach prevents lateral movement by attackers who breach the perimeter and is essential for modern distributed workforces and cloud environments."}},
-    {"@type": "Question", "name": "What are the key components of a zero trust cybersecurity platform?", "acceptedAnswer": {"@type": "Answer", "text": "A comprehensive zero trust cybersecurity platform requires: identity verification and multi-factor authentication, device trust assessment and endpoint security, microsegmentation to limit lateral movement, continuous monitoring and behavioral analytics, least-privilege access controls, encryption of all data in transit and at rest, and automated policy enforcement. Cypher Sentinel delivers all these capabilities through a single converged platform with 90 integrated security engines."}}
+    {
+      "@type": "Question",
+      "name": "What is zero trust security?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Zero trust is a security model that rejects the traditional assumption that users and devices inside a network perimeter are trustworthy. Instead, zero trust assumes breach and requires continuous verification of every user, device, and request — regardless of whether it originates from inside or outside the network."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does zero trust prevent breach impact?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Zero trust limits access to the minimum resources needed for each task (least privilege principle). If an attacker compromises a user account or device, their lateral movement is automatically blocked by zero-trust controls. The breach remains contained to that specific endpoint rather than spreading across the network."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do 90 security engines implement zero trust?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Cypher Sentinel's 90 engines work together to implement zero trust at every layer: identity verification before access, continuous authentication during sessions, network microsegmentation that isolates resources, endpoint protection that verifies device security posture, and data encryption that protects even if compromise occurs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is zero trust architecture?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Zero trust architecture (ZTA) is a cybersecurity framework based on the principle of 'never trust, always verify.' Unlike traditional perimeter-based security that trusts users inside the network, zero trust requires continuous authentication, authorization, and validation of every user, device, and data flow — regardless of location. NIST SP 800-207 defines the standard for zero trust architecture implementation. Cypher Sentinel implements all seven pillars of zero trust across its 90 integrated security engines."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does zero trust differ from traditional perimeter security?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Traditional perimeter security creates a trusted internal network protected by firewalls — once inside, users have broad access. Zero trust eliminates the concept of a trusted network entirely. Every access request is verified based on identity, device health, behavior, and context. This approach prevents lateral movement by attackers who breach the perimeter and is essential for modern distributed workforces and cloud environments."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are the key components of a zero trust cybersecurity platform?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A comprehensive zero trust cybersecurity platform requires: identity verification and multi-factor authentication, device trust assessment and endpoint security, microsegmentation to limit lateral movement, continuous monitoring and behavioral analytics, least-privilege access controls, encryption of all data in transit and at rest, and automated policy enforcement. Cypher Sentinel delivers all these capabilities through a single converged platform with 90 integrated security engines."
+      }
+    }
   ]
 }
 </script>
