@@ -54,6 +54,7 @@ export const publicPages = new Set([
 export const fixedFiles = new Set([
   'robots.txt', 'sitemap.xml', 'favicon.ico', 'favicon.svg',
   'favicon-48x48.png', 'favicon-180x180.png',
+  'apple-touch-icon.png', 'apple-touch-icon-precomposed.png',
   'vektorium-logo.webp', 'vektorium-logo-1x.webp', 'vektorium-logo-2x.webp', 'vektorium-logo.png',
   '517e3ed770994898b0c5482b33af8418.txt', '.well-known/security.txt',
 ]);
