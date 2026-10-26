@@ -84,6 +84,15 @@ function fixture(options = {}) {
       if (name === 'open' && Object.hasOwn(this, 'open')) this.open = false;
     }
     hasAttribute(name) { return Object.hasOwn(this.attributes, name); }
+    getAttribute(name) { return this.attributes[name] ?? null; }
+    closest(selector) {
+      let node = this;
+      while (node) {
+        if (matches(node, selector)) return node;
+        node = node.parentElement;
+      }
+      return null;
+    }
     contains(node) { return this === node || this.children.some(child => child.contains(node)); }
     focus() { document.activeElement = this; }
     remove() {
@@ -643,4 +652,78 @@ test('new CSS is privacy-only, closes by default, and supplies its own usable na
   assert(!css.includes('url('));
   assert(!source.includes('innerHTML'));
   assert(!source.includes('eval('));
+});
+
+function clickLink(f, href, extra = {}) {
+  const link = f.document.createElement('a');
+  link.setAttribute('href', href);
+  const nested = f.document.createElement('span');
+  link.append(nested);
+  f.originalMain.append(link);
+  f.document.fire('click', { target: nested, button: 0, ...extra });
+}
+
+function measuredEvents(f) {
+  return JSON.parse(JSON.stringify((f.window.dataLayer || []).filter(entry => entry[0] === 'event')
+    .map(entry => [entry[1], entry[2]])));
+}
+
+test('demo and contact interactions send only fixed intent categories', () => {
+  const f = fixture({ pathname: '/architecture' });
+  clickLink(f, 'https://demo.vektorium.io/?private=secret#private');
+  clickLink(f, 'https://mobile-demo.vektorium.io/demo?private=secret');
+  clickLink(f, '/contact?private=secret');
+  clickLink(f, 'mailto:massimo.prando@vektorium.io?subject=private&body=secret');
+  assert.deepEqual(measuredEvents(f), [
+    ['demo_open', { demo_variant: 'desktop' }],
+    ['demo_open', { demo_variant: 'mobile' }],
+    ['contact_intent', { contact_method: 'contact_page' }],
+    ['contact_intent', { contact_method: 'email' }]
+  ]);
+  assert(!JSON.stringify(measuredEvents(f)).match(/private|secret|mailto|@|generate_lead/));
+});
+
+test('interaction measurement honors opt-outs, privacy signals and nonproduction hosts', () => {
+  for (const options of [{ preference: 'denied' }, { gpc: true }, { dnt: '1' },
+    { msDNT: '1' }, { windowDNT: '1' }, { hostname: 'localhost' },
+    { hostname: 'preview.vercel.app' }, { protocol: 'http:' }, { storageReadBlocked: true }]) {
+    const f = fixture(options);
+    clickLink(f, 'https://demo.vektorium.io/');
+    clickLink(f, '/contact');
+    assert.deepEqual(measuredEvents(f), []);
+  }
+});
+
+test('opt-out immediately stops interaction events including after a tag load error', () => {
+  const f = fixture();
+  clickLink(f, '/contact');
+  f.choose('off');
+  clickLink(f, 'https://demo.vektorium.io/');
+  assert.equal(measuredEvents(f).length, 1);
+  const failed = fixture();
+  failed.scriptLoads[0].fire('error');
+  clickLink(failed, '/contact');
+  assert.deepEqual(measuredEvents(failed), []);
+});
+
+test('unrelated, lookalike and prevented link actions do not create intent events', () => {
+  const f = fixture();
+  for (const href of ['/cypher-sentinel', 'https://example.com/contact',
+    'https://demo.vektorium.io.example.com/', 'https://user@demo.vektorium.io/',
+    'https://demo.vektorium.io/unknown', 'mailto:another@example.com', 'javascript:void(0)']) clickLink(f, href);
+  clickLink(f, '/contact', { defaultPrevented: true });
+  clickLink(f, '/contact', { button: 2 });
+  assert.deepEqual(measuredEvents(f), []);
+});
+
+test('copy button records intent only on the contact page without accessing the clipboard', () => {
+  for (const pathname of ['/contact', '/contact/', '/another-page']) {
+    const f = fixture({ pathname });
+    const button = f.document.createElement('button');
+    button.id = 'copyBtn';
+    f.originalMain.append(button);
+    f.document.fire('click', { target: button, button: 0 });
+    assert.deepEqual(measuredEvents(f), pathname.startsWith('/contact')
+      ? [['contact_intent', { contact_method: 'copy_button' }]] : []);
+  }
 });

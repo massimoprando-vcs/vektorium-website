@@ -1,0 +1,90 @@
+/* Architecture content uses the site's existing type, palette and effects. */
+.architecture-page .page-content { max-width: 1120px; }
+.architecture-page .breadcrumb { max-width: 1120px; }
+.architecture-page .architecture-eyebrow,
+.architecture-page .architecture-label {
+  color: var(--cyan);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.architecture-page .architecture-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 20px 28px;
+  margin: 28px 0 40px;
+}
+.architecture-page .cta-section .architecture-actions { justify-content: center; }
+.architecture-page .architecture-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 32px 0;
+}
+.architecture-page .architecture-metrics > div {
+  border-top: 1px solid rgba(0, 212, 255, .3);
+  padding-top: 20px;
+}
+.architecture-page .architecture-metrics dt { font-weight: 500; line-height: 1.5; }
+.architecture-page .architecture-metrics dt span {
+  display: block;
+  color: var(--cyan);
+  font-size: clamp(38px, 5vw, 56px);
+  font-weight: 600;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+.architecture-page .architecture-metrics dd {
+  margin-top: 10px;
+  color: var(--text2);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.architecture-page .architecture-map {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin: 28px 0 20px;
+}
+.architecture-page .architecture-node {
+  padding: 26px;
+  border: 1px solid rgba(0, 212, 255, .18);
+  border-radius: 12px;
+  background: rgba(0, 212, 255, .035);
+}
+.architecture-page .architecture-node h3 { margin: 8px 0 16px; color: var(--cyan); }
+.architecture-page .architecture-node p { font-size: 14px; margin-bottom: 18px; }
+.architecture-page .architecture-node .architecture-label { font-size: 10px; margin-bottom: 0; }
+.architecture-page .architecture-node a { font-size: 14px; line-height: 1.7; }
+.architecture-page .architecture-caption { font-size: 13px; }
+.architecture-page .architecture-flow { list-style: none; margin: 28px 0; padding: 0; }
+.architecture-page .architecture-flow li {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 20px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--border);
+}
+.architecture-page .architecture-step {
+  color: var(--cyan);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  line-height: 1.6;
+}
+.architecture-page .architecture-flow h3 { margin: 0 0 10px; }
+.architecture-page .architecture-flow p { margin: 0; }
+.architecture-page a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; }
+@media (max-width: 768px) {
+  .architecture-page .architecture-metrics { gap: 18px; }
+  .architecture-page .architecture-map { grid-template-columns: 1fr; }
+  .architecture-page .architecture-node { padding: 22px; }
+  .architecture-page .architecture-actions .cta-btn { padding: 16px 26px; }
+}
+@media (max-width: 480px) {
+  .architecture-page .architecture-metrics { grid-template-columns: 1fr; gap: 24px; }
+  .architecture-page .architecture-flow li { grid-template-columns: 30px minmax(0, 1fr); gap: 14px; }
+}

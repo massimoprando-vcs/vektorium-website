@@ -17,6 +17,7 @@ export const publicPages = new Set([
   'sovereign-cybersecurity-platform.html',
   'cybersecurity-convergence-platform.html',
   'integrations.html',
+  'architecture.html',
   'government-cybersecurity-platform.html',
   'critical-infrastructure-cybersecurity.html',
   'post-quantum-cybersecurity.html',
@@ -70,6 +71,7 @@ export const mobileHeader = `
     <nav class="vx-mobile-panel" aria-label="Mobile navigation">
       <a href="/">Home</a>
       <a href="/cypher-sentinel">Cypher Sentinel</a>
+      <a href="/architecture">Architecture</a>
       <a href="/sovereign-cybersecurity-platform">Platform</a>
       <a href="/cybersecurity-convergence-platform">Convergence</a>
       <a href="/integrations">Integrations</a>

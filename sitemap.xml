@@ -17,7 +17,7 @@
   </url>
   <url>
     <loc>https://vektorium.io/zero-trust-cybersecurity-platform</loc>
-    <lastmod>2026-10-25</lastmod>
+    <lastmod>2026-10-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -29,13 +29,13 @@
   </url>
   <url>
     <loc>https://vektorium.io/post-quantum-cybersecurity</loc>
-    <lastmod>2026-10-25</lastmod>
+    <lastmod>2026-10-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://vektorium.io/critical-infrastructure-cybersecurity</loc>
-    <lastmod>2026-10-25</lastmod>
+    <lastmod>2026-10-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -53,7 +53,7 @@
   </url>
   <url>
     <loc>https://vektorium.io/government-cybersecurity-platform</loc>
-    <lastmod>2026-10-25</lastmod>
+    <lastmod>2026-10-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -143,7 +143,7 @@
   </url>
   <url>
     <loc>https://vektorium.io/privacy-policy</loc>
-    <lastmod>2026-03-22</lastmod>
+    <lastmod>2026-10-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -172,4 +172,10 @@
   <url><loc>https://vektorium.io/insight-why-cypher-sentinel</loc><lastmod>2026-10-25</lastmod></url>
   <url><loc>https://vektorium.io/insight-vektorium-builds-cypher-sentinel</loc><lastmod>2026-10-25</lastmod></url>
 <!-- END LINKEDIN INSIGHTS SITEMAP -->
+  <url>
+    <loc>https://vektorium.io/architecture</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
