@@ -34,38 +34,67 @@
   <meta name="twitter:image" content="https://vektorium.io/assets/vektorium-share-v1.png">
   <meta name="twitter:image:alt" content="Vektorium logo centered on a dark blue background">
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@id": "https://vektorium.io/endpoint-detection-response#article",
-    "@type": "TechArticle",
-    "headline": "Endpoint Detection and Response (EDR): Advanced Threat Detection and Autonomous Response",
-    "description": "A comprehensive guide to EDR and XDR solutions for detecting ransomware, malware, and advanced persistent threats with behavior analysis and autonomous response capabilities.",
-    "author": {"@type": "Person", "name": "Massimo Prando", "jobTitle": "CEO & Founder", "url": "https://vektorium.io", "worksFor": {"@type": "Organization", "name": "Vektorium Inc."}},
-    "publisher": {"@type": "Organization", "name": "Vektorium Inc.", "logo": {"@type": "ImageObject", "url": "https://vektorium.io/vektorium-logo.png"}},
-    "datePublished": "2026-03-22",
-    "dateModified": "2026-03-22",
-    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://vektorium.io/endpoint-detection-response"},
-    "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".atomic-answer", "h1"]}
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@id": "https://vektorium.io/endpoint-detection-response#faq",
-    "@type": "FAQPage",
-    "speakable": {
-      "@type": "SpeakableSpecification",
-      "cssSelector": [".atomic-answer", "h1"]
+{
+  "@context": "https://schema.org",
+  "@id": "https://vektorium.io/endpoint-detection-response#article",
+  "@type": "TechArticle",
+  "headline": "Endpoint Detection and Response (EDR): Advanced Threat Detection and Autonomous Response",
+  "description": "A comprehensive guide to EDR and XDR solutions for detecting ransomware, malware, and advanced persistent threats with behavior analysis and autonomous response capabilities.",
+  "author": {
+    "@type": "Person",
+    "name": "Massimo Prando",
+    "jobTitle": "CEO & Founder",
+    "url": "https://vektorium.io",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Vektorium",
+      "@id": "https://vektorium.io/#organization",
+      "url": "https://vektorium.io/"
     },
-    "mainEntity": [
-      {"@type": "Question", "name": "What is endpoint detection and response (EDR)?", "acceptedAnswer": {"@type": "Answer", "text": "Endpoint Detection and Response (EDR) is a security solution that continuously monitors endpoints (computers, servers, mobile devices) for suspicious behavior and threats. EDR solutions use behavior analysis, threat intelligence, and machine learning to detect malware, ransomware, advanced persistent threats, and zero-day exploits that traditional antivirus tools miss."}},
-      {"@type": "Question", "name": "What is the difference between EDR and XDR?", "acceptedAnswer": {"@type": "Answer", "text": "EDR focuses on endpoint-level threat detection and response. XDR (Extended Detection and Response) extends this to cover networks, cloud environments, and entire IT infrastructure. While EDR protects endpoints, XDR provides cross-platform visibility and correlation of threats across all security domains."}},
-      {"@type": "Question", "name": "How does behavioral analysis prevent ransomware attacks?", "acceptedAnswer": {"@type": "Answer", "text": "Behavioral analysis monitors how processes, files, and network connections behave. Ransomware exhibits distinctive patterns: rapid file encryption attempts, network reconnaissance, and lateral movement. EDR solutions detect these behaviors in real-time, before the ransomware can encrypt critical data, enabling immediate containment and response."}},
-      {"@type": "Question", "name": "Can EDR detect zero-day exploits?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. While zero-day exploits bypass signature-based detection, EDR behavior analysis detects the malicious actions that follow exploitation. By monitoring post-exploitation activity, EDR can identify and block zero-day attacks even when their specific signatures are unknown to security vendors."}},
-      {"@type": "Question", "name": "What is autonomous threat response in EDR?", "acceptedAnswer": {"@type": "Answer", "text": "Autonomous threat response enables EDR systems to automatically take defensive actions without waiting for human intervention. This includes isolating infected endpoints, killing malicious processes, blocking network connections, restoring files from backup, and generating incident reports. Autonomous response dramatically reduces dwell time and attack impact."}}
+    "@id": "https://vektorium.io/#founder"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Vektorium",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://vektorium.io/vektorium-logo.png"
+    },
+    "@id": "https://vektorium.io/#organization",
+    "url": "https://vektorium.io/"
+  },
+  "datePublished": "2026-03-22",
+  "dateModified": "2026-03-22",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://vektorium.io/endpoint-detection-response"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [
+      ".atomic-answer",
+      "h1"
     ]
   }
-  </script>
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@id": "https://vektorium.io/endpoint-detection-response#faq",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is endpoint detection and response (EDR)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Endpoint Detection and Response (EDR) is a security solution that continuously monitors endpoints (computers, servers, mobile devices) for suspicious behavior and threats. EDR solutions use behavior analysis, threat intelligence, and machine learning to detect malware, ransomware, advanced persistent threats, and zero-day exploits that traditional antivirus tools miss."
+      }
+    }
+  ]
+}
+</script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -77,19 +106,31 @@
   }
   </script>
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Cypher Sentinel EDR/XDR",
-    "applicationCategory": "SecurityApplication",
-    "operatingSystem": "Windows, Linux, macOS, Cloud",
-    "description": "Enterprise-grade endpoint detection and response platform with behavioral analysis, threat hunting, autonomous response, and XDR capabilities for detecting ransomware, malware, and advanced persistent threats.",
-    "url": "https://vektorium.io/endpoint-detection-response",
-    "offers": {"@type": "Offer", "availability": "https://schema.org/InStock", "priceCurrency": "USD", "price": "0", "description": "Contact for enterprise pricing"},
-    "publisher": {"@type": "Organization", "name": "Vektorium Inc.", "url": "https://vektorium.io"},
-    "featureList": ["Behavioral Threat Detection", "Ransomware Protection", "Malware Analysis", "Zero-Day Detection", "Autonomous Response", "Threat Hunting", "Cloud Endpoint Security"]
-  }
-  </script>
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Cypher Sentinel",
+  "applicationCategory": "SecurityApplication",
+  "description": "Enterprise-grade endpoint detection and response platform with behavioral analysis, threat hunting, autonomous response, and XDR capabilities for detecting ransomware, malware, and advanced persistent threats.",
+  "url": "https://vektorium.io/cypher-sentinel",
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://vektorium.io/#organization",
+    "name": "Vektorium",
+    "url": "https://vektorium.io/"
+  },
+  "featureList": [
+    "Behavioral Threat Detection",
+    "Ransomware Protection",
+    "Malware Analysis",
+    "Zero-Day Detection",
+    "Autonomous Response",
+    "Threat Hunting",
+    "Cloud Endpoint Security"
+  ],
+  "@id": "https://vektorium.io/cypher-sentinel#product"
+}
+</script>
   <script type="application/ld+json">
   [
     {"@context":"https://schema.org","@type":"DefinedTerm","name":"Endpoint Detection and Response","description":"A security solution that continuously monitors endpoints for suspicious behavior, detects threats including malware and ransomware, and enables rapid response to contain and remediate attacks.","url":"https://vektorium.io/endpoint-detection-response"},

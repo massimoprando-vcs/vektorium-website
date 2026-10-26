@@ -13,7 +13,7 @@ const checkout = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const options = new Set(process.argv.slice(2));
 assert.ok([...options].every(option => ['--actual', '--keep-actual'].includes(option)), 'Unknown test option');
 assert.ok(!options.has('--keep-actual') || options.has('--actual'), '--keep-actual requires --actual');
-assert.equal(publicPages.size, 38, 'Review the explicit public manifest if the site inventory changes');
+assert.equal(publicPages.size, 39, 'Review the explicit public manifest if the site inventory changes');
 assert.ok([...publicPages].every(page => /^[a-z0-9-]+\.html$/.test(page)));
 const temporaryParent = realpathSync(tmpdir());
 const temporaryRoot = mkdtempSync(join(temporaryParent, 'vektorium-compatible-tests-'));
@@ -140,7 +140,7 @@ function outputCheck(root, environment) {
 
 try {
   test('mobile navigation is additive, complete and excluded from demo redirects', () => {
-    assert.equal(mobilePages.size, 36);
+    assert.equal(mobilePages.size, 37);
     assert.equal(mobilePages.has('demo.html'), false);
     assert.equal(mobilePages.has('generated.html'), false);
     assert.ok(!/<(?:script|style)\b|\s(?:style|on[a-z]+)=/i.test(mobileHeader), 'Mobile markup may not authorize inline code or styling');
@@ -151,7 +151,7 @@ try {
       const path = new URL(href, 'https://vektorium.io').pathname;
       assert.ok(publicPages.has(path === '/' ? 'index.html' : path.slice(1) + '.html'), `Missing navigation target: ${href}`);
     }
-    for (const target of ['https://mobile-demo.vektorium.io/demo', '/contact', '/blog', '/cypher-sentinel']) assert.ok(links.includes(target), target);
+    for (const target of ['https://mobile-demo.vektorium.io/demo', '/contact', '/blog', '/cypher-sentinel', '/integrations']) assert.ok(links.includes(target), target);
     const source = '<html><head><title>Original</title></head><body><main>Original product claim</main></body></html>';
     const output = prepareHtml('index.html', source);
     assert.ok(output.includes('<body>' + mobileHeader + '<main>Original product claim</main>'));

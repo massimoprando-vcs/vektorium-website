@@ -1,62 +1,68 @@
-# Vektorium — Sovereign Cybersecurity Infrastructure
+# Vektorium public website
 
-**[vektorium.io](https://vektorium.io)**
+**[vektorium.io](https://vektorium.io/)** is the corporate website for Vektorium,
+the company building **Cypher Sentinel**, a sovereign cybersecurity convergence
+platform.
 
-Vektorium Inc. builds **Cypher Sentinel** — a sovereign cybersecurity convergence platform with 88 integrated security modules for governments and enterprises protecting critical infrastructure.
+## Cypher Sentinel
 
-## About Cypher Sentinel
+**Keep your security stack. Add frontier defense.**
 
-Cypher Sentinel is a production-ready sovereign cybersecurity platform that unifies threat intelligence, network security, endpoint protection, identity and access management, compliance and GRC, AI-powered SIEM, zero-trust architecture, and more into a single converged platform.
+Cypher Sentinel brings together **160 surfaced capabilities across 90
+customer-facing engines and 27 command families**. Integration bridges and APIs
+connect existing security tools with the platform's native capabilities for
+shared context and coordinated defense under customer-defined authority.
 
-### Key Features
+The website presents four connected themes:
 
-- **88 Security Modules** — Complete cybersecurity coverage in one sovereign platform
-- - **Full Data Sovereignty** — Deploy on-premise or in your own private cloud
-  - - **Government Grade** — Designed for critical infrastructure and government networks
-    - - **Production Ready** — 95% production-ready with 2,350+ tests passed
-      - - **Zero Trust Architecture** — End-to-end zero-trust implementation
-        - - **AI-Powered SIEM/SOAR** — Intelligent threat detection with predictive analytics
-          - - **IT-OT Convergence** — Unified security across information and operational technology
-           
-            - ### Core Capabilities
-           
-            - | Domain | Description |
-            - |--------|-------------|
-            - | Threat Intelligence | AI-powered real-time threat detection and analysis |
-            - | Network Security | Zero-trust architecture with advanced packet inspection |
-            - | Endpoint Protection | Next-gen EDR/XDR with behavioral analysis |
-            - | Identity & Access | IAM/PAM with multi-factor authentication |
-            - | Compliance & GRC | Automated governance, risk, and compliance |
-            - | AI-Powered SIEM | Intelligent SIEM with predictive analytics and SOAR |
-            - | Data Encryption | Military-grade encryption for data at rest and in transit |
-            - | Vulnerability Management | Continuous assessment and prioritized remediation |
-            - | Incident Response | Automated detection, investigation, and response |
-            - | Cloud Security | Sovereign cloud security posture management |
-            - | IoT Security | Protection for OT and IoT in critical infrastructure |
-           
-            - ## Website
-           
-            - This repository contains the source code for [vektorium.io](https://vektorium.io) — the official Vektorium corporate website.
-           
-            - ### Pages
-           
-            - - [Home](https://vektorium.io/) — Main landing page
-              - - [Sovereign Cybersecurity Platform](https://vektorium.io/sovereign-cybersecurity-platform.html) — Sovereign platform deep-dive
-                - - [Cybersecurity Convergence Platform](https://vektorium.io/cybersecurity-convergence-platform.html) — Platform convergence approach
-                  - - [Critical Infrastructure Cybersecurity](https://vektorium.io/critical-infrastructure-cybersecurity.html) — Infrastructure protection
-                   
-                    - ## Technology Stack
-                   
-                    - - Static HTML/CSS/JavaScript
-                      - - WebGL fluid animation background
-                        - - Deployed via Vercel
-                          - - Domain: vektorium.io (Squarespace Domains)
-                           
-                            - ## Contact
-                           
-                            - - **Website:** [vektorium.io](https://vektorium.io)
-                              - - **Email:** massimo.prando@vektorium.io
-                               
-                                - ---
+- **Convergence:** security functions and connected tools operate with shared
+  context and coordinated workflows.
+- **Cryptographic architecture:** advanced cryptographic capabilities form part
+  of the same security platform.
+- **Sovereign control:** customers define deployment boundaries, connected
+  systems and authorized actions.
+- **AI operating model:** designed to coordinate capabilities, reduce manual SOC
+  work and accelerate response within those boundaries.
 
-                                *Vektorium Inc. — From Japan to Silicon Valley, building the cybersecurity infrastructure that nations and enterprises need.*
+This repository contains the public marketing website. The Cypher Sentinel
+application, private development source and product validation records are
+maintained separately.
+
+## Main pages
+
+| Page | Purpose |
+| --- | --- |
+| [Home](https://vektorium.io/) | Company vision and frontier security architecture |
+| [Cypher Sentinel](https://vektorium.io/cypher-sentinel) | Platform breadth and operating model |
+| [Cybersecurity convergence](https://vektorium.io/cybersecurity-convergence-platform) | Shared context and integration with existing tools |
+| [AI-powered SIEM](https://vektorium.io/ai-powered-siem-platform) | AI-assisted security operations |
+| [Sovereign cybersecurity](https://vektorium.io/sovereign-cybersecurity-platform) | Customer control and deployment choices |
+| [Government cybersecurity](https://vektorium.io/government-cybersecurity-platform) | Government and defence use cases |
+| [Critical infrastructure](https://vektorium.io/critical-infrastructure-cybersecurity) | Infrastructure protection |
+| [Post-quantum cybersecurity](https://vektorium.io/post-quantum-cybersecurity) | Cryptographic architecture |
+| [Insights](https://vektorium.io/blog) | Technical perspectives and archived publications |
+| [Contact](https://vektorium.io/contact) | Demo and commercial inquiries |
+
+## Build and release
+
+The website uses static HTML, CSS and JavaScript, with a dependency-free Node.js
+24 build. Vercel deploys only the generated `dist` directory.
+
+```sh
+npm run check
+npm run test:privacy
+npm run test:integration
+VERCEL_ENV=production npm run build
+```
+
+Other build environments produce non-indexable previews. See
+[website operations](docs/website-operations.md) for the public-file manifest,
+privacy controls, exact Content Security Policy, preview review and release
+checks. Preserve the existing typography, cyan visual identity and desktop
+mouse/light effects when updating content.
+
+## Contact
+
+- **Website:** [vektorium.io](https://vektorium.io/)
+- **Email:** [massimo.prando@vektorium.io](mailto:massimo.prando@vektorium.io)
+- **LinkedIn:** [Vektorium](https://www.linkedin.com/company/vektorium)

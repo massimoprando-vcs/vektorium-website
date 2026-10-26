@@ -40,12 +40,42 @@
   "@type": "TechArticle",
   "headline": "Post-Quantum Cybersecurity: Protecting Data Against the Quantum Threat",
   "description": "Post-quantum cybersecurity platforms implement quantum-safe encryption to protect against future quantum computing threats. Cypher Sentinel features 90 integrated security engines with post quantum cryptography and FIPS 203/204/205 standards.",
-  "author": {"@type": "Person", "name": "Massimo Prando", "jobTitle": "CEO & Founder", "url": "https://vektorium.io", "worksFor": {"@type": "Organization", "name": "Vektorium Inc."}},
-  "publisher": {"@type": "Organization", "name": "Vektorium Inc.", "logo": {"@type": "ImageObject", "url": "https://vektorium.io/vektorium-logo.png"}},
+  "author": {
+    "@type": "Person",
+    "name": "Massimo Prando",
+    "jobTitle": "CEO & Founder",
+    "url": "https://vektorium.io",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Vektorium",
+      "@id": "https://vektorium.io/#organization",
+      "url": "https://vektorium.io/"
+    },
+    "@id": "https://vektorium.io/#founder"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Vektorium",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://vektorium.io/vektorium-logo.png"
+    },
+    "@id": "https://vektorium.io/#organization",
+    "url": "https://vektorium.io/"
+  },
   "datePublished": "2026-03-08",
   "dateModified": "2026-10-25",
-  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://vektorium.io/post-quantum-cybersecurity"},
-  "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".atomic-answer", "h1"]}
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://vektorium.io/post-quantum-cybersecurity"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [
+      ".atomic-answer",
+      "h1"
+    ]
+  }
 }
 </script>
 
@@ -91,30 +121,7 @@ body{cursor:none}.cursor-dot{position:fixed;top:0;left:0;width:8px;height:8px;ba
   "@context": "https://schema.org",
   "@id": "https://vektorium.io/post-quantum-cybersecurity#faq",
   "@type": "FAQPage",
-  "speakable": {
-    "@type": "SpeakableSpecification",
-    "cssSelector": [
-      ".atomic-answer",
-      "h1"
-    ]
-  },
   "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What is post-quantum cybersecurity?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Post-quantum cybersecurity refers to security systems that use quantum-resistant encryption algorithms to protect data against attacks from future quantum computers. Post quantum cryptography uses mathematical problems that are difficult for both classical and quantum computers to solve, ensuring data protection even when quantum computing becomes widely available."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "When will quantum computers break current encryption?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Large-scale quantum computers capable of breaking RSA and elliptic curve cryptography may become available within 10-20 years. However, the threat is immediate because of 'harvest now, decrypt later' attacks where adversaries collect encrypted data today for decryption once quantum computers become available. Post quantum cybersecurity protection is needed now to protect long-term sensitive data."
-      }
-    },
     {
       "@type": "Question",
       "name": "What are FIPS 203, FIPS 204, and FIPS 205?",
@@ -153,38 +160,6 @@ body{cursor:none}.cursor-dot{position:fixed;top:0;left:0;width:8px;height:8px;ba
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "A harvest-now-decrypt-later (HNDL) attack is a strategy where adversaries intercept and store encrypted data today with the intention of decrypting it once quantum computers become powerful enough to break current encryption. This threat is particularly serious for government classified information, financial data, healthcare records, and intellectual property with long-term value. Post-quantum cybersecurity platforms like Cypher Sentinel protect against HNDL attacks by implementing quantum-resistant encryption now."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What is a harvest now decrypt later attack?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "A harvest now decrypt later attack is a strategy where adversaries intercept and store encrypted data today with the intent of decrypting it in the future using quantum computers. This makes post-quantum cybersecurity urgent even before quantum computers exist."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is post-quantum cryptography compatible with existing systems?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Cypher Sentinel implements hybrid cryptographic approaches that combine classical and post-quantum algorithms during the transition period, ensuring backward compatibility while providing quantum resistance."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What industries need post-quantum cybersecurity most?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Government agencies, defense organizations, financial institutions, healthcare systems, and critical infrastructure operators handling long-lived sensitive data face the greatest urgency for post-quantum cybersecurity."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How does homomorphic encryption relate to post-quantum security?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Homomorphic encryption allows computation on encrypted data without decryption, providing an additional layer of quantum-resistant security. Cypher Sentinel combines post-quantum cryptography with homomorphic encryption for secure data processing."
       }
     }
   ]

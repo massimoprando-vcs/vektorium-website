@@ -16,6 +16,7 @@ export const publicPages = new Set([
   'cypher-sentinel.html',
   'sovereign-cybersecurity-platform.html',
   'cybersecurity-convergence-platform.html',
+  'integrations.html',
   'government-cybersecurity-platform.html',
   'critical-infrastructure-cybersecurity.html',
   'post-quantum-cybersecurity.html',
@@ -71,6 +72,7 @@ export const mobileHeader = `
       <a href="/cypher-sentinel">Cypher Sentinel</a>
       <a href="/sovereign-cybersecurity-platform">Platform</a>
       <a href="/cybersecurity-convergence-platform">Convergence</a>
+      <a href="/integrations">Integrations</a>
       <a href="/critical-infrastructure-cybersecurity">Infrastructure</a>
       <a href="/post-quantum-cybersecurity">Post-Quantum</a>
       <a href="/blog">Blog &amp; insights</a>
