@@ -34,6 +34,8 @@ maintained separately.
 | --- | --- |
 | [Home](https://vektorium.io/) | Company vision and frontier security architecture |
 | [Cypher Sentinel](https://vektorium.io/cypher-sentinel) | Platform breadth and operating model |
+| [Architecture](https://vektorium.io/architecture) | Capability organization, shared context and customer-defined authority |
+| [Integrations](https://vektorium.io/integrations) | How Cypher Sentinel works alongside an existing security stack |
 | [Cybersecurity convergence](https://vektorium.io/cybersecurity-convergence-platform) | Shared context and integration with existing tools |
 | [AI-powered SIEM](https://vektorium.io/ai-powered-siem-platform) | AI-assisted security operations |
 | [Sovereign cybersecurity](https://vektorium.io/sovereign-cybersecurity-platform) | Customer control and deployment choices |

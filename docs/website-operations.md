@@ -35,7 +35,7 @@ The six homepage schematics and LinkedIn archive use small, separate stylesheets
 Do not reintroduce the parked global stylesheet or replacement desktop-effects
 implementation when making subsequent changes.
 
-The shared mobile header is inserted only into the 37 marketing/content pages.
+The shared mobile header is inserted only into the 38 marketing/content pages.
 Its layout and reading refinements live in `assets/mobile.css` and apply only
 at 768px or narrower. The original desktop header, cursor, WebGL effects and
 inline style/script bodies stay intact. The native menu remains usable without
@@ -58,6 +58,9 @@ direct CSS property assignments; changing it to `cssText` or inline event
 handlers can break the policy.
 
 ## Analytics and privacy settings
+
+See [search measurement](search-measurement.md) for the scoped demo/contact intent
+events and the distinction between website interaction and a qualified inquiry.
 
 The owner selected an opt-out model: existing Google Analytics is enabled by
 default on the two public hostnames, subject to a saved opt-out and supported

@@ -1,4 +1,4 @@
-/* Privacy controls only: the original site layout and effects are untouched.
+/* Privacy controls and scoped interaction measurement. Layout and effects are untouched.
  * The owner selected analytics-on by default with a visitor opt-out. That
  * default is not visitor consent. No Google tag runs on preview/local hosts.
  */
@@ -412,6 +412,39 @@
     renderState();
   }
 
+  function measureInteraction(event) {
+    if (event.defaultPrevented || (event.button !== undefined && event.button !== 0) ||
+        !canMeasure() || window[DISABLE_KEY] || typeof window.gtag !== 'function') return;
+    const target = event.target;
+    if (!target || typeof target.closest !== 'function') return;
+    const button = target.closest('button');
+    if (button && button.id === 'copyBtn' && window.location.pathname.replace(/\/$/, '') === '/contact') {
+      // Button intent only: do not read clipboard contents or imply copy success.
+      window.gtag('event', 'contact_intent', { contact_method: 'copy_button' });
+      return;
+    }
+    const link = target.closest('a');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    if (!href) return;
+    let url;
+    try { url = new URL(href, window.location.origin + window.location.pathname); }
+    catch { return; }
+    // Send only fixed categories. No address, message, link text, query or hash.
+    if (url.protocol === 'mailto:' && url.pathname.toLowerCase() === 'massimo.prando@vektorium.io') {
+      window.gtag('event', 'contact_intent', { contact_method: 'email' });
+    } else if (url.protocol === 'https:' && url.origin === window.location.origin &&
+               url.pathname.replace(/\/$/, '') === '/contact') {
+      window.gtag('event', 'contact_intent', { contact_method: 'contact_page' });
+    } else if (url.protocol === 'https:' && !url.username && !url.password &&
+               url.hostname === 'demo.vektorium.io' && /^\/(?:demo\/?)?$/.test(url.pathname)) {
+      window.gtag('event', 'demo_open', { demo_variant: 'desktop' });
+    } else if (url.protocol === 'https:' && !url.username && !url.password &&
+               url.hostname === 'mobile-demo.vektorium.io' && /^\/demo\/?$/.test(url.pathname)) {
+      window.gtag('event', 'demo_open', { demo_variant: 'mobile' });
+    }
+  }
+
   function initialize() {
     const preference = readPreference();
     storageUnavailable = !preference.readable;
@@ -420,6 +453,7 @@
     if (canMeasure()) startAnalytics();
     else { window[DISABLE_KEY] = true; clearAnalyticsCookies(); }
     renderState();
+    document.addEventListener('click', measureInteraction);
     window.addEventListener('storage', synchronizePreference);
     window.addEventListener('pageshow', checkForRevocation);
     window.addEventListener('focus', checkForRevocation);
