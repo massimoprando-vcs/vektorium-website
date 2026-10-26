@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="180" viewBox="0 0 180 180">
+  <title>Vektorium Apple touch icon</title>
+  <rect width="180" height="180" fill="#1a1f3a"/>
+  <!-- Match the existing square favicon's crop and dark blue background. -->
+  <svg width="180" height="180" viewBox="0 32 1712 1712">
+    <image width="1712" height="1776" xlink:href="../vektorium-logo.png"/>
+  </svg>
+</svg>
