@@ -673,12 +673,15 @@ test('demo and contact interactions send only fixed intent categories', () => {
   clickLink(f, 'https://demo.vektorium.io/?private=secret#private');
   clickLink(f, 'https://mobile-demo.vektorium.io/demo?private=secret');
   clickLink(f, '/contact?private=secret');
-  clickLink(f, 'mailto:massimo.prando@vektorium.io?subject=private&body=secret');
+  const addresses = ['massimo.prando@vektorium.io', 'info@vektorium.io',
+    'sales@vektorium.io', 'tech@vektorium.io', 'marketing@vektorium.io',
+    'security@vektorium.io', 'privacy@vektorium.io'];
+  for (const address of addresses) clickLink(f, `mailto:${address}?subject=private&body=secret`);
   assert.deepEqual(measuredEvents(f), [
     ['demo_open', { demo_variant: 'desktop' }],
     ['demo_open', { demo_variant: 'mobile' }],
     ['contact_intent', { contact_method: 'contact_page' }],
-    ['contact_intent', { contact_method: 'email' }]
+    ...addresses.map(() => ['contact_intent', { contact_method: 'email' }])
   ]);
   assert(!JSON.stringify(measuredEvents(f)).match(/private|secret|mailto|@|generate_lead/));
 });
@@ -690,6 +693,7 @@ test('interaction measurement honors opt-outs, privacy signals and nonproduction
     const f = fixture(options);
     clickLink(f, 'https://demo.vektorium.io/');
     clickLink(f, '/contact');
+    clickLink(f, 'mailto:info@vektorium.io');
     assert.deepEqual(measuredEvents(f), []);
   }
 });
@@ -710,7 +714,9 @@ test('unrelated, lookalike and prevented link actions do not create intent event
   const f = fixture();
   for (const href of ['/cypher-sentinel', 'https://example.com/contact',
     'https://demo.vektorium.io.example.com/', 'https://user@demo.vektorium.io/',
-    'https://demo.vektorium.io/unknown', 'mailto:another@example.com', 'javascript:void(0)']) clickLink(f, href);
+    'https://demo.vektorium.io/unknown', 'mailto:another@example.com',
+    'mailto:other@vektorium.io', 'mailto:info@vektorium.io.example.com',
+    'mailto:info@vektorium.io,another@example.com', 'javascript:void(0)']) clickLink(f, href);
   clickLink(f, '/contact', { defaultPrevented: true });
   clickLink(f, '/contact', { button: 2 });
   assert.deepEqual(measuredEvents(f), []);
