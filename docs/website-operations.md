@@ -35,13 +35,18 @@ The six homepage schematics and LinkedIn archive use small, separate stylesheets
 Do not reintroduce the parked global stylesheet or replacement desktop-effects
 implementation when making subsequent changes.
 
-The shared mobile header is inserted only into the 38 marketing/content pages.
-Its layout and reading refinements live in `assets/mobile.css` and apply only
-at 768px or narrower. The original desktop header, cursor, WebGL effects and
-inline style/script bodies stay intact. The native menu remains usable without
-JavaScript; `assets/mobile.js` adds dismissal and focus handling. Keep desktop
-selectors out of that stylesheet's ungated rules and check both sides of the
-768px breakpoint whenever changing it.
+The build adds shared hamburger navigation to the 38 marketing/content pages;
+demo redirects are excluded. At 768px or narrower, the mobile header keeps its
+12 existing links. Above 768px, a native desktop menu follows the primary
+navigation's existing Contact link. Its three groups and demo/contact actions
+keep the homepage section links available on compact desktop layouts.
+
+Both menus remain usable without JavaScript. `assets/mobile.css` and
+`assets/mobile.js` own the mobile layout and dismissal; `assets/navigation.css`
+loads after the mobile stylesheet and `assets/navigation.js` handles the desktop
+menu. Original source HTML, inline effects and CSP hashes stay intact. Check
+both sides of the 768px breakpoint and the compact desktop layout through
+1100px. Missing or ambiguous primary navigation targets fail the build.
 
 The enforced Content Security Policy permits the reviewed inline scripts,
 style blocks and static style attributes by their exact SHA-256 hashes. If one

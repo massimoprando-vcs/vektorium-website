@@ -9,6 +9,7 @@ import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { attr, build, cspHash, decodeAttribute, expectedConfig, fixedFiles, htmlTokens, inspectHtml, legacyGaBodies, legacyGaBody, legacyGaSource, mobileHeader, mobilePages, prepareBuild, prepareHtml, publicPages, searchIndexPages, versionPageAssets } from './build.mjs';
 import { createSearchIndex, extractSearchPage, searchBodyLimit, siteSearchIndexPath } from './search-index.mjs';
+import { desktopMenu, menuIcon } from './navigation.mjs';
 
 const checkout = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const options = new Set(process.argv.slice(2));
@@ -38,6 +39,15 @@ function synchronizeFixtureConfig(root) {
   put(root, 'vercel.json', JSON.stringify(expectedConfig(inventory), null, 2) + '\n');
 }
 
+function fixtureNavigation(page) {
+  if (!mobilePages.has(page)) return '';
+  const links = '<a href="/">Home</a><a href="/contact" class="cta"><span>Contact</span></a>';
+  if (page === 'index.html') return `<nav class="floating-nav" aria-label="Primary navigation">${links}</nav>`;
+  // The published-insight and blog templates use the same class without a label.
+  const label = page === 'blog.html' || page.startsWith('insight-') ? '' : ' aria-label="Primary navigation"';
+  return `<nav class="site-nav"${label}><a href="/" class="logo">Vektorium</a><div class="nav-links">${links}</div></nav>`;
+}
+
 function fixture(name) {
   assert.match(name, /^[a-z0-9-]+$/);
   const root = join(temporaryRoot, name);
@@ -51,7 +61,7 @@ function fixture(name) {
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter&amp;display=swap"></noscript>
 <style>\nbody { color: #eef; }\n</style><link rel="stylesheet" href="/assets/fixture.css"><script src="/assets/fixture.js" defer></script>
 <script type="application/ld+json">{"@type":"Organization","name":"Unchanged fixture claim"}</script>
-</head><body><main style="color: #eef">Fixture</main><script>\nwindow.fixture = 'unchanged';\n</script></body></html>`);
+</head><body>${fixtureNavigation(page)}<main style="color: #eef">Fixture</main><script>\nwindow.fixture = 'unchanged';\n</script></body></html>`);
   }
   for (const [path, content] of [
     ['assets/fixture.css', 'body { background: #111; }\n'], ['assets/fixture.js', "'use strict';\n"],
@@ -61,6 +71,8 @@ function fixture(name) {
     ['assets/privacy-controls.js', "'use strict'; // No network access in fixture.\n"],
     ['assets/mobile.css', '.vx-mobile-header { display: none; }\n'],
     ['assets/mobile.js', "'use strict'; // Mobile navigation fixture.\n"],
+    ['assets/navigation.css', '.vx-desktop-menu { display: none; }\n'],
+    ['assets/navigation.js', "'use strict'; // Desktop navigation fixture.\n"],
     ['robots.txt', 'User-agent: *\nAllow: /\nSitemap: https://vektorium.io/sitemap.xml\n'],
     ['sitemap.xml', '<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>'],
     ['.well-known/security.txt', 'Contact: mailto:fixture@example.invalid\nExpires: 2030-01-01T00:00:00Z\n'],
@@ -117,6 +129,30 @@ function outputCheck(root, environment) {
     assert.equal(tokens.filter(t => t.name === 'header' && attr(t, 'class') === 'vx-mobile-header').length, mobileCount, page);
     assert.equal(tokens.filter(t => t.name === 'script' && attr(t, 'src')?.startsWith('/assets/mobile.js?')).length, mobileCount, page);
     assert.equal(tokens.filter(t => t.name === 'link' && attr(t, 'href')?.startsWith('/assets/mobile.css?')).length, mobileCount, page);
+    const desktop = tokens.filter(t => !t.closing && t.name === 'details' && attr(t, 'class') === 'vx-desktop-menu');
+    assert.equal(desktop.length, mobileCount, page);
+    const navigationCss = tokens.filter(t => t.name === 'link' && attr(t, 'href')?.startsWith('/assets/navigation.css?'));
+    const navigationJs = tokens.filter(t => t.name === 'script' && attr(t, 'src')?.startsWith('/assets/navigation.js?'));
+    assert.equal(navigationCss.length, mobileCount, page);
+    assert.equal(navigationJs.length, mobileCount, page);
+    const ids = tokens.filter(t => !t.closing && t.attrs.has('id')).map(t => attr(t, 'id'));
+    assert.equal(new Set(ids).size, ids.length, `${page}: duplicate HTML IDs`);
+    for (const panel of ['vx-mobile-panel', 'vx-desktop-panel']) {
+      assert.equal(ids.filter(id => id === panel).length, mobileCount, page);
+      const summaries = tokens.filter(t => !t.closing && t.name === 'summary' && attr(t, 'aria-controls') === panel);
+      assert.equal(summaries.length, mobileCount, page);
+      if (mobileCount) assert.equal(attr(summaries[0], 'aria-label'), 'Navigation menu', page);
+    }
+    if (mobileCount) {
+      assert.ok(navigationJs[0].attrs.has('defer'), page);
+      assert.ok(navigationCss[0].start > tokens.find(t => t.name === 'link' && attr(t, 'href')?.startsWith('/assets/mobile.css?')).start, page);
+      assert.ok(desktop[0].attrs.has('data-search-ignore'), page);
+      const sourceTokens = htmlTokens(source);
+      const contact = sourceTokens.find(t => !t.closing && t.name === 'a' && attr(t, 'href') === '/contact' && attr(t, 'class')?.split(/\s+/).includes('cta'));
+      assert.ok(contact, `${page}: expected original primary Contact link`);
+      const contactClose = sourceTokens.slice(sourceTokens.indexOf(contact) + 1).find(t => t.closing && t.name === 'a');
+      assert.ok(html.includes(source.slice(contact.start, contactClose.end) + desktopMenu), `${page}: desktop menu must immediately follow the unchanged Contact anchor`);
+    }
     const inventory = inspectHtml(page, html);
     const policy = JSON.parse(readFileSync(join(root, 'vercel.json'), 'utf8')).headers[0].headers.find(h => h.key === 'Content-Security-Policy').value;
     for (const hashes of Object.values(inventory)) for (const hash of hashes) assert.ok(policy.includes(`'${hash}'`), `${page}: unapproved inline hash`);
@@ -151,25 +187,66 @@ function outputCheck(root, environment) {
 }
 
 try {
-  test('mobile navigation is additive, complete and excluded from demo redirects', () => {
+  test('shared hamburger markup has complete allowed links, accessible controls and no inline code', () => {
     assert.equal(mobilePages.size, 38);
     assert.equal(mobilePages.has('demo.html'), false);
     assert.equal(mobilePages.has('generated.html'), false);
-    assert.ok(!/<(?:script|style)\b|\s(?:style|on[a-z]+)=/i.test(mobileHeader), 'Mobile markup may not authorize inline code or styling');
-    const links = htmlTokens(mobileHeader).filter(t => t.name === 'a' && !t.closing).map(t => attr(t, 'href'));
+    assert.ok(!/<(?:script|style)\b|\s(?:style|on[a-z]+)=/i.test(mobileHeader + desktopMenu), 'Navigation markup may not authorize inline code or styling');
+    assert.equal(htmlTokens(menuIcon).filter(t => t.name === 'span' && !t.closing).length, 4, 'Icon has one wrapper and three lines');
+    assert.ok(mobileHeader.includes(menuIcon) && desktopMenu.includes(menuIcon));
+    const mobileLinks = htmlTokens(mobileHeader).filter(t => t.name === 'a' && !t.closing).map(t => attr(t, 'href')).slice(1);
+    assert.deepEqual(mobileLinks, ['/', '/cypher-sentinel', '/architecture', '/sovereign-cybersecurity-platform', '/cybersecurity-convergence-platform', '/integrations', '/critical-infrastructure-cybersecurity', '/post-quantum-cybersecurity', '/blog', '/#about', 'https://mobile-demo.vektorium.io/demo', '/contact']);
+    const desktopLinks = htmlTokens(desktopMenu).filter(t => t.name === 'a' && !t.closing).map(t => attr(t, 'href'));
+    assert.deepEqual(desktopLinks, ['/cypher-sentinel', '/architecture', '/integrations', '/sovereign-cybersecurity-platform', '/cybersecurity-convergence-platform', '/#product', '/critical-infrastructure-cybersecurity', '/post-quantum-cybersecurity', '/ai-powered-siem-platform', '/zero-trust-cybersecurity-platform', '/', '/#vision', '/#about', '/#technology', '/blog', 'https://demo.vektorium.io/', '/contact']);
+    assert.equal(htmlTokens(desktopMenu).filter(t => t.name === 'section' && !t.closing).length, 3);
+    assert.equal(htmlTokens(desktopMenu).filter(t => t.name === 'nav').length, 0, 'Desktop panel does not nest a second navigation landmark');
+    const links = [...mobileLinks, ...desktopLinks];
     for (const href of links) {
-      if (href === 'https://mobile-demo.vektorium.io/demo') continue;
+      if (['https://mobile-demo.vektorium.io/demo', 'https://demo.vektorium.io/'].includes(href)) continue;
       assert.ok(href.startsWith('/') && !href.startsWith('//'), 'Navigation must remain on this site');
       const path = new URL(href, 'https://vektorium.io').pathname;
       assert.ok(publicPages.has(path === '/' ? 'index.html' : path.slice(1) + '.html'), `Missing navigation target: ${href}`);
     }
-    for (const target of ['https://mobile-demo.vektorium.io/demo', '/contact', '/blog', '/cypher-sentinel', '/integrations', '/architecture']) assert.ok(links.includes(target), target);
-    const source = '<html><head><title>Original</title></head><body><main>Original product claim</main></body></html>';
+    const source = '<html><head><title>Original</title></head><body>' + fixtureNavigation('index.html') + '<main>Original product claim</main></body></html>';
     const output = prepareHtml('index.html', source);
-    assert.ok(output.includes('<body>' + mobileHeader + '<main>Original product claim</main>'));
+    assert.ok(output.includes('<body>' + mobileHeader + '<nav class="floating-nav"'));
+    assert.ok(output.includes('</span></a>' + desktopMenu + '</nav><main>Original product claim</main>'));
     assert.ok(!prepareHtml('demo.html', source).includes('vx-mobile-header'));
+    assert.ok(!prepareHtml('generated.html', source).includes('vx-desktop-menu'));
     assert.throws(() => prepareHtml('index.html', source.replace('<body>', '')), /missing opening body/);
     assert.throws(() => prepareHtml('index.html', source.replace('<body>', '<body>' + mobileHeader)), /inserted only by the build/);
+  });
+  test('desktop insertion recognizes both source layouts without touching comments, inline code or existing bytes', () => {
+    for (const page of ['index.html', 'architecture.html', 'blog.html']) {
+      const nav = fixtureNavigation(page);
+      const decoy = '<!-- ' + nav + ' --><script>const example = ' + JSON.stringify(nav) + ';</script>';
+      const source = '<html><head><title>Original</title><style>.original { color: cyan; }</style></head><body><header><a href="/contact">Contact Us</a></header>' + decoy + nav + '<main>Original content</main></body></html>';
+      const output = prepareHtml(page, source);
+      assert.deepEqual(importantInline(output), importantInline(source));
+      assert.ok(output.includes(decoy));
+      assert.ok(output.includes(nav.replace('</span></a>', '</span></a>' + desktopMenu)));
+      assert.equal(htmlTokens(output).filter(t => !t.closing && attr(t, 'class') === 'vx-desktop-menu').length, 1);
+      const restored = output.replace(mobileHeader, '').replace(desktopMenu, '').replace(/<link rel="stylesheet" href="\/assets\/(?:fonts|mobile|navigation|privacy-controls)\.css">\n/g, '').replace(/<script src="\/assets\/(?:mobile|navigation|privacy-controls)\.js" defer><\/script>\n/g, '');
+      assert.equal(restored, source, 'Only the explicit additive markup and assets may change');
+    }
+  });
+  test('ambiguous, missing or malformed navigation and pre-existing generated IDs fail closed', () => {
+    const nav = fixtureNavigation('index.html');
+    const source = '<html><head><title>Original</title></head><body>' + nav + '</body></html>';
+    for (const invalid of [
+      source.replace(nav, ''),
+      source.replace(nav, nav + nav),
+      source.replace('href="/contact"', 'href="/other"'),
+      source.replace('</nav>', '<a href="/contact">Another contact</a></nav>'),
+      source.replace('<a href="/contact"', '<div><a href="/contact"').replace('</span></a>', '</span></a></div>'),
+      source.replace('</span></a>', '</span></div>'),
+      source.replace('aria-label="Primary navigation"', 'aria-label="Secondary navigation"'),
+    ]) assert.throws(() => prepareHtml('index.html', invalid), /primary navigation|Contact anchor/);
+    for (const marker of ["<div id='vx-desktop-panel'></div>", "<div id='vx-mobile-panel'></div>", "<details class='vx-desktop-menu'></details>"]) {
+      assert.throws(() => prepareHtml('index.html', source.replace('</body>', marker + '</body>')), /inserted only by the build/);
+    }
+    const subpage = source.replace(nav, fixtureNavigation('architecture.html'));
+    assert.throws(() => prepareHtml('architecture.html', subpage.replace('</nav>', '<div class="nav-links"></div></nav>')), /nav-links container/);
   });
   test('search extracts visible main content while excluding navigation, code, graphics and ignored subtrees', () => {
     const html = `<html><head><title>Fallback | Vektorium</title><meta name="description" content="Research &amp; development"></head>
@@ -370,7 +447,7 @@ try {
   if (options.has('--actual')) {
     test('actual checkout production and preview builds preserve all approved desktop source bytes', () => {
       const prepared = prepareBuild(checkout, 'production'); // Read-only source preflight.
-      const paths = [...prepared.files.keys()].filter(path => path !== siteSearchIndexPath).concat(['vercel.json', 'package.json', 'scripts/build.mjs', 'scripts/search-index.mjs']);
+      const paths = [...prepared.files.keys()].filter(path => path !== siteSearchIndexPath).concat(['vercel.json', 'package.json', 'scripts/build.mjs', 'scripts/search-index.mjs', 'scripts/navigation.mjs']);
       const sourceDigests = new Map(paths.map(path => [path, digest(readFileSync(join(checkout, path)))]));
       const outputDigests = new Map([...prepared.files].map(([path, bytes]) => [path, digest(bytes)]));
       for (const environment of ['production', 'preview']) {
@@ -383,7 +460,7 @@ try {
         assert.ifError(run.error);
         assert.equal(run.status, 0, run.stderr || run.stdout);
         const report = outputCheck(root, environment);
-        for (const asset of report.assets) if (!(environment === 'preview' && asset.file === 'robots.txt')) assert.equal(digest(readFileSync(join(root, 'dist', asset.file))), outputDigests.get(asset.file));
+        for (const asset of report.assets) if (!(environment === 'preview' && asset.file === 'robots.txt')) assert.equal(digest(readFileSync(join(root, 'dist', asset.file))), outputDigests.get(asset.file), `${environment}: asset bytes changed during integration: ${asset.file}`);
         retained.push(root);
         console.log(JSON.stringify({ actualBuild: environment, output: join(root, 'dist'), pages: report.pages.length, assets: report.assets.length, hashCounts: Object.fromEntries(Object.entries(report.csp).map(([key, values]) => [key, values.length])) }));
       }

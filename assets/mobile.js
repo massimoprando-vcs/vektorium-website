@@ -10,28 +10,45 @@
     const panel = menu && menu.querySelector('.vx-mobile-panel');
     if (!menu || !summary || !panel) return;
     header.dataset.vxMobileReady = 'true';
+    let focusTimer;
+    let pointerInHeader = false;
 
     function closeMenu(restoreFocus) {
+      window.clearTimeout(focusTimer);
       if (!menu.open) return;
       menu.open = false;
       if (restoreFocus) summary.focus({ preventScroll: true });
     }
 
     document.addEventListener('keydown', function (event) {
-      if (event.key !== 'Escape' || event.defaultPrevented || !menu.open) return;
+      if (event.key !== 'Escape' || event.defaultPrevented || event.isComposing || !menu.open) return;
       closeMenu(true);
       event.preventDefault();
     });
 
-    document.addEventListener('click', function (event) {
+    document.addEventListener('pointerdown', function (event) {
       // Do not steal focus from the control the visitor just clicked.
+      pointerInHeader = header.contains(event.target);
+      if (!pointerInHeader) closeMenu(false);
+    });
+    document.addEventListener('pointerup', function () { pointerInHeader = false; });
+    document.addEventListener('pointercancel', function () { pointerInHeader = false; });
+    document.addEventListener('focusin', function (event) {
+      window.clearTimeout(focusTimer);
       if (!header.contains(event.target)) closeMenu(false);
     });
 
     header.addEventListener('focusout', function (event) {
       // This is a navigation disclosure, not a modal. Let Tab leave normally,
       // and close the panel so it cannot cover the newly focused page control.
-      if (event.relatedTarget && !header.contains(event.relatedTarget)) closeMenu(false);
+      window.clearTimeout(focusTimer);
+      if (event.relatedTarget) {
+        if (!header.contains(event.relatedTarget)) closeMenu(false);
+        return;
+      }
+      focusTimer = window.setTimeout(function () {
+        if (!pointerInHeader && !header.contains(document.activeElement)) closeMenu(false);
+      }, 0);
     });
 
     panel.addEventListener('click', function (event) {

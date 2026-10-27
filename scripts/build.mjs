@@ -1,7 +1,7 @@
 /**
  * Dependency-free, desktop-preserving static build.
  * Source HTML is never rewritten. Only approved GA/font substitutions, external
- * privacy controls, mobile navigation, cache versions, and preview robots
+ * privacy controls, shared navigation, cache versions, and preview robots
  * metadata change in dist.
  * Existing inline effects/styles are authorized by exact CSP hashes, not by
  * unsafe-inline. A changed hash requires an explicit committed config review.
@@ -11,6 +11,7 @@ import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, rmSync, wr
 import { dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createSearchIndex, siteSearchIndexPath } from './search-index.mjs';
+import { desktopNavigationEdit, menuIcon } from './navigation.mjs';
 
 export const publicPages = new Set([
   'index.html',
@@ -63,14 +64,14 @@ export const fixedFiles = new Set([
 ]);
 export const mobilePages = new Set([...publicPages].filter(page => !['demo.html', 'generated.html'].includes(page)));
 export const searchIndexPages = new Set([...publicPages].filter(page => !['demo.html', 'generated.html'].includes(page)));
-// One additive mobile shell. Original desktop markup, scripts, styles and copy
+// One additive mobile shell. Original source markup, scripts, styles and copy
 // remain byte-for-byte intact; mobile.css hides this header above 768px.
 export const mobileHeader = `
 <header class="vx-mobile-header">
   <a class="vx-mobile-brand" href="/" aria-label="Vektorium home"><img src="/vektorium-logo.webp" width="28" height="28" alt="">Vektorium</a>
   <details class="vx-mobile-menu">
-    <summary>Menu</summary>
-    <nav class="vx-mobile-panel" aria-label="Mobile navigation">
+    <summary class="vx-menu-toggle" aria-label="Navigation menu" aria-controls="vx-mobile-panel">${menuIcon}</summary>
+    <nav class="vx-mobile-panel" id="vx-mobile-panel" aria-label="Mobile navigation">
       <a href="/">Home</a>
       <a href="/cypher-sentinel">Cypher Sentinel</a>
       <a href="/architecture">Architecture</a>
@@ -170,12 +171,13 @@ function applyEdits(html, edits) {
 /** Approved output-only changes. Does not reserialize existing HTML. */
 export function prepareHtml(page, source, preview = false) {
   const edits = [];
+  const tokens = htmlTokens(source);
   let headEnd;
   let bodyStart;
   let fontsInserted = false;
   let gaLoader = 0;
   let gaInline = 0;
-  for (const token of htmlTokens(source)) {
+  for (const token of tokens) {
     if (token.closing && token.name === 'head') headEnd = token.start;
     if (token.closing) continue;
     if (token.name === 'body') bodyStart = token.end;
@@ -201,13 +203,18 @@ export function prepareHtml(page, source, preview = false) {
   if (headEnd === undefined) throw new Error(`${page}: missing closing head`);
   if (mobilePages.has(page)) {
     if (bodyStart === undefined) throw new Error(`${page}: missing opening body for mobile navigation`);
-    if (source.includes('class="vx-mobile-header"')) throw new Error(`${page}: mobile navigation must be inserted only by the build`);
+    edits.push(desktopNavigationEdit(page, tokens, attr));
     edits.push({ start: bodyStart, end: bodyStart, text: mobileHeader });
   }
   if (gaLoader !== gaInline || gaLoader > 1) throw new Error(`${page}: legacy GA loader/config pair is inconsistent`);
   const additions = [
     ...(fontsInserted ? [] : ['<link rel="stylesheet" href="/assets/fonts.css">']),
-    ...(mobilePages.has(page) ? ['<link rel="stylesheet" href="/assets/mobile.css">', '<script src="/assets/mobile.js" defer></script>'] : []),
+    ...(mobilePages.has(page) ? [
+      '<link rel="stylesheet" href="/assets/mobile.css">',
+      '<link rel="stylesheet" href="/assets/navigation.css">',
+      '<script src="/assets/mobile.js" defer></script>',
+      '<script src="/assets/navigation.js" defer></script>',
+    ] : []),
     '<link rel="stylesheet" href="/assets/privacy-controls.css">',
     '<script src="/assets/privacy-controls.js" defer></script>',
     ...(preview ? ['<meta name="robots" content="noindex, nofollow, noarchive">'] : []),
