@@ -370,22 +370,54 @@
 
     <section class="contact-section">
       <div class="contact-card reveal">
-        <h2>Reach Out</h2>
+        <h2>General Enquiries</h2>
         <div class="email-display">
-          <a href="mailto:massimo.prando@vektorium.io" class="email-link">massimo.prando@vektorium.io</a>
-          <button class="copy-btn" id="copyBtn" aria-label="Copy email to clipboard">Copy Email</button>
+          <a href="mailto:info@vektorium.io" class="email-link">info@vektorium.io</a>
+          <button class="copy-btn" id="copyBtn" aria-label="Copy info@vektorium.io to clipboard">Copy Email</button>
         </div>
 
         <div class="contact-methods">
-          <h3>Other Ways to Connect</h3>
+          <h3>Find the Right Contact</h3>
           <div class="methods-grid">
             <div class="method-item">
               <div class="method-icon">
-                <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
               </div>
-              <h4>Email</h4>
-              <p>Send us a message directly</p>
-              <a href="mailto:massimo.prando@vektorium.io">Contact us</a>
+              <h4>Demos &amp; Commercial Enquiries</h4>
+              <p>Demos, pilots and commercial enquiries</p>
+              <a href="mailto:sales@vektorium.io">sales@vektorium.io</a>
+            </div>
+            <div class="method-item">
+              <div class="method-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="2" width="8" height="6" rx="1"/><rect x="2" y="16" width="8" height="6" rx="1"/><rect x="14" y="16" width="8" height="6" rx="1"/><path d="M12 8v4M6 16v-4h12v4"/></svg>
+              </div>
+              <h4>Technical Enquiries</h4>
+              <p>Architecture, integration and deployment questions</p>
+              <a href="mailto:tech@vektorium.io">tech@vektorium.io</a>
+            </div>
+            <div class="method-item">
+              <div class="method-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 9h4l12-5v16L7 15H3zM7 15l2 6h4l-2-4M22 9v6"/></svg>
+              </div>
+              <h4>Media &amp; Marketing</h4>
+              <p>Media, events and marketing enquiries</p>
+              <a href="mailto:marketing@vektorium.io">marketing@vektorium.io</a>
+            </div>
+            <div class="method-item">
+              <div class="method-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l8 3v6c0 5-8 9-8 9s-8-4-8-9V6zM12 8v5"/><circle cx="12" cy="16" r="0.5"/></svg>
+              </div>
+              <h4>Security Reports</h4>
+              <p>Report vulnerabilities or security concerns affecting Vektorium</p>
+              <a href="mailto:security@vektorium.io">security@vektorium.io</a>
+            </div>
+            <div class="method-item">
+              <div class="method-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15" r="1"/><path d="M12 16v2"/></svg>
+              </div>
+              <h4>Privacy</h4>
+              <p>Privacy and personal data enquiries</p>
+              <a href="mailto:privacy@vektorium.io">privacy@vektorium.io</a>
             </div>
             <div class="method-item">
               <div class="method-icon">
@@ -431,7 +463,7 @@
 
     // Copy email button functionality
     const copyBtn = document.getElementById('copyBtn');
-    const email = 'massimo.prando@vektorium.io';
+    const email = 'info@vektorium.io';
 
     copyBtn.addEventListener('click', () => {
       navigator.clipboard.writeText(email).then(() => {

@@ -7,6 +7,15 @@
 
   const ANALYTICS_ID = 'G-KZL0QVQ6XC';
   const DISABLE_KEY = 'ga-disable-' + ANALYTICS_ID;
+  const CONTACT_EMAILS = new Set([
+    'massimo.prando@vektorium.io',
+    'info@vektorium.io',
+    'sales@vektorium.io',
+    'tech@vektorium.io',
+    'marketing@vektorium.io',
+    'security@vektorium.io',
+    'privacy@vektorium.io'
+  ]);
   // Keep the historical key/values so an existing opt-out is not lost.
   const PREFERENCE_KEY = 'vektorium.analytics-consent.v1';
   const INITIALIZED_KEY = '__vektoriumPrivacyControlsV1';
@@ -431,7 +440,7 @@
     try { url = new URL(href, window.location.origin + window.location.pathname); }
     catch { return; }
     // Send only fixed categories. No address, message, link text, query or hash.
-    if (url.protocol === 'mailto:' && url.pathname.toLowerCase() === 'massimo.prando@vektorium.io') {
+    if (url.protocol === 'mailto:' && CONTACT_EMAILS.has(url.pathname.toLowerCase())) {
       window.gtag('event', 'contact_intent', { contact_method: 'email' });
     } else if (url.protocol === 'https:' && url.origin === window.location.origin &&
                url.pathname.replace(/\/$/, '') === '/contact') {
