@@ -49,8 +49,9 @@
 .vx-mobile-header .vx-language-panel { top: calc(100% + 8px); right: 16px; width: 260px; max-height: calc(100dvh - 100px); }
 
 /* Longer translations must wrap inside their existing cards and sections. */
-html:not([lang='en']) .hero-tagline { max-width: 1100px; padding: 0 24px; letter-spacing: .22em; line-height: 1.8; }
+html:not([lang='en']) .hero-tagline { max-width: 1100px; padding: 0 24px; letter-spacing: .22em; line-height: 1.8; overflow-wrap: anywhere; hyphens: auto; }
 html:not([lang='en']) .hero-badge { max-width: calc(100% - 40px); letter-spacing: .12em; line-height: 1.7; }
+html:not([lang='en']) .vision-content { min-width: 0; width: 100%; overflow-wrap: anywhere; hyphens: auto; }
 html:not([lang='en']) .floating-nav > a { padding-right: 12px; padding-left: 12px; letter-spacing: .1em; }
 html:not([lang='en']) .site-nav .nav-links { gap: 18px; }
 html:not([lang='en']) .site-nav .nav-links > a { letter-spacing: .06em; }
