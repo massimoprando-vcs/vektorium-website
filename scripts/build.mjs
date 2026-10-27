@@ -1,8 +1,8 @@
 /**
  * Dependency-free, desktop-preserving static build.
  * Source HTML is never rewritten. Only approved GA/font substitutions, external
- * privacy controls, shared navigation, cache versions, and preview robots
- * metadata change in dist.
+ * privacy controls, shared navigation, multilingual output, cache versions, and
+ * preview robots metadata change in dist.
  * Existing inline effects/styles are authorized by exact CSP hashes, not by
  * unsafe-inline. A changed hash requires an explicit committed config review.
  */
@@ -12,6 +12,7 @@ import { dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createSearchIndex, siteSearchIndexPath } from './search-index.mjs';
 import { desktopNavigationEdit, menuIcon } from './navigation.mjs';
+import { compileLocales } from './build-locales.mjs';
 
 export const publicPages = new Set([
   'index.html',
@@ -340,7 +341,7 @@ export function versionPageAssets(page, html, files) {
   return applyEdits(html, edits);
 }
 
-export function prepareBuild(root, environment, checkConfig = true) {
+export function prepareBuild(root, environment, checkConfig = true, withLocalization = true) {
   const preview = environment !== 'production';
   for (const entry of readdirSync(root, { withFileTypes: true })) if (/\.html$/i.test(entry.name) && !publicPages.has(entry.name)) throw new Error(`HTML page is not in the public manifest: ${entry.name}`);
   const files = new Map();
@@ -379,14 +380,21 @@ export function prepareBuild(root, environment, checkConfig = true) {
   // One explicit generated asset. Source JSON files remain outside the public
   // allowlist, and only the validated content manifest supplies search text.
   files.set(siteSearchIndexPath, Buffer.from(JSON.stringify(createSearchIndex(searchSources, htmlTokens)) + '\n'));
-  for (const page of publicPages) files.set(page, Buffer.from(versionPageAssets(page, files.get(page), files)));
+  const pagePaths = new Set(publicPages);
+  if (withLocalization) {
+    const sources = new Map([...mobilePages].map(page => [page, files.get(page)]));
+    const generated = compileLocales({ root, sources, files, tokenize: htmlTokens, readAttribute: attr, readRegular });
+    for (const page of generated) { pagePaths.add(page); inspectHtml(page, files.get(page).toString('utf8'), inventory); }
+    if (JSON.stringify(expectedConfig(inventory)) !== JSON.stringify(config)) throw new Error('Localized output changed the exact reviewed CSP inventory');
+  }
+  for (const page of pagePaths) files.set(page, Buffer.from(versionPageAssets(page, files.get(page).toString('utf8'), files)));
   if (preview) files.set('robots.txt', Buffer.from('User-agent: *\nDisallow: /\n'));
-  return { files, inventory, config, environment: preview ? 'preview' : 'production' };
+  return { files, inventory, config, pagePaths, environment: preview ? 'preview' : 'production' };
 }
 
-export function build(root, environment) {
+export function build(root, environment, withLocalization = true) {
   // Complete validation and read every approved input BEFORE touching old output.
-  const prepared = prepareBuild(root, environment);
+  const prepared = prepareBuild(root, environment, true, withLocalization);
   const output = join(root, 'dist');
   const marker = join(output, '.vektorium-static-output');
   if (existsSync(output)) {
@@ -400,7 +408,7 @@ export function build(root, environment) {
     const target = join(output, file);
     mkdirSync(dirname(target), { recursive: true });
     writeFileSync(target, bytes);
-    (publicPages.has(file) ? report.pages : report.assets).push({ file, bytes: bytes.length, sha256: sha256(bytes) });
+    (prepared.pagePaths.has(file) ? report.pages : report.assets).push({ file, bytes: bytes.length, sha256: sha256(bytes) });
   }
   for (const [kind, hashes] of Object.entries(prepared.inventory)) report.csp[kind] = [...hashes].sort();
   for (const list of [report.pages, report.assets]) list.sort((a, b) => a.file.localeCompare(b.file));
@@ -417,7 +425,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
     console.log(JSON.stringify(expectedConfig(inventory), null, 2)); // Read-only; never changes policy.
   } else if (arguments_.length === 1 && arguments_[0] === '--check') {
     const result = prepareBuild(root, process.env.VERCEL_ENV);
-    console.log(`Checked ${publicPages.size} pages, ${result.files.size - publicPages.size} public assets; exact CSP/config and static-output boundary passed. No files written.`);
+    console.log(`Checked ${result.pagePaths.size} pages, ${result.files.size - result.pagePaths.size} public assets; exact CSP/config and static-output boundary passed. No files written.`);
   } else if (!arguments_.length) {
     const result = build(root, process.env.VERCEL_ENV);
     console.log(`Built ${result.pages.length} pages and ${result.assets.length} public assets into dist (${result.environment}).`);

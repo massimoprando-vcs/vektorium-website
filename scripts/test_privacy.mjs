@@ -8,6 +8,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import vm from 'node:vm';
+import { languages, translator } from './localization.mjs';
+import { runtimeSources, translateScript } from './localization-runtime.mjs';
 
 const source = readFileSync(new URL('../assets/privacy-controls.js', import.meta.url), 'utf8');
 const css = readFileSync(new URL('../assets/privacy-controls.css', import.meta.url), 'utf8');
@@ -182,7 +184,7 @@ function fixture(options = {}) {
   const context = vm.createContext({ window, document, navigator, URL, Set, Date }, {
     codeGeneration: { strings: false, wasm: false }
   });
-  const execute = () => vm.runInContext(source, context, { filename: 'assets/privacy-controls.js', timeout: 1000 });
+  const execute = () => vm.runInContext(options.scriptSource || source, context, { filename: 'assets/privacy-controls.js', timeout: 1000 });
   execute();
   return {
     window, document, navigator, options, storage, storageWrites, scriptLoads, cookieWrites, steps,
@@ -731,5 +733,37 @@ test('copy button records intent only on the contact page without accessing the 
     f.document.fire('click', { target: button, button: 0 });
     assert.deepEqual(measuredEvents(f), pathname.startsWith('/contact')
       ? [['contact_intent', { contact_method: 'copy_button' }]] : []);
+  }
+});
+
+test('translated privacy controls retain opt-outs, host and signal gates, and localized links', () => {
+  const runtime = runtimeSources([source], readFileSync(new URL('../index.html', import.meta.url), 'utf8'));
+  for (const { code } of languages.slice(1)) {
+    const translate = translator(JSON.parse(readFileSync(new URL(`../locales/${code}.json`, import.meta.url), 'utf8')));
+    const scriptSource = translateScript(source, translate, runtime, code);
+    const f = fixture({ scriptSource, preference: 'denied', pathname: `/${code}/contact` });
+    assert.equal(f.scriptLoads.length, 0, code);
+    assert.equal(f.settings().textContent, translate('Privacy settings'), code);
+    f.show();
+    assert.equal(f.title().textContent, translate('Privacy settings'), code);
+    assert.equal(f.state().textContent, translate('Analytics off'), code);
+    assert.equal(f.nodes().find(node => node.className === 'vx-privacy-link').href, `/${code}/privacy-policy`, code);
+    f.choose('on');
+    assert.equal(f.scriptLoads.length, 1, code);
+    assert.equal(f.storage.get(KEY), 'granted', code);
+    assert.equal(f.state().textContent, translate('Analytics on'), code);
+    clickLink(f, `/${code}/contact`);
+    assert.deepEqual(measuredEvents(f), [['contact_intent', { contact_method: 'contact_page' }]], code);
+    f.choose('off');
+    assert.equal(f.window[DISABLE], true, code);
+    assert.equal(f.storage.get(KEY), 'denied', code);
+    assert.equal(f.reloads(), 1, code);
+    for (const options of [{ hostname: 'preview.vercel.app' }, { gpc: true }, { dnt: '1' }]) {
+      const blocked = fixture({ ...options, scriptSource, preference: 'granted' });
+      assert.equal(blocked.scriptLoads.length, 0, code);
+      assert.equal(blocked.button('on').disabled, true, code);
+      blocked.button('on').fire('click');
+      assert.equal(blocked.scriptLoads.length, 0, code);
+    }
   }
 });

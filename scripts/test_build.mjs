@@ -7,11 +7,17 @@ import { copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSy
 import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { attr, build, cspHash, decodeAttribute, expectedConfig, fixedFiles, htmlTokens, inspectHtml, legacyGaBodies, legacyGaBody, legacyGaSource, mobileHeader, mobilePages, prepareBuild, prepareHtml, publicPages, searchIndexPages, versionPageAssets } from './build.mjs';
+import { attr, build as buildComplete, cspHash, decodeAttribute, expectedConfig, fixedFiles, htmlTokens, inspectHtml, legacyGaBodies, legacyGaBody, legacyGaSource, mobileHeader, mobilePages, prepareBuild as prepareCompleteBuild, prepareHtml, publicPages, searchIndexPages, versionPageAssets } from './build.mjs';
 import { createSearchIndex, extractSearchPage, searchBodyLimit, siteSearchIndexPath } from './search-index.mjs';
 import { desktopMenu, menuIcon } from './navigation.mjs';
+import { languages } from './localization.mjs';
 
 const checkout = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+// Small synthetic fixtures exercise the original source/CSP boundary. Actual
+// deployment-command integration always requires all complete locale catalogues.
+const localizedFixture = root => existsSync(join(root, 'locales/source.json'));
+const prepareBuild = (root, environment, checkConfig = true) => prepareCompleteBuild(root, environment, checkConfig, localizedFixture(root));
+const build = (root, environment) => buildComplete(root, environment, localizedFixture(root));
 const options = new Set(process.argv.slice(2));
 assert.ok([...options].every(option => ['--actual', '--keep-actual'].includes(option)), 'Unknown test option');
 assert.ok(!options.has('--keep-actual') || options.has('--actual'), '--keep-actual requires --actual');
@@ -108,7 +114,8 @@ function styleAttributes(html) {
 function outputCheck(root, environment) {
   const output = join(root, 'dist');
   const preview = environment !== 'production';
-  assert.deepEqual(readdirSync(output).filter(name => name.endsWith('.html')).sort(), [...publicPages].sort());
+  const multilingual = localizedFixture(root);
+  assert.deepEqual(readdirSync(output).filter(name => name.endsWith('.html')).sort(), [...publicPages, ...(multilingual ? languages.slice(1).map(language => language.code + '.html') : [])].sort());
   for (const page of publicPages) {
     const source = readFileSync(join(root, page), 'utf8');
     const html = readFileSync(join(output, page), 'utf8');
@@ -166,7 +173,7 @@ function outputCheck(root, environment) {
     }
   }
   const report = JSON.parse(readFileSync(join(root, 'build-report.json'), 'utf8'));
-  assert.equal(report.pages.length, publicPages.size);
+  assert.equal(report.pages.length, multilingual ? 306 : publicPages.size);
   assert.equal(report.environment, preview ? 'preview' : 'production');
   assert.ok(report.assets.some(asset => asset.file === 'robots.txt'), 'Rewritten robots is included in build report');
   assert.ok(report.assets.some(asset => asset.file === siteSearchIndexPath), 'Generated search index is included in build report');
@@ -180,7 +187,7 @@ function outputCheck(root, environment) {
     assert.ok(Array.isArray(page.headings) && page.headings.every(heading => typeof heading === 'string'));
     assert.ok(page.body.length <= searchBodyLimit);
   }
-  for (const forbidden of ['.git', '.github', 'scripts', 'docs', 'content', 'node_modules', 'README.md', 'package.json', 'package-lock.json', 'vercel.json', 'build-report.json', 'secret.txt']) assert.equal(existsSync(join(output, forbidden)), false, `${forbidden} leaked into output`);
+  for (const forbidden of ['.git', '.github', 'scripts', 'docs', 'content', 'locales', 'node_modules', 'README.md', 'package.json', 'package-lock.json', 'vercel.json', 'build-report.json', 'secret.txt']) assert.equal(existsSync(join(output, forbidden)), false, `${forbidden} leaked into output`);
   if (preview) assert.equal(readFileSync(join(output, 'robots.txt'), 'utf8'), 'User-agent: *\nDisallow: /\n');
   else assert.equal(readFileSync(join(output, 'robots.txt'), 'utf8'), readFileSync(join(root, 'robots.txt'), 'utf8'));
   return report;
@@ -447,7 +454,7 @@ try {
   if (options.has('--actual')) {
     test('actual checkout production and preview builds preserve all approved desktop source bytes', () => {
       const prepared = prepareBuild(checkout, 'production'); // Read-only source preflight.
-      const paths = [...prepared.files.keys()].filter(path => path !== siteSearchIndexPath).concat(['vercel.json', 'package.json', 'scripts/build.mjs', 'scripts/search-index.mjs', 'scripts/navigation.mjs']);
+      const paths = [...prepared.files.keys()].filter(path => existsSync(join(checkout, path))).concat(['vercel.json', 'package.json', 'scripts/build.mjs', 'scripts/search-index.mjs', 'scripts/navigation.mjs', 'scripts/localization.mjs', 'scripts/localization-runtime.mjs', 'scripts/build-locales.mjs', 'locales/source.json', 'locales/font-coverage.json', ...languages.slice(1).map(language => `locales/${language.code}.json`)]);
       const sourceDigests = new Map(paths.map(path => [path, digest(readFileSync(join(checkout, path)))]));
       const outputDigests = new Map([...prepared.files].map(([path, bytes]) => [path, digest(bytes)]));
       for (const environment of ['production', 'preview']) {
@@ -456,7 +463,7 @@ try {
         for (const relative of ['docs/private-review.md', 'content/private-source.json', '.git/private-fixture', '.github/private-fixture', 'scripts/private.mjs', 'README.md']) put(root, relative, 'Synthetic excluded build input.');
         // Exercise the real deployment command and CLI in the isolated copy,
         // not only the imported build function used by smaller fixture tests.
-        const run = spawnSync('npm', ['run', 'build'], { cwd: root, env: { ...process.env, VERCEL_ENV: environment }, encoding: 'utf8', timeout: 30_000, maxBuffer: 1_000_000 });
+        const run = spawnSync('npm', ['run', 'build'], { cwd: root, env: { ...process.env, VERCEL_ENV: environment }, encoding: 'utf8', timeout: 60_000, maxBuffer: 1_000_000 });
         assert.ifError(run.error);
         assert.equal(run.status, 0, run.stderr || run.stdout);
         const report = outputCheck(root, environment);

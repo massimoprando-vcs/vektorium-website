@@ -46,6 +46,9 @@ jobs:
       - name: Test local website search behavior without network access
         run: npm run test:search
 
+      - name: Verify complete multilingual content, routes and search
+        run: npm run test:localization
+
       - name: Test build safeguards and actual production plus preview output
         run: npm run test:integration
 
