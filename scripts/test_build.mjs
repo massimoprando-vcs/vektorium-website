@@ -7,7 +7,8 @@ import { copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSy
 import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { attr, build, cspHash, decodeAttribute, expectedConfig, fixedFiles, htmlTokens, inspectHtml, legacyGaBodies, legacyGaBody, legacyGaSource, mobileHeader, mobilePages, prepareBuild, prepareHtml, publicPages, versionPageAssets } from './build.mjs';
+import { attr, build, cspHash, decodeAttribute, expectedConfig, fixedFiles, htmlTokens, inspectHtml, legacyGaBodies, legacyGaBody, legacyGaSource, mobileHeader, mobilePages, prepareBuild, prepareHtml, publicPages, searchIndexPages, versionPageAssets } from './build.mjs';
+import { createSearchIndex, extractSearchPage, searchBodyLimit, siteSearchIndexPath } from './search-index.mjs';
 
 const checkout = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const options = new Set(process.argv.slice(2));
@@ -132,6 +133,17 @@ function outputCheck(root, environment) {
   assert.equal(report.pages.length, publicPages.size);
   assert.equal(report.environment, preview ? 'preview' : 'production');
   assert.ok(report.assets.some(asset => asset.file === 'robots.txt'), 'Rewritten robots is included in build report');
+  assert.ok(report.assets.some(asset => asset.file === siteSearchIndexPath), 'Generated search index is included in build report');
+  const index = JSON.parse(readFileSync(join(output, siteSearchIndexPath), 'utf8'));
+  assert.equal(index.version, 1);
+  assert.equal(index.pages.length, searchIndexPages.size);
+  assert.deepEqual(index.pages.map(page => page.url), [...searchIndexPages].map(page => page === 'index.html' ? '/' : '/' + page.slice(0, -5)).sort());
+  for (const page of index.pages) {
+    assert.deepEqual(Object.keys(page), ['url', 'title', 'description', 'category', 'headings', 'body']);
+    for (const key of ['url', 'title', 'description', 'category', 'body']) assert.equal(typeof page[key], 'string');
+    assert.ok(Array.isArray(page.headings) && page.headings.every(heading => typeof heading === 'string'));
+    assert.ok(page.body.length <= searchBodyLimit);
+  }
   for (const forbidden of ['.git', '.github', 'scripts', 'docs', 'content', 'node_modules', 'README.md', 'package.json', 'package-lock.json', 'vercel.json', 'build-report.json', 'secret.txt']) assert.equal(existsSync(join(output, forbidden)), false, `${forbidden} leaked into output`);
   if (preview) assert.equal(readFileSync(join(output, 'robots.txt'), 'utf8'), 'User-agent: *\nDisallow: /\n');
   else assert.equal(readFileSync(join(output, 'robots.txt'), 'utf8'), readFileSync(join(root, 'robots.txt'), 'utf8'));
@@ -158,6 +170,78 @@ try {
     assert.ok(!prepareHtml('demo.html', source).includes('vx-mobile-header'));
     assert.throws(() => prepareHtml('index.html', source.replace('<body>', '')), /missing opening body/);
     assert.throws(() => prepareHtml('index.html', source.replace('<body>', '<body>' + mobileHeader)), /inserted only by the build/);
+  });
+  test('search extracts visible main content while excluding navigation, code, graphics and ignored subtrees', () => {
+    const html = `<html><head><title>Fallback | Vektorium</title><meta name="description" content="Research &amp; development"></head>
+      <body><header>HEADER_ONLY</header><nav>NAV_ONLY</nav><p>OUTSIDE_MAIN</p>
+      <main><article><header><h1>Security <em>architecture</em></h1></header>
+      <h2>Shared context</h2><p>Research &amp; development. cyber<strong>security</strong>. &#x1f512; &amp;quot;</p>
+      <!-- COMMENT_ONLY --><div data-search-ignore><h2>IGNORED_HEADING</h2><div>IGNORED_BODY</div></div>
+      <nav>NESTED_NAV</nav><div role="navigation">ROLE_NAV</div><footer>FOOTER_ONLY</footer>
+      <div class="breadcrumb">BREADCRUMB_ONLY</div><div class="nav-links">MENU_ONLY</div>
+      <div class="internal-links"><h3>RELATED_ONLY</h3><div><a href="/blog">UNRELATED_TOPIC_ONLY</a></div></div>
+      <script>const text = '<main>JAVASCRIPT_ONLY</main>';</script><style>.STYLE_ONLY{color:red}</style>
+      <svg><text>SVG_ONLY</text></svg><canvas>CANVAS_ONLY</canvas><template>TEMPLATE_ONLY</template>
+      <noscript>NOSCRIPT_ONLY</noscript><textarea>TEXTAREA_ONLY</textarea><button>BUTTON_ONLY</button>
+      <p hidden>HIDDEN_ONLY</p><p aria-hidden="true">ARIA_ONLY</p></article></main></body></html>`;
+    const page = extractSearchPage('architecture.html', html, htmlTokens);
+    assert.equal(page.url, '/architecture');
+    assert.equal(page.title, 'Security architecture');
+    assert.equal(page.description, 'Research & development');
+    assert.equal(page.category, 'Platform');
+    assert.deepEqual(page.headings, ['Security architecture', 'Shared context']);
+    assert.equal(page.body, 'Security architecture Shared context Research & development. cybersecurity. 🔒 &quot;');
+    assert.ok(!JSON.stringify(page).match(/_ONLY|OUTSIDE_MAIN|IGNORED_|NESTED_NAV|ROLE_NAV/));
+  });
+  test('search supports legal wrappers and title/body fallbacks without inventing external or redirect routes', () => {
+    const legal = extractSearchPage('privacy-policy.html', '<html><head><title>Privacy | Vektorium Inc.</title></head><body><header>Global header</header><div class="content-wrapper"><h1>Privacy Policy</h1><p>Data rights.</p></div><p>Outside wrapper</p></body></html>', htmlTokens);
+    assert.equal(legal.category, 'Company');
+    assert.equal(legal.body, 'Privacy Policy Data rights.');
+    const fallback = extractSearchPage('index.html', '<html><head><title>Public reference — Vektorium</title></head><body><header>Ignore global header</header><p>Useful public body.</p><footer>Ignore footer</footer></body></html>', htmlTokens);
+    assert.equal(fallback.url, '/');
+    assert.equal(fallback.title, 'Public reference');
+    assert.equal(fallback.description, '');
+    assert.deepEqual(fallback.headings, []);
+    assert.equal(fallback.body, 'Useful public body.');
+    for (const page of ['../secret.html', 'docs/private.html', 'https://example.com/page.html', 'demo.html', 'generated.html']) {
+      assert.throws(() => extractSearchPage(page, '<title>Not public</title>', htmlTokens), /Not an indexable public content filename/);
+    }
+  });
+  test('search is manifest-bound and only the build can produce its JSON asset', () => {
+    const root = fixture('search-boundary');
+    for (const page of ['demo.html', 'generated.html']) edit(root, page, html => html.replace('>Fixture</main>', '>REDIRECT_ONLY_SENTINEL</main>'));
+    put(root, 'docs/private-search.html', '<main>PRIVATE_REPOSITORY_SENTINEL</main>');
+    put(root, 'content/private-search.json', '{"text":"PRIVATE_REPOSITORY_SENTINEL"}');
+    const prepared = prepareBuild(root, 'production');
+    const text = prepared.files.get(siteSearchIndexPath).toString('utf8');
+    const index = JSON.parse(text);
+    assert.equal(index.pages.length, 38);
+    assert.equal(searchIndexPages.size, 38);
+    assert.ok(!text.includes('REDIRECT_ONLY_SENTINEL') && !text.includes('PRIVATE_REPOSITORY_SENTINEL'));
+    assert.ok(!index.pages.some(page => ['/demo', '/generated'].includes(page.url)));
+    assert.equal(existsSync(join(root, siteSearchIndexPath)), false, 'Index must not depend on a checked-in source JSON file');
+    put(root, siteSearchIndexPath, '{"private":"SOURCE_JSON_MUST_NOT_DEPLOY"}');
+    assert.throws(() => prepareBuild(root, 'production'), /not allowlisted/);
+  });
+  test('search generation is deterministic, environment-independent and follows source edits', () => {
+    const root = fixture('search-deterministic');
+    const production = prepareBuild(root, 'production').files.get(siteSearchIndexPath);
+    assert.deepEqual(prepareBuild(root, 'production').files.get(siteSearchIndexPath), production);
+    assert.deepEqual(prepareBuild(root, 'preview').files.get(siteSearchIndexPath), production);
+    const sources = [...searchIndexPages].map(page => [page, readFileSync(join(root, page), 'utf8')]);
+    assert.deepEqual(createSearchIndex(sources, htmlTokens), createSearchIndex([...sources].reverse(), htmlTokens));
+    const before = JSON.parse(production);
+    edit(root, 'architecture.html', html => html.replace('>Fixture</main>', '>Updated searchable architecture.</main>'));
+    const after = JSON.parse(prepareBuild(root, 'production').files.get(siteSearchIndexPath));
+    assert.equal(after.pages.find(page => page.url === '/architecture').body, 'Updated searchable architecture.');
+    assert.deepEqual(after.pages.filter(page => page.url !== '/architecture'), before.pages.filter(page => page.url !== '/architecture'));
+  });
+  test('search bounds public text size and keeps decoded text separate from markup', () => {
+    const page = extractSearchPage('blog.html', `<title>Insights</title><main><h1>Insights</h1><p>${'Long public text. '.repeat(3000)}</p></main>`, htmlTokens);
+    assert.equal(page.category, 'Insights');
+    assert.ok(page.body.length <= searchBodyLimit && page.body.length > searchBodyLimit - 120);
+    const encoded = extractSearchPage('contact.html', '<title>Contact</title><main>&lt;svg&gt;Text, not markup&lt;/svg&gt;<p>Still public.</p></main>', htmlTokens);
+    assert.equal(encoded.body, '<svg>Text, not markup</svg> Still public.');
   });
   test('production preserves original inline code, styles, schema and robots while isolating public output', () => {
     const root = fixture('production');
@@ -286,8 +370,9 @@ try {
   if (options.has('--actual')) {
     test('actual checkout production and preview builds preserve all approved desktop source bytes', () => {
       const prepared = prepareBuild(checkout, 'production'); // Read-only source preflight.
-      const paths = [...prepared.files.keys(), 'vercel.json', 'package.json', 'scripts/build.mjs'];
+      const paths = [...prepared.files.keys()].filter(path => path !== siteSearchIndexPath).concat(['vercel.json', 'package.json', 'scripts/build.mjs', 'scripts/search-index.mjs']);
       const sourceDigests = new Map(paths.map(path => [path, digest(readFileSync(join(checkout, path)))]));
+      const outputDigests = new Map([...prepared.files].map(([path, bytes]) => [path, digest(bytes)]));
       for (const environment of ['production', 'preview']) {
         const root = join(temporaryRoot, `actual-${environment}`); mkdirSync(root);
         for (const relative of paths) { const target = join(root, relative); mkdirSync(dirname(target), { recursive: true }); copyFileSync(join(checkout, relative), target); }
@@ -298,7 +383,7 @@ try {
         assert.ifError(run.error);
         assert.equal(run.status, 0, run.stderr || run.stdout);
         const report = outputCheck(root, environment);
-        for (const asset of report.assets) if (!(environment === 'preview' && asset.file === 'robots.txt')) assert.equal(digest(readFileSync(join(root, 'dist', asset.file))), sourceDigests.get(asset.file));
+        for (const asset of report.assets) if (!(environment === 'preview' && asset.file === 'robots.txt')) assert.equal(digest(readFileSync(join(root, 'dist', asset.file))), outputDigests.get(asset.file));
         retained.push(root);
         console.log(JSON.stringify({ actualBuild: environment, output: join(root, 'dist'), pages: report.pages.length, assets: report.assets.length, hashCounts: Object.fromEntries(Object.entries(report.csp).map(([key, values]) => [key, values.length])) }));
       }

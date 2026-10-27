@@ -9,6 +9,7 @@
     "check": "node scripts/build.mjs --check",
     "test:build": "node scripts/test_build.mjs",
     "test:privacy": "node scripts/test_privacy.mjs",
+    "test:search": "node --test scripts/test_search.mjs",
     "test:integration": "node scripts/test_build.mjs --actual"
   }
 }
