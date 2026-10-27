@@ -5,6 +5,7 @@
   "installCommand": "",
   "outputDirectory": "dist",
   "cleanUrls": true,
+  "trailingSlash": false,
   "redirects": [
     {
       "source": "/demo",
