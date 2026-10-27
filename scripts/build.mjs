@@ -218,7 +218,8 @@ export function prepareHtml(page, source, preview = false) {
     ] : []),
     '<link rel="stylesheet" href="/assets/privacy-controls.css">',
     '<script src="/assets/privacy-controls.js" defer></script>',
-    ...(preview ? ['<meta name="robots" content="noindex, nofollow, noarchive">'] : []),
+    // Review the authored language; browser auto-translation can otherwise alter layout and labels.
+    ...(preview ? ['<meta name="robots" content="noindex, nofollow, noarchive">', '<meta name="google" content="notranslate">'] : []),
   ].join('\n') + '\n';
   edits.push({ start: headEnd, end: headEnd, text: additions });
   return applyEdits(source, edits);
