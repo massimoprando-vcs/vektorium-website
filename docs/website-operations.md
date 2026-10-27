@@ -57,6 +57,21 @@ policy regeneration to work around a failing check. Runtime effect code uses
 direct CSS property assignments; changing it to `cssText` or inline event
 handlers can break the policy.
 
+## Website search index
+
+Each build generates `assets/site-search-index.json` from the 38 approved public
+content pages. Demo redirects, repository files and external sites are excluded.
+The generator reads main content, or the legal pages' content wrapper, and omits
+navigation, footers, scripts, styles, SVGs and elements marked
+`data-search-ignore`. Mark search controls and other repeated interface text with
+that attribute. Article titles and headings remain searchable.
+
+The deterministic version-1 index contains clean local URLs, titles, descriptions,
+categories, headings and up to 24,000 characters of body text per page. Production
+and preview use the same content index; preview indexability controls still
+apply. Update the HTML to change search content. Do not commit a handwritten
+index or broaden the public asset allowlist to accept source JSON files.
+
 ## Analytics and privacy settings
 
 See [search measurement](search-measurement.md) for the scoped demo/contact intent

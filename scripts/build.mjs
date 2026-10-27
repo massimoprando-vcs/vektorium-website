@@ -10,6 +10,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { createSearchIndex, siteSearchIndexPath } from './search-index.mjs';
 
 export const publicPages = new Set([
   'index.html',
@@ -61,6 +62,7 @@ export const fixedFiles = new Set([
   '517e3ed770994898b0c5482b33af8418.txt', '.well-known/security.txt',
 ]);
 export const mobilePages = new Set([...publicPages].filter(page => !['demo.html', 'generated.html'].includes(page)));
+export const searchIndexPages = new Set([...publicPages].filter(page => !['demo.html', 'generated.html'].includes(page)));
 // One additive mobile shell. Original desktop markup, scripts, styles and copy
 // remain byte-for-byte intact; mobile.css hides this header above 768px.
 export const mobileHeader = `
@@ -335,11 +337,13 @@ export function prepareBuild(root, environment, checkConfig = true) {
   const preview = environment !== 'production';
   for (const entry of readdirSync(root, { withFileTypes: true })) if (/\.html$/i.test(entry.name) && !publicPages.has(entry.name)) throw new Error(`HTML page is not in the public manifest: ${entry.name}`);
   const files = new Map();
+  const searchSources = new Map();
   const inventory = { scripts: new Set(), styles: new Set(), attributes: new Set() };
   for (const page of publicPages) {
     const bytes = readRegular(root, page);
     const html = bytes.toString('utf8');
     if (!Buffer.from(html).equals(bytes)) throw new Error(`${page}: source must be valid UTF-8`);
+    if (searchIndexPages.has(page)) searchSources.set(page, html);
     const prepared = prepareHtml(page, html, preview);
     inspectHtml(page, prepared, inventory);
     files.set(page, prepared);
@@ -365,6 +369,9 @@ export function prepareBuild(root, environment, checkConfig = true) {
     }
   };
   visitAssets('assets');
+  // One explicit generated asset. Source JSON files remain outside the public
+  // allowlist, and only the validated content manifest supplies search text.
+  files.set(siteSearchIndexPath, Buffer.from(JSON.stringify(createSearchIndex(searchSources, htmlTokens)) + '\n'));
   for (const page of publicPages) files.set(page, Buffer.from(versionPageAssets(page, files.get(page), files)));
   if (preview) files.set('robots.txt', Buffer.from('User-agent: *\nDisallow: /\n'));
   return { files, inventory, config, environment: preview ? 'preview' : 'production' };

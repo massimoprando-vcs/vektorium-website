@@ -153,6 +153,8 @@
     <link rel="alternate" hreflang="x-default" href="https://vektorium.io/">
 <link rel="stylesheet" href="/assets/capability-visuals-original.css">
 <link rel="stylesheet" href="/assets/home-insights.css">
+<link rel="stylesheet" href="/assets/home-search.css">
+<script type="module" src="/assets/home-search.js"></script>
 </head>
 <body>
 <div class="cursor-dot" id="cursorDot"></div>
@@ -171,6 +173,32 @@
 <a href="#" class="back-to-top" id="backToTop">BACK TO TOP</a>
 <main id="main-content">
 <section class="hero" id="hero">
+<div class="vx-home-search" id="vx-home-search" data-search-ignore>
+  <button class="vx-search-toggle" id="vx-search-toggle" type="button" aria-label="Search Vektorium" aria-expanded="false" aria-controls="vx-search-panel" disabled>
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+    <span>Search</span>
+  </button>
+  <div class="vx-search-panel" id="vx-search-panel" role="search" aria-label="Search Vektorium" hidden>
+    <div class="vx-search-bar">
+      <svg class="vx-search-lens" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <label class="vx-search-sr" for="vx-search-input">Search the Vektorium website</label>
+      <input id="vx-search-input" type="search" placeholder="What would you like to explore?" maxlength="100" autocomplete="off" spellcheck="false" aria-controls="vx-search-results" aria-describedby="vx-search-hint">
+      <button class="vx-search-clear" id="vx-search-clear" type="button" aria-label="Clear search" hidden>Clear</button>
+      <button class="vx-search-close" id="vx-search-close" type="button" aria-label="Close search"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="vx-search-content">
+      <p class="vx-search-status" id="vx-search-status" role="status" aria-live="polite" aria-atomic="true">Explore Vektorium</p>
+      <div class="vx-search-popular" id="vx-search-popular" aria-label="Popular pages">
+        <a href="/cypher-sentinel">Cypher Sentinel</a><a href="/architecture">Architecture</a><a href="/integrations">Integrations</a><a href="/post-quantum-cybersecurity">Post-quantum security</a><a href="/contact">Contact us</a>
+      </div>
+      <ol class="vx-search-results" id="vx-search-results" aria-label="Search results" hidden></ol>
+      <p class="vx-search-message" id="vx-search-message" hidden></p>
+      <button class="vx-search-retry" id="vx-search-retry" type="button" hidden>Try again</button>
+    </div>
+    <p class="vx-search-hint" id="vx-search-hint">Search the platform, solutions and insights.</p>
+  </div>
+  <noscript><p class="vx-search-noscript">Search needs JavaScript. <a href="/blog">Browse our insights</a>.</p></noscript>
+</div>
 <div class="hero-shield"><picture><source srcset="vektorium-logo.webp" type="image/webp"><img src="vektorium-logo.png" alt="Vektorium Logo" width="120" height="120" fetchpriority="high"></picture></div>
 <h1 class="hero-title">Vektorium</h1>
 <p class="hero-tagline">Cypher Sentinel — Sovereign Cybersecurity Infrastructure</p>
