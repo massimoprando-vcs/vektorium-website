@@ -76,7 +76,10 @@ function findElements(node, predicate, stopAtMatch = false) {
 function textContent(node) {
   if (typeof node === 'string') return node;
   if (node.ignored || node.name === 'head') return '';
-  const text = node.children.map(textContent).join('');
+  // Animated statistics start at zero in HTML; index their approved final count.
+  const target = hasClass(node, 'counter') ? attribute(node, 'data-target') : '';
+  const text = /^(?:0|[1-9]\d*)$/.test(target) && Number.isSafeInteger(Number(target))
+    ? target : node.children.map(textContent).join('');
   return blockElements.has(node.name) ? ` ${text} ` : text;
 }
 

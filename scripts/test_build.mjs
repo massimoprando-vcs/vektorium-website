@@ -260,7 +260,10 @@ try {
       <body><header>HEADER_ONLY</header><nav>NAV_ONLY</nav><p>OUTSIDE_MAIN</p>
       <main><article><header><h1>Security <em>architecture</em></h1></header>
       <h2>Shared context</h2><p>Research &amp; development. cyber<strong>security</strong>. &#x1f512; &amp;quot;</p>
-      <!-- COMMENT_ONLY --><div data-search-ignore><h2>IGNORED_HEADING</h2><div>IGNORED_BODY</div></div>
+      <div><span class="counter" data-target="160">0</span> capabilities</div>
+      <div><span class="counter" data-target="14200">0</span><span>+</span> tests passed</div>
+      <p><span class="counter" data-target="160invalid">Count unavailable</span></p>
+      <!-- COMMENT_ONLY --><div data-search-ignore><h2>IGNORED_HEADING</h2><div>IGNORED_BODY</div><span class="counter" data-target="99999">0</span></div>
       <nav>NESTED_NAV</nav><div role="navigation">ROLE_NAV</div><footer>FOOTER_ONLY</footer>
       <div class="breadcrumb">BREADCRUMB_ONLY</div><div class="nav-links">MENU_ONLY</div>
       <div class="internal-links"><h3>RELATED_ONLY</h3><div><a href="/blog">UNRELATED_TOPIC_ONLY</a></div></div>
@@ -274,7 +277,8 @@ try {
     assert.equal(page.description, 'Research & development');
     assert.equal(page.category, 'Platform');
     assert.deepEqual(page.headings, ['Security architecture', 'Shared context']);
-    assert.equal(page.body, 'Security architecture Shared context Research & development. cybersecurity. 🔒 &quot;');
+    assert.equal(page.body, 'Security architecture Shared context Research & development. cybersecurity. 🔒 &quot; 160 capabilities 14200+ tests passed Count unavailable');
+    assert.doesNotMatch(page.body, /\b0 capabilities|\b0\+ tests passed|99999/, 'Search describes final statistics and excludes ignored counters');
     assert.ok(!JSON.stringify(page).match(/_ONLY|OUTSIDE_MAIN|IGNORED_|NESTED_NAV|ROLE_NAV/));
   });
   test('search supports legal wrappers and title/body fallbacks without inventing external or redirect routes', () => {
