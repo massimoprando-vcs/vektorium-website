@@ -143,6 +143,8 @@ if (root) {
     requestAnimationFrame(() => { if (opened) root.classList.add('is-open'); });
     render();
     input.focus({ preventScroll: true });
+    // The fading activation pill is decorative while the field has focus.
+    toggle.inert = true;
     loadIndex();
   }
 
@@ -152,6 +154,7 @@ if (root) {
     window.clearTimeout(inputTimer);
     window.clearTimeout(focusTimer);
     root.classList.remove('is-open');
+    toggle.inert = false;
     panel.inert = true;
     toggle.setAttribute('aria-expanded', 'false');
     cursorHover(false);
