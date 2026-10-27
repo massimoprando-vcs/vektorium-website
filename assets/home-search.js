@@ -17,6 +17,8 @@ if (root) {
   let opened = false;
   let closeTimer;
   let inputTimer;
+  let focusTimer;
+  let pointerInSearch = false;
   let indexPromise;
   let indexState = 'idle';
   let pages = [];
@@ -131,6 +133,7 @@ if (root) {
   function openSearch() {
     if (opened) return;
     window.clearTimeout(closeTimer);
+    window.clearTimeout(focusTimer);
     const mobileMenu = document.querySelector('.vx-mobile-menu');
     if (mobileMenu?.open) mobileMenu.open = false;
     opened = true;
@@ -147,6 +150,7 @@ if (root) {
     if (!opened) return;
     opened = false;
     window.clearTimeout(inputTimer);
+    window.clearTimeout(focusTimer);
     root.classList.remove('is-open');
     panel.inert = true;
     toggle.setAttribute('aria-expanded', 'false');
@@ -214,9 +218,27 @@ if (root) {
       closeSearch(true);
     }
   });
-  document.addEventListener('pointerdown', event => { if (opened && !root.contains(event.target)) closeSearch(); });
-  root.addEventListener('focusout', () => {
-    queueMicrotask(() => { if (opened && !root.contains(document.activeElement)) closeSearch(); });
+  document.addEventListener('pointerdown', event => {
+    pointerInSearch = root.contains(event.target);
+    if (opened && !pointerInSearch) closeSearch();
+  });
+  document.addEventListener('pointerup', () => { pointerInSearch = false; });
+  document.addEventListener('pointercancel', () => { pointerInSearch = false; });
+  document.addEventListener('focusin', event => {
+    window.clearTimeout(focusTimer);
+    if (opened && !root.contains(event.target)) closeSearch();
+  });
+  root.addEventListener('focusout', event => {
+    window.clearTimeout(focusTimer);
+    if (event.relatedTarget) {
+      if (opened && !root.contains(event.relatedTarget)) closeSearch();
+      return;
+    }
+    // During pointer focus transfers, activeElement can briefly be the body.
+    // Let the click finish; a real move outside is also handled by focusin.
+    focusTimer = window.setTimeout(() => {
+      if (opened && !pointerInSearch && !root.contains(document.activeElement)) closeSearch();
+    }, 0);
   });
   document.querySelector('.vx-mobile-menu')?.addEventListener('toggle', event => {
     if (event.target.open) closeSearch();
