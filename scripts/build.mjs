@@ -276,7 +276,7 @@ export function expectedConfig(inventory) {
   const header = (key, value) => ({ key, value });
   return {
     $schema: 'https://openapi.vercel.sh/vercel.json',
-    framework: null, buildCommand: 'npm run build', installCommand: '', outputDirectory: 'dist', cleanUrls: true,
+    framework: null, buildCommand: 'npm run build', installCommand: '', outputDirectory: 'dist', cleanUrls: true, trailingSlash: false,
     redirects: [
       ...['/demo', '/demo.html'].flatMap(source => [
         {
