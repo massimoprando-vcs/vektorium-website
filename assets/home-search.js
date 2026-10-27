@@ -94,7 +94,7 @@ if (root) {
       message.hidden = false;
       return;
     }
-    status.textContent = matches.length > 6 ? 'Top 6 results' : visible.length + (visible.length === 1 ? ' result' : ' results');
+    status.textContent = matches.length > 6 ? 'Top 6 results' : (visible.length === 1 ? '{count} result' : '{count} results').replace('{count}', String(visible.length));
     const fragment = document.createDocumentFragment();
     visible.forEach(page => fragment.append(resultLink(page, query)));
     results.append(fragment);
@@ -136,6 +136,7 @@ if (root) {
     window.clearTimeout(focusTimer);
     const mobileMenu = document.querySelector('.vx-mobile-menu');
     if (mobileMenu?.open) mobileMenu.open = false;
+    document.querySelectorAll('.vx-language[open]').forEach(menu => { menu.open = false; });
     opened = true;
     panel.hidden = false;
     panel.inert = false;
@@ -169,6 +170,7 @@ if (root) {
   }
 
   toggle.addEventListener('click', () => opened ? closeSearch(true) : openSearch());
+  document.addEventListener('vx:language-open', () => closeSearch());
   closeButton.addEventListener('click', () => closeSearch(true));
   clear.addEventListener('click', () => {
     input.value = '';

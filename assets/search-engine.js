@@ -2,16 +2,24 @@
 const STOP_WORDS = new Set(['a', 'an', 'and', 'are', 'at', 'be', 'by', 'can', 'do', 'does', 'for', 'from', 'how', 'i', 'in', 'is', 'it', 'me', 'of', 'on', 'or', 'our', 'show', 'the', 'to', 'us', 'what', 'with']);
 
 export function normalizeSearch(value) {
-  return String(value ?? '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().replace(/\s+/g, ' ');
+  return String(value ?? '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').normalize('NFC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim().replace(/\s+/g, ' ');
 }
 
+const eastAsian = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u;
+const segmenter = typeof Intl.Segmenter === 'function' ? new Intl.Segmenter(undefined, { granularity: 'word' }) : null;
+function tokens(value) {
+  const normalized = normalizeSearch(value);
+  const basic = normalized.split(' ').filter(Boolean);
+  if (!eastAsian.test(normalized) || !segmenter) return basic;
+  return [...segmenter.segment(normalized)].filter(segment => segment.isWordLike).map(segment => segment.segment);
+}
 export function searchTerms(query) {
-  return [...new Set(normalizeSearch(String(query).slice(0, 100)).split(' ').filter(term => term && !STOP_WORDS.has(term)))].slice(0, 12);
+  return [...new Set(tokens(String(query).slice(0, 100)).filter(term => !STOP_WORDS.has(term)))].slice(0, 12);
 }
 
-const safeUrl = value => typeof value === 'string' && /^\/(?:[a-z0-9]+(?:-[a-z0-9]+)*)?$/.test(value);
+const safeUrl = value => typeof value === 'string' && /^\/(?:(?:fr|it|de|es|pt|ja|ko)\/)?(?:[a-z0-9]+(?:-[a-z0-9]+)*)?$/.test(value);
 const text = (value, limit) => typeof value === 'string' ? value.slice(0, limit).replace(/\s+/g, ' ').trim() : '';
-const words = value => new Set(normalizeSearch(value).split(' ').filter(Boolean));
+const words = value => new Set([...normalizeSearch(value).split(' ').filter(Boolean), ...tokens(value)]);
 
 export function prepareSearchIndex(data) {
   if (data?.version !== 1 || !Array.isArray(data.pages) || data.pages.length > 200) throw new Error('Search index is unavailable');
@@ -39,6 +47,8 @@ export function prepareSearchIndex(data) {
 
 function wordScore(set, term) {
   if (set.has(term)) return 1;
+  // Japanese compounds and Korean inflections do not follow Latin word boundaries.
+  if (eastAsian.test(term) && [...set].some(word => word.includes(term))) return 0.8;
   // Complete words and deliberate partial typing; "ai" must not match "email".
   if (term.length >= 3 && [...set].some(word => word.startsWith(term) || (term.endsWith('s') && word === term.slice(0, -1)))) return 0.65;
   return 0;
@@ -62,7 +72,7 @@ export function rankSearch(pages, query, limit = 6) {
     else if ((' ' + title + ' ').includes(' ' + phrase + ' ')) score += 35;
     if (normalizeSearch(page.url.slice(1)) === phrase) score += 50;
     return { page, score };
-  }).filter(Boolean).sort((a, b) => b.score - a.score || Number(['/', '/blog'].includes(a.page.url)) - Number(['/', '/blog'].includes(b.page.url)) || a.page.title.localeCompare(b.page.title, 'en') || a.page.url.localeCompare(b.page.url))
+  }).filter(Boolean).sort((a, b) => b.score - a.score || Number(/^\/(?:(?:fr|it|de|es|pt|ja|ko)\/?(?:blog)?|blog)?$/.test(a.page.url)) - Number(/^\/(?:(?:fr|it|de|es|pt|ja|ko)\/?(?:blog)?|blog)?$/.test(b.page.url)) || a.page.title.localeCompare(b.page.title, 'en') || a.page.url.localeCompare(b.page.url))
     .slice(0, Math.max(1, Math.min(limit, 20))).map(result => result.page);
 }
 
@@ -72,7 +82,7 @@ export function searchExcerpt(page, query, limit = 165) {
   const normalizedDescription = words(source);
   if (terms.length && !terms.some(term => wordScore(normalizedDescription, term)) && page.body) {
     const body = page.body;
-    const expression = new RegExp('\\b(?:' + terms.join('|') + ')', 'i');
+    const expression = new RegExp((terms.some(term => eastAsian.test(term)) ? '' : '\\b') + '(?:' + terms.join('|') + ')', 'iu');
     const at = body.search(expression);
     if (at >= 0) {
       const start = Math.max(0, at - 45);

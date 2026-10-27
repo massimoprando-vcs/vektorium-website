@@ -1,0 +1,101 @@
+/* Shared multilingual navigation, scoped to preserve the existing visual identity. */
+.vx-language { position: relative; flex: none; text-align: left; }
+.vx-language-toggle {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  width: 44px; min-width: 44px; height: 44px; min-height: 44px;
+  margin: 0; padding: 0; border: 1px solid rgba(0, 212, 255, .25); border-radius: 50%;
+  color: #b4d4e3; background: rgba(10, 20, 36, .38); list-style: none;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  transition: color .2s, border-color .2s, background .2s, box-shadow .2s;
+}
+.vx-language-toggle::-webkit-details-marker { display: none; }
+.vx-language-toggle::marker { content: ''; }
+.vx-language-toggle::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(circle at var(--vx-language-x, 50%) var(--vx-language-y, 50%), rgba(0, 212, 255, .13), transparent 72%);
+  opacity: 0; transition: opacity .2s;
+}
+.vx-language-toggle:focus-visible, .vx-language-panel a:focus-visible { outline: 2px solid var(--cyan, #00d4ff); outline-offset: 3px; }
+.vx-language[open] > .vx-language-toggle { color: var(--teal, #00ffcc); border-color: rgba(0, 255, 204, .45); background: rgba(0, 212, 255, .08); }
+.vx-language-panel {
+  position: absolute; z-index: 6; top: calc(100% + 12px); right: 0;
+  width: 250px; max-width: calc(100vw - 32px); max-height: calc(100dvh - 160px);
+  overflow-y: auto; overscroll-behavior: contain; padding: 14px;
+  border: 1px solid rgba(0, 212, 255, .25); border-radius: 18px;
+  background: radial-gradient(circle at var(--vx-language-x, 80%) var(--vx-language-y, 0%), rgba(0, 212, 255, .08), transparent 70%), rgba(10, 18, 34, .97);
+  -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, .38); scrollbar-width: thin; scrollbar-color: #245365 transparent;
+}
+.vx-language:not([open]) > .vx-language-panel { display: none; }
+.vx-language[open] > .vx-language-panel { animation: vx-language-reveal .18s ease-out both; }
+.vx-language-heading { margin: 0 10px 8px; color: #8da5b9; font: 500 10px/1.5 'Inter', sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+.vx-language .vx-language-panel a {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  min-height: 44px; margin: 0; padding: 9px 12px; border: 1px solid transparent; border-radius: 10px;
+  background: transparent; color: #bfd3e0; font: 400 14px/1.5 'Inter', sans-serif;
+  letter-spacing: 0; text-transform: none; text-decoration: none; white-space: normal;
+  transition: color .16s, background .16s, border-color .16s;
+}
+.vx-language .vx-language-panel a[aria-current] { color: var(--cyan, #00d4ff); border-color: rgba(0, 212, 255, .17); background: rgba(0, 212, 255, .065); }
+.vx-language-panel a svg { flex: none; }
+.vx-home-tools { display: flex; align-items: center; justify-content: center; gap: 12px; width: max-content; max-width: 100%; margin: 0 auto; }
+.vx-home-tools > .vx-search-toggle { margin: 0; }
+.vx-home-search.is-open .vx-language-home { visibility: hidden; pointer-events: none; }
+.vx-home-search.is-open .vx-search-toggle { position: relative; }
+.site-nav .vx-language-desktop { position: static; margin-left: 2px; }
+.site-nav .vx-language-desktop .vx-language-panel { top: calc(100% + 12px); right: 48px; max-height: calc(100dvh - 110px); }
+.vx-mobile-header > .vx-language-mobile { position: static; margin-left: auto; margin-right: 10px; }
+.vx-mobile-header .vx-language-panel { top: calc(100% + 8px); right: 16px; width: 260px; max-height: calc(100dvh - 100px); }
+
+/* Longer translations must wrap inside their existing cards and sections. */
+html:not([lang='en']) .hero-tagline { max-width: 1100px; padding: 0 24px; letter-spacing: .22em; line-height: 1.8; overflow-wrap: anywhere; hyphens: auto; }
+html:not([lang='en']) .hero-badge { max-width: calc(100% - 40px); letter-spacing: .12em; line-height: 1.7; }
+html:not([lang='en']) .vision-content { min-width: 0; width: 100%; overflow-wrap: anywhere; hyphens: auto; }
+html:not([lang='en']) .floating-nav > a { padding-right: 12px; padding-left: 12px; letter-spacing: .1em; }
+html:not([lang='en']) .site-nav .nav-links { gap: 18px; }
+html:not([lang='en']) .site-nav .nav-links > a { letter-spacing: .06em; }
+html:not([lang='en']) .product-card h3, html:not([lang='en']) .diff-item h3 { overflow-wrap: anywhere; }
+html:not([lang='en']) .stat-label { letter-spacing: .12em; line-height: 1.7; }
+
+@media (hover: hover) and (pointer: fine) {
+  .vx-language-toggle:hover { color: var(--cyan, #00d4ff); border-color: rgba(0, 212, 255, .55); box-shadow: 0 0 28px rgba(0, 212, 255, .12); }
+  .vx-language-toggle:hover::before { opacity: 1; }
+  .vx-language .vx-language-panel a:hover { color: #e8eaf0; background: rgba(0, 212, 255, .08); border-color: rgba(0, 212, 255, .14); }
+}
+@media (min-width: 769px) and (hover: hover) and (pointer: fine) {
+  .vx-language-toggle, .vx-language-panel a { cursor: none; }
+}
+@media (min-width: 769px) and (max-width: 1280px) {
+  .site-nav .vx-language-desktop .vx-language-panel { right: 24px; }
+  .site-nav .nav-links { gap: 12px; }
+  html:not([lang='en']) .floating-nav > a[href='#vision'],
+  html:not([lang='en']) .floating-nav > a[href='#about'],
+  html:not([lang='en']) .floating-nav > a[href='#technology'] { display: none; }
+  html:not([lang='en']) .site-nav .nav-links > a[href$='/sovereign-cybersecurity-platform'],
+  html:not([lang='en']) .site-nav .nav-links > a[href$='/cybersecurity-convergence-platform'],
+  html:not([lang='en']) .site-nav .nav-links > a[href$='/critical-infrastructure-cybersecurity'] { display: none; }
+}
+@media (min-width: 769px) and (max-width: 1100px) {
+  .site-nav .nav-links > a[href$='/sovereign-cybersecurity-platform'],
+  .site-nav .nav-links > a[href$='/cybersecurity-convergence-platform'],
+  .site-nav .nav-links > a[href$='/critical-infrastructure-cybersecurity'] { display: none; }
+  html:not([lang='en']) .site-nav .nav-links { gap: 10px; }
+  html:not([lang='en']) .site-nav .nav-links > a { font-size: 10px; letter-spacing: 0; }
+}
+@media (max-width: 768px) {
+  .vx-language-home, .vx-language-desktop { display: none; }
+  .vx-mobile-panel .vx-mobile-contact { border: 1px solid rgba(0, 212, 255, .3); margin-top: 4px; }
+  .vx-home-tools { display: block; }
+  .vx-home-tools > .vx-search-toggle { margin: 0 auto; }
+  html:not([lang='en']) .hero-tagline { max-width: 100%; letter-spacing: .15em; padding: 0 12px; }
+  html:not([lang='en']) .hero-badge { max-width: 100%; }
+}
+@media (max-width: 360px) {
+  .vx-mobile-brand { font-size: 12px; letter-spacing: .16em; gap: 8px; }
+  .vx-mobile-header > .vx-language-mobile { margin-right: 8px; }
+}
+@keyframes vx-language-reveal { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .vx-language-toggle, .vx-language-toggle::before, .vx-language-panel, .vx-language-panel a { animation: none !important; transition: none !important; }
+}

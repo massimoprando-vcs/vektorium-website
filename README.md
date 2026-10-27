@@ -53,6 +53,8 @@ The website uses static HTML, CSS and JavaScript, with a dependency-free Node.js
 ```sh
 npm run check
 npm run test:privacy
+npm run test:search
+npm run test:localization
 npm run test:integration
 VERCEL_ENV=production npm run build
 ```
@@ -62,6 +64,11 @@ Other build environments produce non-indexable previews. See
 privacy controls, exact Content Security Policy, preview review and release
 checks. Preserve the existing typography, cyan visual identity and desktop
 mouse/light effects when updating content.
+
+The 38 content pages are available in English, French, Italian, German, Spanish,
+Portuguese, Japanese and Korean. English remains the editorial source. See
+[multilingual maintenance](docs/localization.md) for translations, language
+switching, localized search and font updates.
 
 ## Contact
 

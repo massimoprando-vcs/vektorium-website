@@ -1,0 +1,16 @@
+/* Noto CJK ja glyphs complement the original Latin faces. License: language-fonts.css. */
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url('/assets/fonts/noto-sans-jp-site.woff2') format('woff2');
+  unicode-range: U+1100-11FF,U+2E80-9FFF,U+A960-A97F,U+AC00-D7FF,U+F900-FAFF,U+FF00-FFEF,U+20000-3FFFF;
+}
+@font-face {
+  font-family: 'JetBrains Mono'; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url('/assets/fonts/noto-sans-jp-site.woff2') format('woff2');
+  unicode-range: U+1100-11FF,U+2E80-9FFF,U+A960-A97F,U+AC00-D7FF,U+F900-FAFF,U+FF00-FFEF,U+20000-3FFFF;
+}
+html .hero-tagline, html .hero-badge, html .stat-label, html .section-label,
+html .site-nav .nav-links > a, html .floating-nav > a { letter-spacing: .06em; }
+html .hero-tagline { line-height: 1.85; }
+html .section-title, html .hero-title { line-height: 1.45; }
+html .product-card h3, html .diff-item h3 { overflow-wrap: normal; word-break: normal; }

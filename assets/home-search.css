@@ -40,14 +40,14 @@
   box-shadow: 0 0 28px rgba(0, 212, 255, .12);
 }
 .vx-search-toggle svg { flex: none; }
-.vx-home-search.is-open > .vx-search-toggle {
+.vx-home-search.is-open .vx-search-toggle {
   z-index: 3;
   opacity: 0;
   pointer-events: none;
   visibility: hidden;
   animation: vx-search-activate .36s ease-out;
 }
-.vx-home-search.is-open > .vx-search-toggle::after {
+.vx-home-search.is-open .vx-search-toggle::after {
   content: '';
   position: absolute;
   inset: -6px;
