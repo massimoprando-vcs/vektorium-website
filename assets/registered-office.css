@@ -1,0 +1,55 @@
+/* Match the homepage tagline without inheriting its entrance animation. */
+.vx-registered-office {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 24px;
+  color: var(--text2, #8892a8);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 2.2;
+  letter-spacing: 8px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.vx-registered-office > span {
+  display: block;
+}
+
+.vx-registered-office--home {
+  margin-top: 48px;
+  padding-inline: 0;
+}
+
+.contact.vx-contact-with-office {
+  padding-bottom: 64px;
+}
+
+.vx-registered-office--contact {
+  margin-bottom: 64px;
+}
+
+@media (max-width: 768px) {
+  .vx-registered-office {
+    letter-spacing: 0.18em;
+    line-height: 1.9;
+    text-wrap: balance;
+  }
+
+  .vx-registered-office--home {
+    margin-top: 36px;
+  }
+
+  .contact.vx-contact-with-office {
+    padding-bottom: 48px;
+  }
+
+  .vx-registered-office--contact {
+    margin-bottom: 48px;
+  }
+}
