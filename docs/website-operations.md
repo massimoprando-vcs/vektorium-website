@@ -35,7 +35,7 @@ The six homepage schematics and LinkedIn archive use small, separate stylesheets
 Do not reintroduce the parked global stylesheet or replacement desktop-effects
 implementation when making subsequent changes.
 
-The build adds shared hamburger navigation to the 38 marketing/content pages;
+The build adds shared hamburger navigation to the 39 marketing/content pages;
 demo redirects are excluded. At 768px or narrower, the mobile header keeps its
 12 existing links. Above 768px, a native desktop menu follows the primary
 navigation's existing Contact link. Its three groups and demo/contact actions
@@ -64,7 +64,7 @@ handlers can break the policy.
 
 ## Website search index
 
-Each build generates `assets/site-search-index.json` from the 38 approved public
+Each build generates `assets/site-search-index.json` from the 39 approved public
 content pages. Demo redirects, repository files and external sites are excluded.
 The generator reads main content, or the legal pages' content wrapper, and omits
 navigation, footers, scripts, styles, SVGs and elements marked

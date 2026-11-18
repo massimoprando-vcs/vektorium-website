@@ -1,7 +1,7 @@
 {
   "version": 1,
   "locale": "it",
-  "sourceHash": "f357918cc894907bd65abfdc96fe25caf2319cc76460b6f5d8bd44d9499c477f",
+  "sourceHash": "b31f03c26ce6ca2b7141b141343f3eaf077b0f3f4a05bc5de5c95efdd00c4e12",
   "translations": {
     "5f9e38a180b639a9": "Vektorium | Convergenza della cybersicurezza all’avanguardia",
     "15be2e6d1f4b32d9": "Mantenete il vostro ecosistema di sicurezza. Aggiungete una difesa all’avanguardia con Cypher Sentinel: 160 funzionalità, 90 motori, 27 famiglie di comandi. La vostra autorità. Il vostro controllo.",
@@ -2168,6 +2168,25 @@
     "af2a207b1565139c": "Simulazioni di phishing",
     "8eb5e447b3eed495": "Sviluppo di una cultura della sicurezza",
     "5af8a2dfb47c391c": "Formazione basata sui ruoli",
-    "3fe8abe273e7a207": "Logo Vektorium al centro su uno sfondo blu scuro"
+    "3fe8abe273e7a207": "Logo Vektorium al centro su uno sfondo blu scuro",
+    "bf591542940eeb4c": "18 novembre 2026",
+    "1df5f30ff3cdd84c": "<0>Non tutte le interruzioni hanno un attaccante. Ogni interruzione ha un proprietario.</0>",
+    "a988be3d8ebbe394": "Cause diverse. Un’unica struttura. Vektorium sulle interruzioni delle infrastrutture, sulle dipendenze esterne e su chi possiede i sistemi da cui dipende la vostra sicurezza.",
+    "060e7f2a2ef95789": "Non tutte le interruzioni hanno un attaccante. Ogni interruzione ha un proprietario. | Approfondimenti Vektorium",
+    "8e9e60ea40286332": "Non tutte le interruzioni hanno un attaccante. Ogni interruzione ha un proprietario.",
+    "3483e1ccfd00c269": "Una panoramica della rete nella dimostrazione di Cypher Sentinel che accompagna il post LinkedIn di Vektorium del 18 novembre 2026",
+    "39be0ad499d1932f": "Da lunedì, centinaia di persone, se non migliaia, ci hanno chiesto di commentare ciò che sta accadendo.\n\nEcco, dunque...\n\nEmail fuori uso in tutto il mondo per circa 18 ore.\nTutti i decolli negli Stati Uniti bloccati (terza volta nella storia).\nBanche. I servizi di Apple. Diverse reti.\nLa stessa rete classificata della NSA.\nTutto nell’arco di una settimana.\n\nLa risposta ufficiale, ogni volta: non è stato un attacco informatico.\nDoveva rassicurare.\n\nLa provocazione: un attacco informatico sarebbe stato di gran lunga la risposta migliore.\nUn attacco ha un colpevole. Qualcuno da identificare, da sanzionare, da dissuadere.\n\nQuello che sta accadendo è molto peggio.\n\nLa sostituzione di un router. Una modifica alla configurazione. Un aggiornamento interno. Una patch di routine.\nNon è stato nemmeno necessario un nemico.\n\nEcco, quindi, il punto:\nNon tutte le interruzioni hanno un attaccante. Ogni interruzione ha un proprietario.\n\nAlla domanda sul perché la FAA non potesse semplicemente cambiare fornitore,\nil segretario ai Trasporti degli Stati Uniti ha detto del suo appaltatore:\n«Non posso rivolgermi altrove. Ne sono i proprietari.» Parola chiave: Loro.\n\nE dove un nemico si è effettivamente presentato, la porta era già aperta:\nPrima ancora, i frigoriferi e PHP.\nLunedì 178 organizzazioni, tra cui CNN, la BBC, Zoom e HSBC, hanno distribuito malware ai propri visitatori per circa 17 ore.\nNessuna di loro era stata violata. Lo script di un fornitore era cambiato durante la notte.\n\nE Google ha documentato la prima intrusione condotta dall’inizio alla fine dall’IA, senza intervento umano.\n\nNome utente admin e data odierna come password, su controller privi di supporto da anni.\n\nCause diverse. Un’unica struttura.\n\nIl guasto risiedeva in qualcosa che la vittima non possedeva, non poteva vedere e non poteva fermare.\n\nNel nostro post precedente abbiamo scritto che un esterno può farvi tre cose:\nLeggere. Fermare. Cambiare.\nQuesto mese, tutte e tre sono avvenute su larga scala.\n\nIl ritmo accelererà.\nUn anno fa Microsoft rilasciava circa 100 correzioni di sicurezza al mese.\nOra circa 1100. Le macchine trovano le falle, le macchine trasformano le patch in exploit, e i sistemi non sono mai stati costruiti per essere modificati a quel ritmo.\n\nCypher Sentinel è stato progettato esattamente per questo.\n\nNessuna dipendenza esterna. Funziona con il mondo esterno disconnesso.\nOgni motore verificato dall’interno del perimetro.\nNulla modifica il comportamento senza la vostra approvazione.\n\nLa domanda non è più soltanto chi vi attacca.\nÈ chi possiede ciò su cui poggiate.\n\nAbbiamo chiesto in ogni post: «Sarete padroni della vostra difesa o la prenderete in affitto?»\nAbbiamo costruito la risposta.\n\nvektorium.io\n\nPer chi porta avanti questa missione ogni giorno:\nCybersecurity and Infrastructure Security Agency, National Security Agency, U.S. Cyber Command, Defense Advanced Research Projects Agency (DARPA), United States Space Force, U.S. Department of Homeland Security\n\n#CyberSecurity #CriticalInfrastructure #CyberResilience #SovereignSecurity #SovereignAI #Vektorium #CypherSentinel",
+    "3e2f2bcb635b566b": "Una vista ravvicinata dei nodi connessi nella dimostrazione di Cypher Sentinel che accompagna il post LinkedIn di Vektorium del 18 novembre 2026",
+    "db97097e751bf01a": "Fonti condivise con la pubblicazione originale",
+    "ed2e1e74301580f3": "Questi riferimenti sono stati forniti da Vektorium in un commento che accompagnava il post su LinkedIn.",
+    "b78bba6391fc8530": "<0>FAA: l’appaltatore che possiede la rete<1> (si apre in una nuova scheda)</1></0>",
+    "5ba7777f5a05329b": "<0>Interruzione dei servizi Microsoft<1> (si apre in una nuova scheda)</1></0>",
+    "75b63eddc0667669": "<0>Interruzione della rete della NSA<1> (si apre in una nuova scheda)</1></0>",
+    "b2aaa653c9f4113a": "<0>«Non è un attacco informatico»<1> (si apre in una nuova scheda)</1></0>",
+    "ccebd40fe8d398ec": "<0>Attacchi ai congelatori: indicazioni del governo per rafforzare la sicurezza<1> (si apre in una nuova scheda)</1></0>",
+    "9e090015ff6de42c": "<0>PHP: il Web a rischio<1> (si apre in una nuova scheda)</1></0>",
+    "6441b121c86b0366": "<0>178 organizzazioni: l’attacco alla catena di fornitura di Optimizely<1> (si apre in una nuova scheda)</1></0>",
+    "aad4badcf3860de6": "<0>Google: l’attività malevola degli agenti IA supera una soglia significativa<1> (si apre in una nuova scheda)</1></0>",
+    "abbcf3afc5a92107": "<0>Microsoft: quasi 1100 vulnerabilità di sicurezza<1> (si apre in una nuova scheda)</1></0>"
   }
 }

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "locale": "pt",
-  "sourceHash": "f357918cc894907bd65abfdc96fe25caf2319cc76460b6f5d8bd44d9499c477f",
+  "sourceHash": "b31f03c26ce6ca2b7141b141343f3eaf077b0f3f4a05bc5de5c95efdd00c4e12",
   "translations": {
     "5f9e38a180b639a9": "Vektorium | Convergência de vanguarda em cibersegurança",
     "15be2e6d1f4b32d9": "Mantenha o seu conjunto de ferramentas de segurança. Acrescente defesa de vanguarda com Cypher Sentinel: 160 capacidades, 90 motores, 27 famílias de comandos. A sua autoridade. O seu controlo.",
@@ -2168,6 +2168,25 @@
     "af2a207b1565139c": "Simulações de phishing",
     "8eb5e447b3eed495": "Desenvolvimento de uma cultura de segurança",
     "5af8a2dfb47c391c": "Formação adaptada às funções",
-    "3fe8abe273e7a207": "Logótipo da Vektorium centrado sobre um fundo azul-escuro"
+    "3fe8abe273e7a207": "Logótipo da Vektorium centrado sobre um fundo azul-escuro",
+    "bf591542940eeb4c": "18 de novembro de 2026",
+    "1df5f30ff3cdd84c": "<0>Nem toda a interrupção tem um atacante. Toda a interrupção tem um dono.</0>",
+    "a988be3d8ebbe394": "Causas diferentes. Uma estrutura. A Vektorium sobre interrupções no funcionamento das infraestruturas, dependências externas e quem é dono dos sistemas de que depende a sua segurança.",
+    "060e7f2a2ef95789": "Nem toda a interrupção tem um atacante. Toda a interrupção tem um dono. | Análises da Vektorium",
+    "8e9e60ea40286332": "Nem toda a interrupção tem um atacante. Toda a interrupção tem um dono.",
+    "3483e1ccfd00c269": "Vista geral da rede na demonstração do Cypher Sentinel que acompanha a publicação da Vektorium no LinkedIn de 18 de novembro de 2026",
+    "39be0ad499d1932f": "Desde segunda-feira, centenas de pessoas, se não milhares, pediram-nos que comentássemos o que está a acontecer.\n\nPois aqui está...\n\nCorreio eletrónico indisponível em todo o mundo durante cerca de 18 horas.\nTodas as partidas nos Estados Unidos suspensas (pela terceira vez na história).\nBancos. Os serviços da Apple. Várias redes.\nA própria rede classificada da NSA.\nTudo numa só semana.\n\nA resposta oficial, todas as vezes: não foi um ciberataque.\nA intenção era tranquilizar.\n\nA ideia provocadora: um ciberataque teria sido, de longe, a melhor resposta.\nUm ataque tem um culpado. Alguém a identificar, a sancionar, a dissuadir.\n\nO que está a acontecer é muito pior.\n\nUma troca de router. Uma alteração de configuração. Uma atualização interna. Uma correção de rotina.\nNem sequer foi preciso um inimigo.\n\nPor isso, aqui está:\nNem toda a interrupção tem um atacante. Toda a interrupção tem um dono.\n\nQuestionado sobre por que razão a FAA não podia simplesmente mudar de fornecedor,\no secretário dos Transportes dos Estados Unidos disse sobre o seu prestador de serviços:\n«Não posso ir a outro lado. São eles os donos.» A palavra-chave: eles.\n\nE onde apareceu um inimigo, a porta já estava aberta:\nAntes disso, os frigoríficos e o PHP.\nNa segunda-feira, 178 organizações, entre elas a CNN, a BBC, a Zoom e o HSBC, distribuíram malware aos seus próprios visitantes durante cerca de 17 horas.\nNenhuma delas tinha sido comprometida. O script de um fornecedor mudou durante a noite.\n\nE a Google documentou a primeira intrusão executada de ponta a ponta por IA, sem intervenção humana.\n\nNome de utilizador admin e a data de hoje como palavra-passe, em controladores sem suporte há anos.\n\nCausas diferentes. Uma estrutura.\n\nA falha estava em algo que a vítima não possuía, não conseguia ver e não conseguia parar.\n\nNa nossa publicação anterior, escrevemos que alguém de fora lhe pode fazer três coisas:\nLer. Parar. Alterar.\nEste mês, as três aconteceram em grande escala.\n\nVai acelerar.\nHá um ano, a Microsoft disponibilizava cerca de 100 correções de segurança por mês.\nAgora, cerca de 1.100. As máquinas encontram as falhas, as máquinas transformam correções em exploits, e os sistemas nunca foram concebidos para serem alterados a esse ritmo.\n\nO Cypher Sentinel foi concebido precisamente para isto.\n\nZero dependências externas. Funciona com o mundo exterior desligado.\nCada motor verificado dentro do perímetro.\nNada altera o comportamento sem a sua aprovação.\n\nA questão já não é apenas quem o ataca.\nÉ quem é dono daquilo em que se apoia.\n\nPerguntámos em todas as publicações: «Será dono da sua defesa ou vai alugá-la?»\nConstruímos a resposta.\n\nvektorium.io\n\nPara quem assume esta missão todos os dias:\nCybersecurity and Infrastructure Security Agency, National Security Agency, U.S. Cyber Command, Defense Advanced Research Projects Agency (DARPA), United States Space Force, U.S. Department of Homeland Security\n\n#CyberSecurity #CriticalInfrastructure #CyberResilience #SovereignSecurity #SovereignAI #Vektorium #CypherSentinel",
+    "3e2f2bcb635b566b": "Vista de pormenor de nós interligados na demonstração do Cypher Sentinel que acompanha a publicação da Vektorium no LinkedIn de 18 de novembro de 2026",
+    "db97097e751bf01a": "Fontes partilhadas com a publicação original",
+    "ed2e1e74301580f3": "Estas referências foram fornecidas pela Vektorium num comentário que acompanha a publicação no LinkedIn.",
+    "b78bba6391fc8530": "<0>FAA: o prestador de serviços que é dono da rede<1> (abre num novo separador)</1></0>",
+    "5ba7777f5a05329b": "<0>Interrupção dos serviços da Microsoft<1> (abre num novo separador)</1></0>",
+    "75b63eddc0667669": "<0>Interrupção na rede da NSA<1> (abre num novo separador)</1></0>",
+    "b2aaa653c9f4113a": "<0>«Não foi um ciberataque»<1> (abre num novo separador)</1></0>",
+    "ccebd40fe8d398ec": "<0>Ataques a congeladores: orientações governamentais de reforço da segurança<1> (abre num novo separador)</1></0>",
+    "9e090015ff6de42c": "<0>PHP: a Web em risco<1> (abre num novo separador)</1></0>",
+    "6441b121c86b0366": "<0>178 organizações: o ataque à cadeia de abastecimento da Optimizely<1> (abre num novo separador)</1></0>",
+    "aad4badcf3860de6": "<0>Google: a atividade maliciosa com agentes de IA ultrapassa um limiar significativo<1> (abre num novo separador)</1></0>",
+    "abbcf3afc5a92107": "<0>Microsoft: quase 1.100 vulnerabilidades de segurança<1> (abre num novo separador)</1></0>"
   }
 }

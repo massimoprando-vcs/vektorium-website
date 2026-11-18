@@ -1,7 +1,7 @@
 {
   "version": 1,
   "locale": "es",
-  "sourceHash": "f357918cc894907bd65abfdc96fe25caf2319cc76460b6f5d8bd44d9499c477f",
+  "sourceHash": "b31f03c26ce6ca2b7141b141343f3eaf077b0f3f4a05bc5de5c95efdd00c4e12",
   "translations": {
     "5f9e38a180b639a9": "Vektorium | Convergencia de ciberseguridad de vanguardia",
     "15be2e6d1f4b32d9": "Conserve su infraestructura de seguridad. Añada una defensa de vanguardia con Cypher Sentinel: 160 capacidades, 90 motores y 27 familias de comandos. Su autoridad. Su control.",
@@ -2168,6 +2168,25 @@
     "af2a207b1565139c": "Simulaciones de phishing",
     "8eb5e447b3eed495": "Desarrollo de una cultura de seguridad",
     "5af8a2dfb47c391c": "Formación basada en roles",
-    "3fe8abe273e7a207": "Logotipo de Vektorium centrado sobre un fondo azul oscuro"
+    "3fe8abe273e7a207": "Logotipo de Vektorium centrado sobre un fondo azul oscuro",
+    "bf591542940eeb4c": "18 de noviembre de 2026",
+    "1df5f30ff3cdd84c": "<0>No todas las interrupciones tienen un atacante. Cada interrupción tiene un dueño.</0>",
+    "a988be3d8ebbe394": "Causas distintas. Una misma estructura. Vektorium aborda las interrupciones de infraestructura, las dependencias externas y quién posee los sistemas de los que depende su seguridad.",
+    "060e7f2a2ef95789": "No todas las interrupciones tienen un atacante. Cada interrupción tiene un dueño. | Perspectivas de Vektorium",
+    "8e9e60ea40286332": "No todas las interrupciones tienen un atacante. Cada interrupción tiene un dueño.",
+    "3483e1ccfd00c269": "Una vista general de la red en la demostración de Cypher Sentinel que acompaña a la publicación de Vektorium en LinkedIn del 18 de noviembre de 2026",
+    "39be0ad499d1932f": "Desde el lunes, cientos de personas, si no miles, nos han pedido que comentemos lo que está ocurriendo.\n\nPues aquí va...\n\nEl correo electrónico fuera de servicio en todo el mundo durante unas 18 horas.\nTodos los despegues en Estados Unidos suspendidos (por tercera vez en la historia).\nBancos. Los servicios de Apple. Varias redes.\nLa propia red clasificada de la NSA.\nTodo en una sola semana.\n\nLa respuesta oficial, cada vez: no fue un ciberataque.\nSe pretendía tranquilizar.\n\nLa idea provocadora: un ciberataque habría sido, con diferencia, la mejor respuesta.\nUn ataque tiene un culpable. Alguien a quien señalar, sancionar y disuadir.\n\nLo que está ocurriendo es mucho peor.\n\nEl cambio de un router. Un cambio de configuración. Una actualización interna. Un parche rutinario.\nNi siquiera hizo falta un enemigo.\n\nDe ahí esta conclusión:\nNo todas las interrupciones tienen un atacante. Cada interrupción tiene un dueño.\n\nAl preguntarle por qué la FAA no podía simplemente cambiar de proveedor,\nel secretario de Transporte de Estados Unidos dijo de su contratista:\n«No puedo acudir a otro. Ellos son los dueños». Palabra clave: Ellos.\n\nY donde sí apareció un enemigo, la puerta ya estaba abierta:\nAntes de eso, los frigoríficos y PHP.\nEl lunes, 178 organizaciones, entre ellas CNN, la BBC, Zoom y HSBC, distribuyeron malware a sus propios visitantes durante unas 17 horas.\nNinguna de ellas había sufrido una intrusión. El script de un proveedor cambió durante la noche.\n\nY Google documentó la primera intrusión ejecutada de principio a fin por IA, sin intervención humana.\n\nNombre de usuario admin y la fecha del día como contraseña, en controladores sin soporte desde hace años.\n\nCausas distintas. Una misma estructura.\n\nEl fallo estaba en algo que la víctima no poseía, no podía ver y no podía detener.\n\nEn nuestra publicación anterior escribimos que un tercero puede hacerle tres cosas:\nLeer. Detener. Cambiar.\nEste mes, las tres ocurrieron a gran escala.\n\nEl ritmo se acelerará.\nHace un año, Microsoft publicaba unas 100 correcciones de seguridad al mes.\nAhora, unas 1100. Las máquinas encuentran los fallos, las máquinas convierten los parches en exploits, y los sistemas nunca se diseñaron para ser modificados a ese ritmo.\n\nCypher Sentinel se diseñó exactamente para esto.\n\nNinguna dependencia externa. Funciona con el mundo exterior desconectado.\nCada motor se verifica desde dentro del perímetro.\nNada altera su comportamiento sin su aprobación.\n\nLa pregunta ya no es solo quién le ataca.\nEs quién es dueño de aquello en lo que se apoya.\n\nEn cada publicación preguntamos: «¿Será dueño de su defensa o la alquilará?».\nConstruimos la respuesta.\n\nvektorium.io\n\nPara quienes llevan adelante esta misión cada día:\nCybersecurity and Infrastructure Security Agency, National Security Agency, U.S. Cyber Command, Defense Advanced Research Projects Agency (DARPA), United States Space Force, U.S. Department of Homeland Security\n\n#CyberSecurity #CriticalInfrastructure #CyberResilience #SovereignSecurity #SovereignAI #Vektorium #CypherSentinel",
+    "3e2f2bcb635b566b": "Una vista más cercana de los nodos conectados en la demostración de Cypher Sentinel que acompaña a la publicación de Vektorium en LinkedIn del 18 de noviembre de 2026",
+    "db97097e751bf01a": "Fuentes compartidas con la publicación original",
+    "ed2e1e74301580f3": "Vektorium aportó estas referencias en un comentario que acompañaba a la publicación de LinkedIn.",
+    "b78bba6391fc8530": "<0>FAA: el contratista dueño de la red<1> (se abre en una nueva pestaña)</1></0>",
+    "5ba7777f5a05329b": "<0>Interrupción de los servicios de Microsoft<1> (se abre en una nueva pestaña)</1></0>",
+    "75b63eddc0667669": "<0>Interrupción de la red de la NSA<1> (se abre en una nueva pestaña)</1></0>",
+    "b2aaa653c9f4113a": "<0>«No fue un ciberataque»<1> (se abre en una nueva pestaña)</1></0>",
+    "ccebd40fe8d398ec": "<0>Ataques a congeladores: recomendaciones del Gobierno para reforzar la seguridad<1> (se abre en una nueva pestaña)</1></0>",
+    "9e090015ff6de42c": "<0>PHP: la web en riesgo<1> (se abre en una nueva pestaña)</1></0>",
+    "6441b121c86b0366": "<0>178 organizaciones: el ataque a la cadena de suministro de Optimizely<1> (se abre en una nueva pestaña)</1></0>",
+    "aad4badcf3860de6": "<0>Google: la actividad maliciosa de agentes de IA supera un umbral significativo<1> (se abre en una nueva pestaña)</1></0>",
+    "abbcf3afc5a92107": "<0>Microsoft: casi 1100 vulnerabilidades de seguridad<1> (se abre en una nueva pestaña)</1></0>"
   }
 }

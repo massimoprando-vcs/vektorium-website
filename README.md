@@ -65,7 +65,7 @@ privacy controls, exact Content Security Policy, preview review and release
 checks. Preserve the existing typography, cyan visual identity and desktop
 mouse/light effects when updating content.
 
-The 38 content pages are available in English, French, Italian, German, Spanish,
+The 39 content pages are available in English, French, Italian, German, Spanish,
 Portuguese, Japanese and Korean. English remains the editorial source. See
 [multilingual maintenance](docs/localization.md) for translations, language
 switching, localized search and font updates.

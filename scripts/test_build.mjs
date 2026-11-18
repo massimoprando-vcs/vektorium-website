@@ -21,7 +21,7 @@ const build = (root, environment) => buildComplete(root, environment, localizedF
 const options = new Set(process.argv.slice(2));
 assert.ok([...options].every(option => ['--actual', '--keep-actual'].includes(option)), 'Unknown test option');
 assert.ok(!options.has('--keep-actual') || options.has('--actual'), '--keep-actual requires --actual');
-assert.equal(publicPages.size, 40, 'Review the explicit public manifest if the site inventory changes');
+assert.equal(publicPages.size, 41, 'Review the explicit public manifest if the site inventory changes');
 assert.ok([...publicPages].every(page => /^[a-z0-9-]+\.html$/.test(page)));
 const temporaryParent = realpathSync(tmpdir());
 const temporaryRoot = mkdtempSync(join(temporaryParent, 'vektorium-compatible-tests-'));
@@ -173,7 +173,7 @@ function outputCheck(root, environment) {
     }
   }
   const report = JSON.parse(readFileSync(join(root, 'build-report.json'), 'utf8'));
-  assert.equal(report.pages.length, multilingual ? 306 : publicPages.size);
+  assert.equal(report.pages.length, multilingual ? 314 : publicPages.size);
   assert.equal(report.environment, preview ? 'preview' : 'production');
   assert.ok(report.assets.some(asset => asset.file === 'robots.txt'), 'Rewritten robots is included in build report');
   assert.ok(report.assets.some(asset => asset.file === siteSearchIndexPath), 'Generated search index is included in build report');
@@ -195,7 +195,7 @@ function outputCheck(root, environment) {
 
 try {
   test('shared hamburger markup has complete allowed links, accessible controls and no inline code', () => {
-    assert.equal(mobilePages.size, 38);
+    assert.equal(mobilePages.size, 39);
     assert.equal(mobilePages.has('demo.html'), false);
     assert.equal(mobilePages.has('generated.html'), false);
     assert.ok(!/<(?:script|style)\b|\s(?:style|on[a-z]+)=/i.test(mobileHeader + desktopMenu), 'Navigation markup may not authorize inline code or styling');
@@ -303,8 +303,8 @@ try {
     const prepared = prepareBuild(root, 'production');
     const text = prepared.files.get(siteSearchIndexPath).toString('utf8');
     const index = JSON.parse(text);
-    assert.equal(index.pages.length, 38);
-    assert.equal(searchIndexPages.size, 38);
+    assert.equal(index.pages.length, 39);
+    assert.equal(searchIndexPages.size, 39);
     assert.ok(!text.includes('REDIRECT_ONLY_SENTINEL') && !text.includes('PRIVATE_REPOSITORY_SENTINEL'));
     assert.ok(!index.pages.some(page => ['/demo', '/generated'].includes(page.url)));
     assert.equal(existsSync(join(root, siteSearchIndexPath)), false, 'Index must not depend on a checked-in source JSON file');

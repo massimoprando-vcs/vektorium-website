@@ -39,6 +39,7 @@ export const publicPages = new Set([
   'penetration-testing-ethical-hacking.html',
   'cybersecurity-awareness-training.html',
   'blog.html',
+  'insight-every-outage-has-an-owner.html',
   'insight-control-is-a-dial.html',
   'insight-agent-era-containment.html',
   'insight-will-you-own-your-company.html',
