@@ -98,13 +98,13 @@ test('search supports European accents, Japanese and Korean while rejecting fore
 });
 
 test('every catalogue is complete, current, and preserves numerical and named claims', () => {
-  assert.equal(source.units.length, 2166);
+  assert.equal(source.units.length, 2185);
   for (const { code } of languages.slice(1)) checkCatalogue(source, JSON.parse(readFileSync(resolve(root, `locales/${code}.json`), 'utf8')), code);
 });
 
-test('all 304 content pages have reciprocal language links, correct canonical/indexing and valid assets', () => {
+test('all 312 content pages have reciprocal language links, correct canonical/indexing and valid assets', () => {
   const prepared = prepareBuild(root, 'production');
-  assert.equal(prepared.pagePaths.size, 306);
+  assert.equal(prepared.pagePaths.size, 314);
   const origin = 'https://vektorium.io';
   const exists = pathname => pathname === '/' ? prepared.files.has('index.html') : prepared.files.has(pathname.slice(1)) || prepared.files.has(pathname.slice(1) + '.html');
   for (const page of mobilePages) for (const { code } of languages) {
@@ -148,12 +148,12 @@ test('all 304 content pages have reciprocal language links, correct canonical/in
     inspectHtml(path, html);
   }
   const sitemap = prepared.files.get('sitemap.xml').toString();
-  assert.equal((sitemap.match(/<loc>/g) ?? []).length, 304);
+  assert.equal((sitemap.match(/<loc>/g) ?? []).length, 312);
   for (const { code } of languages.slice(1)) {
     const index = JSON.parse(prepared.files.get(`assets/site-search-index-${code}.json`));
-    assert.equal(index.pages.length, 38, code);
+    assert.equal(index.pages.length, 39, code);
     assert.ok(index.pages.every(page => page.url === '/' + code || page.url.startsWith('/' + code + '/')), code);
-    assert.equal(prepareSearchIndex(index).length, 38, code);
+    assert.equal(prepareSearchIndex(index).length, 39, code);
   }
   for (const excluded of ['locales/source.json', 'locales/fr.json', 'scripts/build.mjs', 'docs/localization.md']) assert.ok(!prepared.files.has(excluded));
 });

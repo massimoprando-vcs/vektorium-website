@@ -1,8 +1,8 @@
 # Multilingual public website
 
 The English HTML remains the editorial source. The dependency-free Node 24 build
-emits all 38 public content pages in eight languages, plus the two existing demo
-redirects: 306 HTML files in total. External demo applications are separate and
+emits all 39 public content pages in eight languages, plus the two existing demo
+redirects: 314 HTML files in total. External demo applications are separate and
 remain in English.
 
 | Language | Menu label | Homepage | Example content page |
@@ -87,7 +87,7 @@ inputs. Do not broaden the public asset allowlist to include them.
 
 ## Search and discovery
 
-Each locale has a separate generated 38-page local search index. Search queries
+Each locale has a separate generated 39-page local search index. Search queries
 stay in the browser. Unicode normalization preserves Japanese and Korean, while
 accent folding continues to support European languages. The ranking engine
 rejects external, executable and malformed result URLs.
@@ -95,7 +95,7 @@ rejects external, executable and malformed result URLs.
 Each content page has one self-referencing canonical URL, `lang`, and reciprocal
 `hreflang` links for all eight versions plus English `x-default`. Translated
 JSON-LD uses corresponding local page URLs and `inLanguage`. The sitemap lists
-304 actual content URLs. Preview pages and preview robots remain non-indexable.
+312 actual content URLs. Preview pages and preview robots remain non-indexable.
 This is a discoverable multilingual structure; it is not a promise of search or
 AI-answer rankings.
 

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "locale": "de",
-  "sourceHash": "f357918cc894907bd65abfdc96fe25caf2319cc76460b6f5d8bd44d9499c477f",
+  "sourceHash": "b31f03c26ce6ca2b7141b141343f3eaf077b0f3f4a05bc5de5c95efdd00c4e12",
   "translations": {
     "5f9e38a180b639a9": "Vektorium | Wegweisende Konvergenz der Cybersicherheit",
     "15be2e6d1f4b32d9": "Behalten Sie Ihren Sicherheits-Stack. Ergänzen Sie wegweisende Abwehr mit Cypher Sentinel: 160 Funktionen, 90 Engines, 27 Befehlsfamilien. Ihre Entscheidungsbefugnis. Ihre Kontrolle.",
@@ -2168,6 +2168,25 @@
     "af2a207b1565139c": "Phishing-Simulationen",
     "8eb5e447b3eed495": "Aufbau einer Sicherheitskultur",
     "5af8a2dfb47c391c": "Rollenbasierte Schulungen",
-    "3fe8abe273e7a207": "Vektorium-Logo mittig auf dunkelblauem Hintergrund"
+    "3fe8abe273e7a207": "Vektorium-Logo mittig auf dunkelblauem Hintergrund",
+    "bf591542940eeb4c": "18. November 2026",
+    "1df5f30ff3cdd84c": "<0>Nicht jeder Ausfall hat einen Angreifer. Jeder Ausfall hat einen Eigentümer.</0>",
+    "a988be3d8ebbe394": "Verschiedene Ursachen. Eine Struktur. Vektorium über Infrastrukturausfälle, externe Abhängigkeiten und darüber, wem die Systeme gehören, von denen Ihre Sicherheit abhängt.",
+    "060e7f2a2ef95789": "Nicht jeder Ausfall hat einen Angreifer. Jeder Ausfall hat einen Eigentümer. | Vektorium Einblicke",
+    "8e9e60ea40286332": "Nicht jeder Ausfall hat einen Angreifer. Jeder Ausfall hat einen Eigentümer.",
+    "3483e1ccfd00c269": "Netzwerkübersicht aus der Cypher Sentinel-Demonstration zum LinkedIn-Beitrag von Vektorium vom 18. November 2026",
+    "39be0ad499d1932f": "Seit Montag haben uns Hunderte, wenn nicht Tausende Menschen gebeten, das Geschehen zu kommentieren.\n\nAlso, hier ist unser Kommentar...\n\nWeltweiter E-Mail-Ausfall für etwa 18 Stunden.\nAlle Abflüge in den Vereinigten Staaten ausgesetzt (zum dritten Mal in der Geschichte).\nBanken. Dienste von Apple. Mehrere Netzwerke.\nDas NSA-eigene Netzwerk für Verschlusssachen.\nAlles innerhalb einer Woche.\n\nDie offizielle Antwort lautete jedes Mal: Es war kein Cyberangriff.\nDas sollte beruhigen.\n\nDie provokante These: Ein Cyberangriff wäre mit Abstand die bessere Antwort gewesen.\nEin Angriff hat einen Täter. Jemanden, den man benennen, mit Sanktionen belegen und abschrecken kann.\n\nWas gerade geschieht, ist weitaus schlimmer.\n\nEin Routertausch. Eine Konfigurationsänderung. Ein internes Update. Ein Routine-Patch.\nEin Feind war nicht einmal nötig.\n\nDeshalb:\nNicht jeder Ausfall hat einen Angreifer. Jeder Ausfall hat einen Eigentümer.\n\nAuf die Frage, warum die FAA nicht einfach den Anbieter wechseln könne,\nsagte der US-Verkehrsminister über ihren Auftragnehmer:\n„Ich kann nicht zu jemand anderem gehen. Es gehört ihnen.“ Das entscheidende Wort: ihnen.\n\nUnd wo tatsächlich ein Feind auftauchte, stand die Tür bereits offen:\nDavor: die Kühlschränke und PHP.\nAm Montag lieferten 178 Organisationen, darunter CNN, die BBC, Zoom und HSBC, ihren eigenen Besuchern etwa 17 Stunden lang Malware aus.\nKeine von ihnen war kompromittiert worden. Das Skript eines Anbieters änderte sich über Nacht.\n\nUnd Google dokumentierte den ersten Systemeinbruch, der von Anfang bis Ende von KI durchgeführt wurde, ohne menschliche Beteiligung.\n\nBenutzername admin und das heutige Datum als Passwort, auf Steuerungen, für die es seit Jahren keinen Support mehr gibt.\n\nVerschiedene Ursachen. Eine Struktur.\n\nDer Fehler lag in etwas, das dem Opfer nicht gehörte, das es nicht sehen und nicht stoppen konnte.\n\nIm vorigen Beitrag schrieben wir, dass ein Außenstehender Ihnen drei Dinge antun kann:\nLesen. Stoppen. Verändern.\nDiesen Monat geschahen alle drei in großem Maßstab.\n\nDas Tempo wird zunehmen.\nVor einem Jahr lieferte Microsoft monatlich etwa 100 Sicherheitskorrekturen aus.\nJetzt etwa 1.100. Maschinen finden die Schwachstellen, Maschinen machen aus Patches Exploits, und die Systeme wurden nie dafür gebaut, in diesem Tempo verändert zu werden.\n\nCypher Sentinel wurde genau dafür entwickelt.\n\nKeine externen Abhängigkeiten. Es läuft, wenn die Außenwelt abgeschaltet ist.\nJede Engine wird innerhalb der Grenze verifiziert.\nNichts verändert das Verhalten ohne Ihre Zustimmung.\n\nDie Frage ist nicht mehr nur, wer Sie angreift.\nSie lautet, wem das Fundament gehört, auf dem Sie stehen.\n\nWir fragten in jedem Beitrag: „Wird Ihnen Ihre Abwehr gehören, oder werden Sie sie mieten?“\nWir haben die Antwort gebaut.\n\nvektorium.io\n\nFür alle, die diesen Auftrag jeden Tag erfüllen:\nCybersecurity and Infrastructure Security Agency, National Security Agency, U.S. Cyber Command, Defense Advanced Research Projects Agency (DARPA), United States Space Force, U.S. Department of Homeland Security\n\n#CyberSecurity #CriticalInfrastructure #CyberResilience #SovereignSecurity #SovereignAI #Vektorium #CypherSentinel",
+    "3e2f2bcb635b566b": "Detailansicht verbundener Knoten in der Cypher Sentinel-Demonstration zum LinkedIn-Beitrag von Vektorium vom 18. November 2026",
+    "db97097e751bf01a": "Quellen zur Originalveröffentlichung",
+    "ed2e1e74301580f3": "Diese Verweise stellte Vektorium in einem Kommentar zum LinkedIn-Beitrag bereit.",
+    "b78bba6391fc8530": "<0>FAA: der Auftragnehmer, dem das Netzwerk gehört<1> (öffnet sich in einem neuen Tab)</1></0>",
+    "5ba7777f5a05329b": "<0>Ausfall bei Microsoft<1> (öffnet sich in einem neuen Tab)</1></0>",
+    "75b63eddc0667669": "<0>Störung im Netzwerk der NSA<1> (öffnet sich in einem neuen Tab)</1></0>",
+    "b2aaa653c9f4113a": "<0>„Kein Cyberangriff“<1> (öffnet sich in einem neuen Tab)</1></0>",
+    "ccebd40fe8d398ec": "<0>Angriffe auf Gefrieranlagen: behördliche Empfehlungen zur Systemhärtung<1> (öffnet sich in einem neuen Tab)</1></0>",
+    "9e090015ff6de42c": "<0>PHP: das Web in Gefahr<1> (öffnet sich in einem neuen Tab)</1></0>",
+    "6441b121c86b0366": "<0>178 Organisationen: der Optimizely-Lieferkettenangriff<1> (öffnet sich in einem neuen Tab)</1></0>",
+    "aad4badcf3860de6": "<0>Google: Bedrohungsaktivitäten durch KI-Agenten überschreiten eine bedeutende Schwelle<1> (öffnet sich in einem neuen Tab)</1></0>",
+    "abbcf3afc5a92107": "<0>Microsoft: fast 1.100 Sicherheitslücken<1> (öffnet sich in einem neuen Tab)</1></0>"
   }
 }

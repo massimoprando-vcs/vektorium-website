@@ -1,7 +1,7 @@
 {
   "version": 1,
   "locale": "fr",
-  "sourceHash": "f357918cc894907bd65abfdc96fe25caf2319cc76460b6f5d8bd44d9499c477f",
+  "sourceHash": "b31f03c26ce6ca2b7141b141343f3eaf077b0f3f4a05bc5de5c95efdd00c4e12",
   "translations": {
     "5f9e38a180b639a9": "Vektorium | Convergence de pointe en cybersécurité",
     "15be2e6d1f4b32d9": "Conservez votre environnement de sécurité. Ajoutez une défense de pointe avec Cypher Sentinel : 160 fonctionnalités, 90 moteurs, 27 familles de commandes. Votre autorité. Votre contrôle.",
@@ -2168,6 +2168,25 @@
     "af2a207b1565139c": "Simulations d’hameçonnage",
     "8eb5e447b3eed495": "Développement d’une culture de la sécurité",
     "5af8a2dfb47c391c": "Formation adaptée aux rôles",
-    "3fe8abe273e7a207": "Logo Vektorium centré sur un fond bleu foncé"
+    "3fe8abe273e7a207": "Logo Vektorium centré sur un fond bleu foncé",
+    "bf591542940eeb4c": "18 novembre 2026",
+    "1df5f30ff3cdd84c": "<0>Une panne n’a pas toujours un attaquant. Elle a toujours un propriétaire.</0>",
+    "a988be3d8ebbe394": "Des causes différentes. Une même structure. Vektorium revient sur les pannes d’infrastructure, les dépendances externes et les propriétaires des systèmes dont dépend votre sécurité.",
+    "060e7f2a2ef95789": "Une panne n’a pas toujours un attaquant. Elle a toujours un propriétaire. | Analyses Vektorium",
+    "8e9e60ea40286332": "Une panne n’a pas toujours un attaquant. Elle a toujours un propriétaire.",
+    "3483e1ccfd00c269": "Vue d’ensemble du réseau dans la démonstration de Cypher Sentinel accompagnant la publication LinkedIn de Vektorium du 18 novembre 2026",
+    "39be0ad499d1932f": "Depuis lundi, des centaines de personnes, voire des milliers, nous ont demandé de commenter ce qui se passe.\n\nAlors, voici...\n\nLa messagerie hors service dans le monde entier pendant environ 18 heures.\nTous les décollages aux États-Unis suspendus (troisième fois dans l’histoire).\nDes banques. Les services d’Apple. Plusieurs réseaux.\nLe réseau classifié de la NSA elle-même.\nLe tout en une seule semaine.\n\nÀ chaque fois, la réponse officielle : ce n’était pas une cyberattaque.\nCela se voulait rassurant.\n\nCe qui dérange : une cyberattaque aurait été, de loin, la meilleure réponse.\nUne attaque a un coupable. Quelqu’un à nommer, à sanctionner, à dissuader.\n\nCe qui se passe est bien pire.\n\nUn remplacement de routeur. Un changement de configuration. Une mise à jour interne. Un correctif de routine.\nIl n’a même pas fallu d’ennemi.\n\nD’où ce constat :\nUne panne n’a pas toujours un attaquant. Elle a toujours un propriétaire.\n\nInterrogé sur les raisons pour lesquelles la FAA ne pouvait pas simplement changer de fournisseur,\nle secrétaire américain aux Transports a déclaré à propos de son prestataire :\n« Je ne peux pas aller ailleurs. Ils en sont propriétaires. » Le mot clé : Eux.\n\nEt là où un ennemi s’est effectivement présenté, la porte était déjà ouverte :\nAvant cela, les réfrigérateurs et PHP.\nLundi, 178 organisations, dont CNN, la BBC, Zoom et HSBC, ont distribué des logiciels malveillants à leurs propres visiteurs pendant environ 17 heures.\nAucune d’entre elles n’avait été compromise. Le script d’un fournisseur avait changé pendant la nuit.\n\nEt Google a documenté la première intrusion menée de bout en bout par l’IA, sans intervention humaine.\n\nNom d’utilisateur admin et date du jour comme mot de passe, sur des contrôleurs qui ne sont plus pris en charge depuis des années.\n\nDes causes différentes. Une même structure.\n\nLa défaillance se situait dans un élément que la victime ne possédait pas, ne pouvait pas voir et ne pouvait pas arrêter.\n\nDans notre publication précédente, nous avons écrit qu’un acteur extérieur peut vous faire trois choses :\nLire. Arrêter. Modifier.\nCe mois-ci, les trois se sont produites à grande échelle.\n\nLe rythme va s’accélérer.\nIl y a un an, Microsoft publiait environ 100 correctifs de sécurité par mois.\nAujourd’hui, environ 1100. Les machines trouvent les failles, les machines transforment les correctifs en exploits, et les systèmes n’ont jamais été conçus pour être modifiés à ce rythme.\n\nCypher Sentinel a été conçu précisément pour cela.\n\nAucune dépendance externe. Il fonctionne avec le monde extérieur déconnecté.\nChaque moteur vérifié depuis l’intérieur du périmètre.\nRien ne modifie le comportement sans votre approbation.\n\nLa question n’est plus seulement de savoir qui vous attaque.\nC’est de savoir à qui appartient ce sur quoi vous vous appuyez.\n\nDans chaque publication, nous avons posé cette question : « Serez-vous maître de votre défense, ou la louerez-vous ? »\nNous avons construit la réponse.\n\nvektorium.io\n\nÀ ceux qui portent cette mission au quotidien :\nCybersecurity and Infrastructure Security Agency, National Security Agency, U.S. Cyber Command, Defense Advanced Research Projects Agency (DARPA), United States Space Force, U.S. Department of Homeland Security\n\n#CyberSecurity #CriticalInfrastructure #CyberResilience #SovereignSecurity #SovereignAI #Vektorium #CypherSentinel",
+    "3e2f2bcb635b566b": "Vue rapprochée des nœuds connectés dans la démonstration de Cypher Sentinel accompagnant la publication LinkedIn de Vektorium du 18 novembre 2026",
+    "db97097e751bf01a": "Sources partagées avec la publication originale",
+    "ed2e1e74301580f3": "Ces références ont été fournies par Vektorium dans un commentaire accompagnant la publication LinkedIn.",
+    "b78bba6391fc8530": "<0>FAA : le prestataire propriétaire du réseau<1> (s’ouvre dans un nouvel onglet)</1></0>",
+    "5ba7777f5a05329b": "<0>Panne chez Microsoft<1> (s’ouvre dans un nouvel onglet)</1></0>",
+    "75b63eddc0667669": "<0>Perturbation du réseau de la NSA<1> (s’ouvre dans un nouvel onglet)</1></0>",
+    "b2aaa653c9f4113a": "<0>« Pas une cyberattaque »<1> (s’ouvre dans un nouvel onglet)</1></0>",
+    "ccebd40fe8d398ec": "<0>Attaques contre les congélateurs : recommandations gouvernementales de renforcement de la sécurité<1> (s’ouvre dans un nouvel onglet)</1></0>",
+    "9e090015ff6de42c": "<0>PHP : le Web menacé<1> (s’ouvre dans un nouvel onglet)</1></0>",
+    "6441b121c86b0366": "<0>178 organisations : l’attaque de la chaîne d’approvisionnement d’Optimizely<1> (s’ouvre dans un nouvel onglet)</1></0>",
+    "aad4badcf3860de6": "<0>Google : l’activité malveillante des agents d’IA franchit un seuil significatif<1> (s’ouvre dans un nouvel onglet)</1></0>",
+    "abbcf3afc5a92107": "<0>Microsoft : près de 1100 vulnérabilités de sécurité<1> (s’ouvre dans un nouvel onglet)</1></0>"
   }
 }
